@@ -343,6 +343,7 @@ class API:
     def is_consistent_api_request(self, agr):
         try:
             if isinstance(agr, tuple) and len(agr) == 3:
+                print(agr[0])
                 if agr[0] in self.KEYWORDS:
                     return True
             else:
@@ -354,6 +355,7 @@ class API:
         if not self.is_consistent_api_request(request):
             request = parse_string_for_api(request)
             if request:
+                print(request)
                 if not self.is_consistent_api_request(request):
                     return False
             else:
@@ -408,7 +410,6 @@ def parse_string_for_api(raw):
         seq = raw.split(',')
         if len(seq) == 3:
             seq = [n.strip().replace("'", '') for n in seq]
-            print(seq)
             return seq
         else:
             return False
