@@ -1,0 +1,15 @@
+{
+  "facility_name": "sh",
+  "topics":
+  {
+    "global_ping": "globalping",
+    "lights": "lights",
+    "switch": "switch",
+    "sensor": "sensor",
+    "dimmer": "dimmer"
+  }
+
+
+
+
+}

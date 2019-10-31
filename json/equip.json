@@ -1,0 +1,124 @@
+{
+  "switch-d1ca3e00-v0.1":
+  {
+    "type": "switch",
+    "channels": "1",
+    "group": "amb",
+    "hrn": "рождественская иллюминация"
+  },
+  "switch-fcfe3a00-v0.1":
+  {
+    "type": "switch",
+    "channels": "1",
+    "group": "lights",
+    "hrn": "свет на кухне"
+  },
+  "switch-f76eaf00-v0.1":
+  {
+    "type": "switch",
+    "channels": "1",
+    "group": "lights",
+    "hrn": "свет на террасе"
+  },
+  "si-1e110800-v0.1":
+  {
+    "type": "sensor",
+    "channels": "temp, hum",
+    "group": "temp",
+    "hrn": "Атмосфера в гостинной"
+  },
+    "sensor-tst001-v0.1":
+  {
+    "type": "sensor",
+    "channels": "1",
+    "group": "temp",
+    "hrn": "Температура"
+  },
+  "switch-fdfe3a00-v0.1":
+  {
+    "type": "switch",
+    "channels": "1",
+    "group": "lights",
+    "hrn": "свет в спальне"
+  },
+    "switch-1603eb00-v0.1":
+  {
+    "type": "switch",
+    "channels": "1",
+    "group": "vent",
+    "hrn": "вытяжка"
+  },
+    "switch-de387a00-v0.1":
+  {
+    "type": "switch",
+    "channels": "1",
+    "group": "vent",
+    "hrn": "приточка"
+  },
+  "switch-93902400-v0.1":
+  {
+    "type": "switch",
+    "channels": "1",
+    "group": "lights",
+    "hrn": "свет на складе",
+    "pir": "pir"
+  },
+  "si-47354100-v0.1":
+  {
+    "type": "sensor",
+    "channels": "temp, hum",
+    "group": "temp",
+    "hrn": "Атмосфера в спальне"
+  },
+  "bme-cab62d00-v0.1":
+  {
+    "type": "sensor",
+    "channels": "temp",
+    "group": "temp",
+    "hrn": "Температура в гостевой спальне"
+  },
+  "switch-aa7a3700-v0.1":
+  {
+    "type": "switch",
+    "channels": "1",
+    "group": "lights",
+    "hrn": "свет в гардеробной",
+    "pir": "pir"
+  },
+  "thermo1.1":
+  {
+    "type": "thermo",
+    "group": "thermostat",
+    "hrn": "Термостат в санузле"
+  },
+    "thermo1.2":
+  {
+    "type": "thermo",
+    "group": "thermostat",
+    "hrn": "Термостат в мастерской"
+  },
+    "thermo1.4":
+  {
+    "type": "thermo",
+    "group": "thermostat",
+    "hrn": "Термостат в гостинной"
+  },
+    "thermo2.1":
+  {
+    "type": "thermo",
+    "group": "thermostat",
+    "hrn": "Термостат в ванной"
+  },
+    "thermo2.3":
+  {
+    "type": "thermo",
+    "group": "thermostat",
+    "hrn": "Термостат в спальне"
+  },
+    "thermo2.4":
+  {
+    "type": "thermo",
+    "group": "thermostat",
+    "hrn": "Термостат в гостевой"
+  }
+}

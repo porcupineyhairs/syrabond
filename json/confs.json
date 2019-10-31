@@ -1,0 +1,7 @@
+{
+  "common": "global.json",
+  "premises": "premises.json",
+  "bind": "bind.json",
+  "equipment": "equip.json",
+  "tags": "tags.json"
+}

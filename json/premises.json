@@ -1,0 +1,57 @@
+{
+  "1":
+    {
+      "1": {
+        "hrn": "санузел",
+        "thermo": "thermo1.1"
+      },
+      "2": {
+        "hrn": "мастерская",
+        "thermo": "thermo1.2"
+      },
+      "3": {
+        "hrn": "прихожая"
+      },
+      "4": {
+        "hrn": "гостинная",
+        "thermo": "thermo1.4",
+        "ambient_sensor": "si-1e110800-v0.1"
+      },
+      "5": {
+        "hrn": "кухня",
+        "lights": ["switch-fcfe3a00-v0.1", "switch-d1ca3e00-v0.1"]
+      }
+    },
+  "2":
+    {
+      "1": {
+        "hrn": "ванная",
+        "thermo": "thermo2.1"
+      },
+      "2": {
+        "hrn": "склад",
+        "lights": ["switch-93902400-v0.1"]
+      },
+      "3": {
+        "hrn": "мастер-спальня",
+        "thermo": "thermo2.3",
+        "ambient_sensor": "si-47354100-v0.1",
+        "lights": ["switch-fdfe3a00-v0.1"]
+      },
+      "4": {
+        "hrn": "гостевая спальня",
+        "thermo": "thermo2.4",
+        "temp": "bme-cab62d00-v0.1"
+      }
+    },
+  "0":
+    {
+      "0": {
+        "hrn": "за бортом"
+      },
+      "1": {
+        "hrn": "терасса",
+        "lights": ["switch-f76eaf00-v0.1"]
+      }
+    }
+}
