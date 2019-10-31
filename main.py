@@ -11,6 +11,11 @@ while i > 0:
     i -= 1
 sh.facility.message_handler()
 sh.facility.listener.disconnect()
+print('Датчики:')
+for r in sh.facility.resources:
+    res = sh.facility.resources[r]
+    if res.type == 'sensor':
+        print('{} ({}): {}'.format(res.hrn, res.uid, res.get_state()))
 print('Список переключателей:')
 i = 0
 switches = {}
