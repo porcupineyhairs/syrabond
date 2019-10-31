@@ -78,6 +78,7 @@ class Facility:
                         + '/' + prem
                 )
                 self.premises[prem].thermostat.connect()
+        config.clear()
 
     def get_premises(self, terra=None, code=None, tag=None):
         result = []

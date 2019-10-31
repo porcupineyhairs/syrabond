@@ -14,6 +14,7 @@ class Mysql:
         self.debug = bool(conf['debug'])
         self.con = pymysql.connect(conf['host'], conf['user'], conf['password'], conf['database'])
         self.cursor = self.con.cursor()
+        conf.clear()
 
     def rewrite_state(self, uid, state):
         query = 'UPDATE Res_state SET state = \'{}\' WHERE uid = \'{}\''.format(state, uid)

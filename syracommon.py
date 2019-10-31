@@ -44,4 +44,4 @@ chdir(conf['working_dir'])
 log_file = '{}/{}'.format(conf['working_dir'], conf['log_file'])
 confs_dir = conf['confs_dir']
 logging.basicConfig(filename=log_file, level=logging_levels[conf['log_level']])
-conf = None
+conf.clear()

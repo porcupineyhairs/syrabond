@@ -22,6 +22,8 @@ for r in sh.facility.resources:
         switches.update({i: res})
 while True:
     choice = input('Индекс (#) или API (A)? ')
+    print(choice)
+    print(switches)
     if not isinstance(choice, str) and int(choice) in switches:
         com = input('on (1) | off (0) | reboot (r) | webrepl (w)')
         r = switches[int(choice)]
