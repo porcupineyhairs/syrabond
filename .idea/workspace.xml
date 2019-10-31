@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="4fc2e0fc-acda-4d3b-b22a-2fa2a04360b6" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/mqttsender.py" afterPath="$PROJECT_DIR$/mqttsender.py" />
       <change beforePath="$PROJECT_DIR$/syrabond.py" afterPath="$PROJECT_DIR$/syrabond.py" />
+      <change beforePath="$PROJECT_DIR$/syracommon.py" afterPath="$PROJECT_DIR$/syracommon.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,8 +19,8 @@
       <file leaf-file-name="syrabond.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/syrabond.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="145">
-              <caret line="344" column="56" lean-forward="false" selection-start-line="344" selection-start-column="56" selection-end-line="344" selection-end-column="56" />
+            <state relative-caret-position="211">
+              <caret line="110" column="22" lean-forward="false" selection-start-line="110" selection-start-column="19" selection-end-line="110" selection-end-column="22" />
               <folding>
                 <element signature="e#0#17#0" expanded="true" />
               </folding>
@@ -51,7 +53,7 @@
       <file leaf-file-name="syradatabase.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/syradatabase.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
+            <state relative-caret-position="15">
               <caret line="12" column="50" lean-forward="false" selection-start-line="12" selection-start-column="50" selection-end-line="12" selection-end-column="50" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
@@ -97,11 +99,21 @@
       <file leaf-file-name="syracommon.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/syracommon.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="690">
-              <caret line="46" column="12" lean-forward="false" selection-start-line="46" selection-start-column="12" selection-end-line="46" selection-end-column="12" />
+            <state relative-caret-position="165">
+              <caret line="11" column="27" lean-forward="true" selection-start-line="11" selection-start-column="27" selection-end-line="11" selection-end-column="27" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mqttsender.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mqttsender.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1244">
+              <caret line="87" column="67" lean-forward="false" selection-start-line="87" selection-start-column="67" selection-end-line="87" selection-end-column="67" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -125,8 +137,8 @@
       <find>query_buffer</find>
       <find>switch-de387a00-v0.1</find>
       <find>switch-aa7a3700-v0.1</find>
-      <find>log</find>
       <find>extract_config</find>
+      <find>log</find>
     </findStrings>
     <replaceStrings>
       <replace>resource</replace>
@@ -148,16 +160,16 @@
         <option value="$PROJECT_DIR$/premises.json" />
         <option value="$PROJECT_DIR$/syraponte.py" />
         <option value="$PROJECT_DIR$/syradaemon.py" />
-        <option value="$PROJECT_DIR$/mqttsender.py" />
         <option value="$PROJECT_DIR$/equip.json" />
         <option value="$PROJECT_DIR$/test_scen.json" />
         <option value="$PROJECT_DIR$/scen.py" />
         <option value="$PROJECT_DIR$/mysql.json" />
         <option value="$PROJECT_DIR$/json/global.json" />
         <option value="$PROJECT_DIR$/global.json" />
-        <option value="$PROJECT_DIR$/syracommon.py" />
         <option value="$PROJECT_DIR$/syradatabase.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/syracommon.py" />
+        <option value="$PROJECT_DIR$/mqttsender.py" />
         <option value="$PROJECT_DIR$/syrabond.py" />
       </list>
     </option>
@@ -345,7 +357,14 @@
       <option name="project" value="LOCAL" />
       <updated>1572553354122</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="API update">
+      <created>1572553512616</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1572553512616</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -583,16 +602,6 @@
     <entry file="file://$PROJECT_DIR$/secscen1.json" />
     <entry file="file://$PROJECT_DIR$/confs.json" />
     <entry file="file://$PROJECT_DIR$/bind.json" />
-    <entry file="file://$PROJECT_DIR$/mqttsender.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="472">
-          <caret line="99" column="0" lean-forward="true" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#31#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sleep.json" />
     <entry file="file://$PROJECT_DIR$/oh.json" />
     <entry file="file://$PROJECT_DIR$/heating_timeplan.json" />
@@ -631,16 +640,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/syradaemon.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="22" lean-forward="false" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
-          <folding>
-            <element signature="e#19#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/json/global.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
@@ -656,38 +655,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/syracommon.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="46" column="12" lean-forward="false" selection-start-line="46" selection-start-column="12" selection-end-line="46" selection-end-column="12" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/syradatabase.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="50" lean-forward="false" selection-start-line="12" selection-start-column="50" selection-end-line="12" selection-end-column="50" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/json/equip.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
           <caret line="73" column="3" lean-forward="false" selection-start-line="73" selection-start-column="3" selection-end-line="73" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/global.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="1" lean-forward="false" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
           <folding />
         </state>
       </provider>
@@ -708,10 +679,56 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/global.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="1" lean-forward="false" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/syradatabase.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="12" column="50" lean-forward="false" selection-start-line="12" selection-start-column="50" selection-end-line="12" selection-end-column="50" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/syradaemon.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="22" lean-forward="false" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+          <folding>
+            <element signature="e#19#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/syracommon.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="27" lean-forward="true" selection-start-line="11" selection-start-column="27" selection-end-line="11" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mqttsender.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1244">
+          <caret line="87" column="67" lean-forward="false" selection-start-line="87" selection-start-column="67" selection-end-line="87" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/syrabond.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="344" column="56" lean-forward="false" selection-start-line="344" selection-start-column="56" selection-end-line="344" selection-end-column="56" />
+        <state relative-caret-position="211">
+          <caret line="110" column="22" lean-forward="false" selection-start-line="110" selection-start-column="19" selection-end-line="110" selection-end-column="22" />
           <folding>
             <element signature="e#0#17#0" expanded="true" />
           </folding>

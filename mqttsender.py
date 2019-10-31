@@ -46,7 +46,7 @@ class Mqtt:
             log('Error while sending: {}.'.format(e), log_type='error')
             return False
         print('Message sent.')
-        log('Message sent.')
+        log('Message sent.', log_type='debug')
         if self.clean_session:
             self.client.disconnect()
             self.connected = False
@@ -61,10 +61,10 @@ class Mqtt:
                 sleep(5)
         try:
             self.client.subscribe(topic)
-            log('Subscribed: '+topic)
+            log('Subscribed: '+topic, log_type='debug')
             return True
         except Exception as e:
-            log('Could not subscribe')
+            log('Could not subscribe', log_type='error')
             return False
 
     def check_for_messages(self):
@@ -76,7 +76,7 @@ class Mqtt:
 
     def message_to_buffer(self, client, userdata, message):
         if message:
-            log(' Got {} in {}'.format(message.payload.decode(), message.topic))
+            log(' Got {} in {}'.format(message.payload.decode(), message.topic), log_type='debug')
             self.message_buffer.update({message.topic: message.payload.decode()})
 
     def disconnect(self):
@@ -85,7 +85,7 @@ class Mqtt:
         print('Disconnected')
 
     def on_disconnect(self, client, userdata, rc=0):
-        log("Disconnected result code " + str(rc))
+        log("Disconnected result code " + str(rc), log_type='debug')
         client.loop_stop()
 
 

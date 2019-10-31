@@ -26,7 +26,8 @@ class Facility:
         for conf in confs:
             config[conf] = syracommon.extract_config((confs[conf]))
             if not config[conf]:
-                syracommon.log('Unable to parse configuration file {}. Giving up...'.format(confs[conf]), 'error')
+                syracommon.log('Unable to parse configuration file {}. Giving up...'.format(confs[conf]),
+                               log_type='debug')
                 exit()
         for equip in config['equipment']:
             pir = False
@@ -373,9 +374,7 @@ class API:
     def shift_prem_property(self, premise_property, value):
         premise_index = premise_property.split(' ')[0]
         property = premise_property.split(' ')[1]
-        print('. '.join([premise_index, property, value]))
         attr = getattr(self.facility.premises[premise_index], property)
-        print(type(attr))
         if isinstance(attr, list):
             for each in attr:
                 getattr(each, 'turn')(value.lower())
