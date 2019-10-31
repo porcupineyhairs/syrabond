@@ -1,6 +1,9 @@
 {
   "facility_name": "sh",
   "working_dir": "/home/pi/syrabond/python",
+  "confs_dir": "json",
+  "log_file": "syralog.log",
+  "log_level": "INFO",
   "topics":
   {
     "global_ping": "globalping",

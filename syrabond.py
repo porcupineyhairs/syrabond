@@ -1,8 +1,7 @@
 import mqttsender
 from uuid import uuid1
 from sys import exit
-from syracommon import log
-from syracommon import extract_config
+import syracommon
 import syradatabase
 
 
@@ -16,18 +15,18 @@ class Facility:
         self.name = name
         self.DB = syradatabase.Mysql()  # TODO Choose DB interface with config
         uniqid = str(uuid1())
-        log('Creating Syrabond instance with uuid ' + uniqid)
+        syracommon.log('Creating Syrabond instance with uuid ' + uniqid)
         if listen:
             self.listener = mqttsender.Mqtt('syrabond_listener_'+uniqid, config='mqtt.json', clean_session=True)
         else:
             self.listener = mqttsender.Dumb()
         self.sender = mqttsender.Mqtt('syrabond_sender_'+uniqid, config='mqtt.json', clean_session=True)
-        confs = extract_config('confs.json')
+        confs = syracommon.extract_config('confs.json')
         config = {}
         for conf in confs:
-            config[conf] = extract_config((confs[conf]))
+            config[conf] = syracommon.extract_config((confs[conf]))
             if not config[conf]:
-                log('Unable to parse configuration file {}. Giving up...'.format(confs[conf]), 'error')
+                syracommon.log('Unable to parse configuration file {}. Giving up...'.format(confs[conf]), 'error')
                 exit()
         for equip in config['equipment']:
             pir = False
@@ -107,7 +106,7 @@ class Facility:
             return self.resources.get(uid, False)
 
     def state_updated(self, client, userdata, message):
-        log('New message in topic {}: {}'.format(message.topic, message.payload.decode("utf-8")))
+        syracommon.log('New message in topic {}: {}'.format(message.topic, message.payload.decode("utf-8")))
         for res in self.resources:
             if self.resources[res].topic == message.topic:
                 self.resources[res].update_state(message.payload.decode("utf-8"))
@@ -180,7 +179,7 @@ class Resource:
         if not self.state == state:
             self.state = state
             self.DB.rewrite_state(self.uid, self.state)
-            log('The state of {} ({}) changed to {}'.format(self.uid, self.hrn, self.state))
+            syracommon.log('The state of {} ({}) changed to {}'.format(self.uid, self.hrn, self.state))
 
 
 class VirtualAppliance(Resource):
@@ -327,7 +326,7 @@ class Sensor(Device):
 
     def update_state(self, state):
         self.DB.rewrite_state(self.uid, state)
-        log('The state of {} ({}) changed to {}'.format(self.uid, self.hrn, state))
+        syracommon.log('The state of {} ({}) changed to {}'.format(self.uid, self.hrn, state))
 
 
 class API:
@@ -369,7 +368,7 @@ class API:
             attr.set_state(value)
 
     def shift_device(self, uids, command):
-        resources = [s.lstrip() for s in resources.split(',')]
+        resources = [s.lstrip() for s in uids.split(',')]
         for res in resources:
             self.facility.resources[res].turn(command.lower())
 
