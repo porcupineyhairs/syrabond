@@ -363,6 +363,7 @@ class API:
         arg = request[2]
         method = self.KEYWORDS[keyword]
         getattr(self, method)(params, arg)
+        return True
 
     def shift_group(self, group_name, command):
         resources = self.facility.get_resource(self.facility, group=group_name)
@@ -391,7 +392,6 @@ class API:
 
     def request_device_state(self, uids, format):
         pass
-
 
 
 def parse_topic(topic):
