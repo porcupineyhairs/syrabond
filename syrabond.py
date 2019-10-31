@@ -340,14 +340,27 @@ class API:
             'premise': 'shift_prem_property'
             }
 
-    def parse(self, command_string):
-        pass
+    def is_consistent_api_request(self, agr):
+        try:
+            if isinstance(agr, tuple) and len(agr) == 3:
+                if agr[0] in self.KEYWORDS:
+                    return True
+            else:
+                return False
+        except ValueError:
+            return False
 
-    def parse_n_direct(self, command_string):
-        print(command_string)
-        keyword = command_string[0]
-        params = command_string[1]
-        arg = command_string[2]
+    def direct(self, request):
+        if not self.is_consistent_api_request(request):
+            request = parse_string_for_api(request)
+            if request:
+                if not self.is_consistent_api_request(request):
+                    return False
+            else:
+                return False
+        keyword = request[0]
+        params = request[1]
+        arg = request[2]
         method = self.KEYWORDS[keyword]
         getattr(self, method)(params, arg)
 
@@ -380,6 +393,7 @@ class API:
         pass
 
 
+
 def parse_topic(topic):
     type = topic.split('/')[1]
     id = topic.split('/')[2]
@@ -387,4 +401,17 @@ def parse_topic(topic):
     if len(topic.split('/')) == 4:
         channel = topic.split('/')[3]
     return type, id, channel
+
+
+def parse_string_for_api(raw):
+    if isinstance(raw, str):
+        seq = raw.split(',')
+        if len(seq) == 3:
+            seq = [n.strip().replace("'", '') for n in seq]
+            print(seq)
+            return seq
+        else:
+            return False
+    else:
+        return False
 
