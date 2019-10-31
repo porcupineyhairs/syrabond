@@ -22,32 +22,35 @@ for r in sh.facility.resources:
         switches.update({i: res})
 while True:
     choice = input('Индекс (#) или API (A)? ')
-    if choice == 'A':
-        base = input('Укажите API-строку')
-        sh.parse_n_direct(tuple(base))
-    elif int(choice) in switches:
-        com = input('on (1) | off (0) | reboot (r) | webrepl (w)')
-        r = switches[int(choice)]
-        if com == '1':
-            r.on()
-        elif com == '0':
-            r.off()
-        elif com == 'r':
-            r.device_reboot()
-        elif com == 'w':
-            r.webrepl('on')
+    try:
+        choice = int(choice)
+        if choice in switches:
+            com = input('on (1) | off (0) | reboot (r) | webrepl (w)')
+            r = switches[int(choice)]
+            if com == '1':
+                r.on()
+            elif com == '0':
+                r.off()
+            elif com == 'r':
+                r.device_reboot()
+            elif com == 'w':
+                r.webrepl('on')
+            else:
+                break
+            sleep(0.5)
+    except ValueError:
+        if choice == 'A':
+            base = input('Укажите API-строку')
+            sh.parse_n_direct(tuple(base))
         else:
             break
-        sleep(0.5)
-    else:
-        break
-
-    print('Список переключателей:')
-    i = 0
-    switches = {}
-    for r in sh.facility.resources:
-        res = sh.facility.resources[r]
-        if res.type == 'switch':
-            i += 1
-            print('{}) {} ({})'.format(i, res.hrn, res.uid))
-            switches.update({i: res})
+    finally:
+        print('Список переключателей:')
+        i = 0
+        switches = {}
+        for r in sh.facility.resources:
+            res = sh.facility.resources[r]
+            if res.type == 'switch':
+                i += 1
+                print('{}) {} ({})'.format(i, res.hrn, res.uid))
+                switches.update({i: res})
