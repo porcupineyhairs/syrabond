@@ -37,6 +37,8 @@ logging_levels = {
     'INFO': 20,
     'DEBUG': 10
 }
+
+confs_dir = '.'
 conf = extract_config('global.json')
 chdir(conf['working_dir'])
 log_file = '{}/{}'.format(conf['working_dir'], conf['log_file'])
