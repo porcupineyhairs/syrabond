@@ -22,9 +22,10 @@ for r in sh.facility.resources:
         switches.update({i: res})
 while True:
     choice = input('Индекс (#) или API (A)? ')
-    print(isinstance(choice, str))
-    print(int(choice) in switches)
-    if not isinstance(choice, str) and int(choice) in switches:
+    if choice == 'A':
+        base = input('Укажите API-строку')
+        sh.parse_n_direct(tuple(base))
+    elif int(choice) in switches:
         com = input('on (1) | off (0) | reboot (r) | webrepl (w)')
         r = switches[int(choice)]
         if com == '1':
@@ -38,9 +39,6 @@ while True:
         else:
             break
         sleep(0.5)
-    elif choice == 'A':
-        base = input('Укажите API-строку')
-        sh.parse_n_direct(tuple(base))
     else:
         break
 
