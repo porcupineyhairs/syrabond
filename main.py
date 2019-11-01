@@ -42,7 +42,7 @@ while True:
             break
         sleep(0.5)
     elif choice == 'A':
-        base = input('Укажите API-строку')
+        base = input('Укажите API-строку: ')
         if not sh.direct(base):
             print('Wrong API usage.')
     else:
