@@ -184,7 +184,7 @@ class Resource:
             syracommon.log('The state of {} ({}) changed to {}'.format(self.uid, self.hrn, self.state))
 
     def get_state(self):
-        return self.DB.read_state(self.uid)
+        return self.DB.read_state(self.uid)[0][0]
 
 
 class VirtualAppliance(Resource):
