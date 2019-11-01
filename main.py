@@ -16,14 +16,14 @@ for r in sh.facility.resources:
     res = sh.facility.resources[r]
     if res.type == 'sensor':
         print('{} ({}): {}'.format(res.hrn, res.uid, res.get_state()))
-print('Список переключателей:')
+print('Переключатели:')
 i = 0
 switches = {}
 for r in sh.facility.resources:
     res = sh.facility.resources[r]
     if res.type == 'switch':
         i += 1
-        print('{}) {} ({})'.format(i, res.hrn, res.uid))
+        print('{}) {} ({}): {}'.format(i, res.hrn, res.uid, res.get_state()))
         switches.update({i: res})
 while True:
     choice = input('Индекс (#) или API (A)? ')
@@ -55,5 +55,5 @@ while True:
         res = sh.facility.resources[r]
         if res.type == 'switch':
             i += 1
-            print('{}) {} ({})'.format(i, res.hrn, res.uid))
+            print('{}) {} ({}): {}'.format(i, res.hrn, res.uid, res.get_state()))
             switches.update({i: res})

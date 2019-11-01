@@ -219,7 +219,7 @@ class Device(Resource):
         self.repl_on = 'ZAVULON'
         self.repl_off = 'ISAAK'
         self.reboot = 'ZARATUSTRA'
-        self.get_state = 'STATE'
+        self.gimme_state = 'STATE'
 
     def request_state(self):
         try:
