@@ -395,6 +395,38 @@ class API:
     def request_device_state(self, uids, format):
         pass
 
+    def get_status_all(self):
+        status_all = {}
+        for r in self.facility.resources:
+            res = self.facility.resources[r]
+            if res.type == 'switch' or res.type == 'sensor':
+                for prem in self.facility.premises:
+                    premise = self.facility.premises[prem]
+                    if res in premise.resources:
+                        prem_index = ('{}:{} '.format(premise.terra, premise.code))
+                status_all.update({res.uid: [prem_index, self.facility.DB.read_status(res.uid)[0][0]]})
+        return status_all
+
+    def get_state(self, uids):
+        resources = [s.lstrip() for s in uids.split(',')]
+        states = {}
+        for res in resources:
+            if res in self.facility.resources:
+                states.update({res: self.facility.resources[res].get_state()})
+            else:
+                states.update({res: 'Not available'})
+        return states
+
+    def shift_state(self, uids, state):
+        result = {}
+        resources = [s.lstrip() for s in uids.split(',')]
+        for res in resources:
+            if isinstance(self.facility.resources[res], VirtualAppliance):
+                self.facility.resources[res].set_state(state.lower())
+                result.update({res: state})
+            else:
+                result.update({res: 'Unavailable'})
+        return result
 
 def parse_topic(topic):
     type = topic.split('/')[1]
