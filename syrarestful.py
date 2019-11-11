@@ -13,10 +13,14 @@ app = flask.Flask(__name__)
 def get_statusall():
     return api.get_status_all()
 
+@app.route('/api/v02/<path:params>', methods=['GET'])
+def api_request(params):
+    return api.parse_request(params)
 
-@app.route('/api/state/<uids>', methods=['GET'])
-def get_state(uids):
-    return api.get_state(uids)
+
+@app.route('/api/state/<entities>', methods=['GET'])
+def get_state(entities):
+    return api.get_state(entities)
 
 @app.route('/api/shift_state/<uids>/<state>', methods=['GET'])
 def shift_state(uids, state):
@@ -31,8 +35,8 @@ def shift_device(uid, command):
 
 @app.route('/api/shift_group/<group>/<command>', methods=['GET'])
 def shift_group(group, command):
-    api.shift_group(group, command)
-    return 'OK'
+    return api.shift_group(group, command)
+
 
 
 @app.route('/api/shift_premise/<premise>/<property>/<command>', methods=['GET'])

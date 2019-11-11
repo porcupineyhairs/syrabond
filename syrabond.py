@@ -98,11 +98,11 @@ class Facility:
         return result
 
     def get_resource(self, uid=None, group=None):
-        result = []
+        result = set()
         if group:
             for res in self.resources:
                 if self.resources[res].group == group:
-                    result.append(self.resources[res])
+                    result.update({self.resources[res]})
             return result
         if uid:
             return self.resources.get(uid, False)
@@ -338,16 +338,20 @@ class API:
     def __init__(self, facility_name, listen=False):
         self.facility = Facility(facility_name, listen=listen)
 
-        self.KEYWORDS = {
-            'device': 'shift_device',
-            'group': 'shift_group',
-            'premise': 'shift_prem_property'
+        self.ACTIONS = {
+            'shift': 'shift_resources',
+            'state': 'get_state',
+            'set': 'shift_prem_property'
             }
+
+        self.GROUPS = set()
+        for res in self.facility.resources:
+            self.GROUPS.update({self.facility.resources[res].group})
 
     def is_consistent_api_request(self, agr):
         try:
-            if isinstance(agr, tuple) and len(agr) == 3:
-                if agr[0] in self.KEYWORDS:
+            if isinstance(agr, tuple) and len(agr) >= 2:
+                if agr[0] in self.ACTIONS:
                     return True
             else:
                 return False
@@ -363,16 +367,21 @@ class API:
             else:
                 return False
         keyword = request[0]
-        params = request[1]
-        arg = request[2]
-        method = self.KEYWORDS[keyword]
-        getattr(self, method)(params, arg)
-        return True
+        params = request[1:]
+        method = self.ACTIONS[keyword]
+        return getattr(self, method)(params)
+
+
+    def parse_request(self, params):
+        print(params)
+        params = tuple([s.strip().lower() for s in params.split('/')])
+        return self.direct(params)
 
     def shift_group(self, group_name, command):
         resources = self.facility.get_resource(self.facility, group=group_name)
         for res in resources:
             res.turn(command.lower())
+        return check_states(resources)
 
     def shift_prem_property(self, premise_property, value):
         premise_index = premise_property.split(' ')[0]
@@ -383,14 +392,6 @@ class API:
                 getattr(each, 'turn')(value.lower())
         if isinstance(attr, VirtualAppliance):
             attr.set_state(value)
-
-    def shift_device(self, uids, command):
-        resources = [s.lstrip() for s in uids.split(',')]
-        for res in resources:
-            self.facility.resources[res].turn(command.lower())
-
-    def get_device_state(self, uids, format):
-        pass
 
     def request_device_state(self, uids, format):
         pass
@@ -407,15 +408,28 @@ class API:
                 status_all.update({res.uid: [prem_index, self.facility.DB.read_status(res.uid)[0][0]]})
         return status_all
 
-    def get_state(self, uids):
-        resources = [s.lstrip() for s in uids.split(',')]
-        states = {}
+    def get_resources(self, entities):
+        resources = set()
+        for one in entities:
+            if one in self.facility.resources:
+                resources.update({self.facility.resources[one]})
+            elif one in self.GROUPS:
+                resources.update(self.facility.get_resource(self.facility, group=one))
+        return resources
+
+    def get_state(self, entities):
+        return check_states(self.get_resources(entities))
+
+    def shift_resources(self, params):
+        entities = params[0].split(',')
+        command = params[1].lower()
+        resources = self.get_resources(entities)
         for res in resources:
-            if res in self.facility.resources:
-                states.update({res: self.facility.resources[res].get_state()})
-            else:
-                states.update({res: 'Not available'})
-        return states
+            try:
+                res.turn(command)
+            except AttributeError:
+                pass
+        return check_states(resources)
 
     def shift_state(self, uids, state):
         result = {}
@@ -427,6 +441,14 @@ class API:
             else:
                 result.update({res: 'Unavailable'})
         return result
+
+
+def check_states(resources):
+    result = {}
+    for res in resources:
+        result.update({res.uid: res.get_state()})
+    return result
+
 
 def parse_topic(topic):
     type = topic.split('/')[1]
