@@ -1,7 +1,7 @@
 {
-  "host": "localhost",
+  "host": "192.168.88.12",
   "database": "smarthouse",
-  "user": "smart",
+  "user": "pythoner",
   "password": "kal1966",
   "debug": ""
 }

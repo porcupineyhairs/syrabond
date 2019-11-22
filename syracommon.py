@@ -11,6 +11,8 @@ def log(line, log_type='info'):
         logging.info(' {} {}'.format(time_string, line))
     if log_type == 'error':
         logging.error(' {} {}'.format(time_string, line))
+    if log_type == 'debug':
+        logging.debug(' {} {}'.format(time_string, line))
 
 
 def extract_config(file_name):
@@ -44,4 +46,4 @@ chdir(conf['working_dir'])
 log_file = '{}/{}'.format(conf['working_dir'], conf['log_file'])
 confs_dir = conf['confs_dir']
 logging.basicConfig(filename=log_file, level=logging_levels[conf['log_level']])
-conf = None
+conf.clear()

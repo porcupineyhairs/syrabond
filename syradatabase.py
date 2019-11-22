@@ -14,6 +14,7 @@ class Mysql:
         self.debug = bool(conf['debug'])
         self.con = pymysql.connect(conf['host'], conf['user'], conf['password'], conf['database'])
         self.cursor = self.con.cursor()
+        conf.clear()
 
     def rewrite_state(self, uid, state):
         query = 'UPDATE Res_state SET state = \'{}\' WHERE uid = \'{}\''.format(state, uid)
@@ -40,6 +41,14 @@ class Mysql:
     def create_status_row(self, uid):
         query = 'INSERT INTO Dev_status (uid, status) VALUES (\'{}\', \'{}\')'.format(uid, 'None')
         self.send_write_query(query)
+
+    def read_state(self, uid):
+        query = 'SELECT state FROM Res_state WHERE uid = \'{}\''.format(uid)
+        return self.send_read_query(query)
+
+    def read_status(self, uid):
+        query = 'SELECT status FROM Dev_status WHERE uid = \'{}\''.format(uid)
+        return self.send_read_query(query)
     
     def send_write_query(self, query):
         if not self.cursor_locked:

@@ -11,18 +11,23 @@ while i > 0:
     i -= 1
 sh.facility.message_handler()
 sh.facility.listener.disconnect()
-print('Список переключателей:')
+print('Датчики:')
+for r in sh.facility.resources:
+    res = sh.facility.resources[r]
+    if res.type == 'sensor':
+        print('{} ({}): {}'.format(res.hrn, res.uid, res.get_state()))
+print('Переключатели:')
 i = 0
 switches = {}
 for r in sh.facility.resources:
     res = sh.facility.resources[r]
     if res.type == 'switch':
         i += 1
-        print('{}) {} ({})'.format(i, res.hrn, res.uid))
+        print('{}) {} ({}): {}'.format(i, res.hrn, res.uid, res.get_state()))
         switches.update({i: res})
 while True:
     choice = input('Индекс (#) или API (A)? ')
-    if not isinstance(choice, str) and int(choice) in switches:
+    if choice.isdigit() and int(choice) in switches:
         com = input('on (1) | off (0) | reboot (r) | webrepl (w)')
         r = switches[int(choice)]
         if com == '1':
@@ -37,8 +42,9 @@ while True:
             break
         sleep(0.5)
     elif choice == 'A':
-        base = input('Укажите API-строку')
-        sh.parse_n_direct(tuple(base))
+        base = input('Укажите API-строку: ')
+        if not sh.direct(base):
+            print('Wrong API usage.')
     else:
         break
 
@@ -49,5 +55,5 @@ while True:
         res = sh.facility.resources[r]
         if res.type == 'switch':
             i += 1
-            print('{}) {} ({})'.format(i, res.hrn, res.uid))
+            print('{}) {} ({}): {}'.format(i, res.hrn, res.uid, res.get_state()))
             switches.update({i: res})

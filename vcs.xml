@@ -3,10 +3,6 @@
     <option name="visitedUrls">
       <list>
         <UrlAndUserName>
-          <option name="url" value="git@github.com:yogson/syrabond.git" />
-          <option name="userName" value="" />
-        </UrlAndUserName>
-        <UrlAndUserName>
           <option name="url" value="https://github.com/yogson/syrabond.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
