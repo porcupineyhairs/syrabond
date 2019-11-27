@@ -1,4 +1,5 @@
 import flask
+import json
 import syracommon
 from syrabond import API
 
@@ -9,13 +10,9 @@ conf.clear()
 app = flask.Flask(__name__)
 
 
-@app.route('/api/statusall', methods=['GET'])
-def get_statusall():
-    return api.get_status_all()
-
-@app.route('/api/v02/<path:params>', methods=['GET'])
+@app.route('/api/v02/<path:params>', methods=['GET', 'POST'])
 def api_request(params):
-    return api.parse_request(params)
+    return json.dumps(api.parse_request(params), ensure_ascii=False, indent=4, sort_keys=True)
 
 
 @app.route('/api/state/<entities>', methods=['GET'])
@@ -43,6 +40,16 @@ def shift_group(group, command):
 def shift_premise(premise, property, command):
     api.shift_prem_property('{} {}'.format(premise, property), command)
     return 'OK'
+
+
+@app.route('/client/<page>', methods=['GET'])
+def client(page):
+    return open('./clientside/{}.html'.format(page)).read()
+
+
+@app.route('/client/test/<tst>', methods=['GET'])   # test jsons
+def test(tst):
+    return open('./clientside/{}'.format(tst)).read()
 
 if __name__ == '__main__':
     app.run(port=5001, debug=True)

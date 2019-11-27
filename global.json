@@ -3,14 +3,15 @@
   "working_dir": "/Users/egor/PycharmProjects/syrabond",
   "confs_dir": "json",
   "log_file": "syralog.log",
-  "log_level": "INFO",
+  "log_level": "DEBUG",
   "topics":
   {
     "global_ping": "globalping",
     "lights": "lights",
     "switch": "switch",
     "sensor": "sensor",
-    "dimmer": "dimmer"
+    "dimmer": "dimmer",
+    "device_status": "status"
   }
 
 

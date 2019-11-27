@@ -18,6 +18,7 @@ class Facility:
         syracommon.log('Creating Syrabond instance with uuid ' + uniqid)
         if listen:
             self.listener = mqttsender.Mqtt('syrabond_listener_'+uniqid, config='mqtt.json', clean_session=True)
+            self.listener.subscribe('{}/{}/#'.format(self.name, 'status'))  # TODO Dehardcode status topic
         else:
             self.listener = mqttsender.Dumb()
         self.sender = mqttsender.Mqtt('syrabond_sender_'+uniqid, config='mqtt.json', clean_session=True)
@@ -63,10 +64,10 @@ class Facility:
                 if 'pres' in config['premises'][prem][terr]:
                     pres = self.resources[config['premises'][prem][terr]['pres']]
 
-                terra = Premises(prem, terr, config['premises'][prem][terr]['hrn'],
+                premise = Premises(prem, terr, config['premises'][prem][terr]['hrn'],
                                  ambient_sensor, lights, thermo, lights_lvl, pres)
                 # todo prohibit "." in the name of terra
-                self.premises[prem+'.'+terr] = terra
+                self.premises[prem+'.'+terr] = premise
         for binding in config['bind']:
             prem = config['bind'][binding]
             self.premises[prem].resources.append(self.resources[binding])
@@ -128,19 +129,17 @@ class Facility:
                 elif type == 'thermo':
                     self.premises[id].thermostat.update_state(msg)
                 elif type == 'status':
-                    self.resources[id].update_status(msg)
+                    if id in self.resources:
+                        self.resources[id].update_status(msg)
+                    else:
+                        self.DB.rewrite_quarantine(id, msg)
+
         self.listener.message_buffer.clear()
         self.listener.message_buffer_lock = False
 
 
-                # def initialize_resources(self):
-    #     for res in self.resources:
-    #         self.listener.subscribe(self.resources[res].topic, self.state_updated)
-
-
-# for prem in sh.premises:
-# ...  if sh.premises[prem].terra == '1':
-# ...   print(sh.premises[prem].name)
+    def add_new_resourse(self):
+        pass
 
 
 class Premises:
@@ -174,8 +173,12 @@ class Resource:
         self.sender = sender
         self.listener = listener
         self.DB = db
-        self.state = None  # TODO Get from DB on startup
+        self.state = None  # TODO Get from DB on startup. DONE!
         self.DB.check_state_row_exist(self.uid)
+        self.init_state()
+
+    def init_state(self):
+        self.state = self.get_state()
 
     def update_state(self, state):
         if not self.state == state:
@@ -207,7 +210,7 @@ class Device(Resource):
         self.pir = pir
 
         self.DB.check_status_row_exist(self.uid)
-        self.listener.subscribe(self.status_topic)
+        # self.listener.subscribe(self.status_topic) Deprecated. Now subscribing to ../status/#
 
         if pir:
             self.pir_topic = self.topic+'/'+pir
@@ -235,7 +238,7 @@ class Device(Resource):
             print(e)
             return False
 
-    def webrepl(self, command):
+    def webrepl(self, command='on'):
         if command == 'on':
             try:
                 self.sender.mqttsend(self.maintenance_topic, self.repl_on)
@@ -256,6 +259,7 @@ class Device(Resource):
 class Switch(Device):
 
     def toggle(self):
+        self.get_state()
         try:
             if self.state == 'ON':
                 self.off()
@@ -341,7 +345,10 @@ class API:
         self.ACTIONS = {
             'shift': 'shift_resources',
             'state': 'get_state',
-            'set': 'shift_prem_property'
+            'set': 'shift_prem_property',
+            'maintenance': 'maint_device',
+            'statusall': 'get_status_all',
+            'structure': 'get_structure'
             }
 
         self.GROUPS = set()
@@ -351,37 +358,32 @@ class API:
     def is_consistent_api_request(self, agr):
         try:
             if isinstance(agr, tuple) and len(agr) >= 2:
-                if agr[0] in self.ACTIONS:
+                if agr[0][0] in self.ACTIONS:
                     return True
             else:
                 return False
         except ValueError:
             return False
 
-    def direct(self, request):
-        if not self.is_consistent_api_request(request):
-            request = parse_string_for_api(request)
-            if request:
-                if not self.is_consistent_api_request(request):
-                    return False
-            else:
-                return False
-        keyword = request[0]
-        params = request[1:]
+    def direct(self, keyword, entities, param):
         method = self.ACTIONS[keyword]
-        return getattr(self, method)(params)
+        return getattr(self, method)((entities, param))
 
-
-    def parse_request(self, params):
-        print(params)
-        params = tuple([s.strip().lower() for s in params.split('/')])
-        return self.direct(params)
-
-    def shift_group(self, group_name, command):
-        resources = self.facility.get_resource(self.facility, group=group_name)
-        for res in resources:
-            res.turn(command.lower())
-        return check_states(resources)
+    def parse_request(self, request):
+        entities = param = None
+        if request:
+            args = [s.strip().lower() for s in request.split('/')]
+            keyword = args[0].lower()
+            if keyword in self.ACTIONS:
+                if len(args) > 1:
+                    entities = [s.lower().strip() for s in args[1].split(',')]
+                    if len(args) > 2:
+                        param = args[2].lower()
+                return {'response': self.direct(keyword, entities, param)}
+            else:
+                return {'response': 'bad request'}, 400
+        else:
+            return {'response': 'empty request'}, 400
 
     def shift_prem_property(self, premise_property, value):
         premise_index = premise_property.split(' ')[0]
@@ -396,16 +398,19 @@ class API:
     def request_device_state(self, uids, format):
         pass
 
-    def get_status_all(self):
-        status_all = {}
+    def get_status_all(self, null):
+        status_all = []
         for r in self.facility.resources:
             res = self.facility.resources[r]
-            if res.type == 'switch' or res.type == 'sensor':
+            if isinstance(res, Device):
                 for prem in self.facility.premises:
                     premise = self.facility.premises[prem]
                     if res in premise.resources:
                         prem_index = ('{}:{} '.format(premise.terra, premise.code))
-                status_all.update({res.uid: [prem_index, self.facility.DB.read_status(res.uid)[0][0]]})
+                        status_all.append({'uid': res.uid,
+                                                    'premise': prem_index,
+                                                    'ip': self.facility.DB.read_status(res.uid)[0][0]
+                                                       })
         return status_all
 
     def get_resources(self, entities):
@@ -417,30 +422,77 @@ class API:
                 resources.update(self.facility.get_resource(self.facility, group=one))
         return resources
 
-    def get_state(self, entities):
-        return check_states(self.get_resources(entities))
+    def get_structure(self, params):
+        result = {}
+        struct_type = params[0][0]
+        if struct_type == 'groups':
+            for group in self.GROUPS:
+                resources = self.get_resources([group])
+                res_list = []
+                for res in resources:
+                    res_list.append({'uid': res.uid, 'type': res.type, 'name': res.hrn, 'state': res.get_state()})
+                result.update({group: res_list})
+        elif struct_type == 'thermo':
+            for prem in self.facility.premises:
+                premise = self.facility.premises[prem]
+                try:
+                    result.update({prem: {'name': premise.name, 'thermostat_id': premise.thermostat.uid,
+                                   'thermostat_state': premise.thermostat.state}})
+                except:
+                    continue
+        elif struct_type == 'quarantine':
+            result = []
+            response = self.facility.DB.get_quarantine()
+            [result.append({'uid': s[0], 'ip': s[1]}) for s in response]
+        return result
 
-    def shift_resources(self, params):
-        entities = params[0].split(',')
-        command = params[1].lower()
+    def get_state(self, params):
+        entities = params[0]
         resources = self.get_resources(entities)
-        for res in resources:
-            try:
-                res.turn(command)
-            except AttributeError:
-                pass
         return check_states(resources)
 
-    def shift_state(self, uids, state):
-        result = {}
-        resources = [s.lstrip() for s in uids.split(',')]
+    def shift_resources(self, params):
+        entities = params[0]
+        command = params[1]
+        resources = self.get_resources(entities)
         for res in resources:
-            if isinstance(self.facility.resources[res], VirtualAppliance):
-                self.facility.resources[res].set_state(state.lower())
-                result.update({res: state})
-            else:
-                result.update({res: 'Unavailable'})
-        return result
+            if isinstance(res, VirtualAppliance):
+                try:
+                    res.set_state(command.lower())
+                except AttributeError:
+                    pass
+            elif isinstance(res, Switch):
+                try:
+                    if command.lower() == 'toggle':
+                        res.toggle()
+                    else:
+                        res.turn(command.lower())
+                except AttributeError:
+                    pass
+            elif isinstance(res, Sensor):
+                try:
+                    res.update_state(command.lower())
+                except AttributeError:
+                    pass
+        return check_states(resources)
+
+    def maint_device(self, params):
+        MAINT_COMMANDS = {
+            "reboot": "device_reboot",
+            "repl": "webrepl"
+        }
+        entities = params[0]
+        command = params[1]
+        resources = self.get_resources(entities)
+        for res in resources:
+            if command in MAINT_COMMANDS:
+                    getattr(res, MAINT_COMMANDS[command])()
+
+        return check_states(resources)
+
+    def check_for_newbies(self):
+        self.facility.listener.subscribe(self.facility.name+'/status/#')
+
 
 
 def check_states(resources):
@@ -457,16 +509,4 @@ def parse_topic(topic):
     if len(topic.split('/')) == 4:
         channel = topic.split('/')[3]
     return type, id, channel
-
-
-def parse_string_for_api(raw):
-    if isinstance(raw, str):
-        seq = raw.split(',')
-        if len(seq) == 3:
-            seq = [n.strip().replace("'", '') for n in seq]
-            return tuple(seq)
-        else:
-            return False
-    else:
-        return False
 

@@ -27,13 +27,7 @@
     "group": "temp",
     "hrn": "Атмосфера в гостинной"
   },
-    "sensor-tst001-v0.1":
-  {
-    "type": "sensor",
-    "channels": "1",
-    "group": "temp",
-    "hrn": "Температура"
-  },
+
   "switch-fdfe3a00-v0.1":
   {
     "type": "switch",
