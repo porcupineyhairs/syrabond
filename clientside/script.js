@@ -14,5 +14,3 @@ $("body").on('click','button', function() {
       })
 
   });
-
-getSwitches();

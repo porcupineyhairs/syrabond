@@ -15,7 +15,7 @@
             <a class="brand" href="#">Syrabond API Client</a>
             
             <ul class="nav nav-tabs">
-  <li><a href="main">Fast access view</a></li>
+  <li><a href="index">Fast access view</a></li>
   <li><a href="groups">Groups</a></li>
   <li><a href="heating">Heating</a></li>
   <li class="active"><a href="#">Maintenance</a></li>
@@ -31,7 +31,7 @@
     <tr>
     	<td><p data-bind="text: uid"></p></td>
       <td><p data-bind="text: premise"></p></td>
-        <td><span data-bind="text: ip() == 'offline' ? `OFFLINE ` : ip "></span><i data-bind="visible: ip() == 'offline'" class="icon-bell"></i></td>
+        <td><span data-bind="text: ip() == 'offline' ? `OFFLINE ` : ip "></span><span data-bind="visible: ip() == 'offline'" class="label label-important">!</span></td>
     </tr>
     <!-- /ko -->
 </table>

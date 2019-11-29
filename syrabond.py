@@ -31,24 +31,26 @@ class Facility:
                                log_type='debug')
                 exit()
         for equip in config['equipment']:
+            type = config['equipment'][equip]['type']
+            group = config['equipment'][equip]['group']
+            hrn = config['equipment'][equip]['hrn']
+            tags = []
+            for tag in config['tags']:
+                if equip in config['tags'][tag]:
+                    tags.append(tag)
             pir = False
             if 'pir' in config['equipment'][equip]:
                 pir = config['equipment'][equip]['pir']
             if config['equipment'][equip]['type'] == 'switch':
-
-                resource = Switch(self.listener, self.sender, self.DB, self.name, equip,
-                                  config['equipment'][equip]['type'],
-                                  config['equipment'][equip]['group'], config['equipment'][equip]['hrn'], pir)
+                resource = Switch(self.listener, self.sender, self.DB, self.name, equip, type, group, hrn, tags, pir)
             elif config['equipment'][equip]['type'] == 'sensor':
-                resource = Sensor(self.listener, self.sender, self.DB, self.name, equip,
-                                  config['equipment'][equip]['type'],
-                                  config['equipment'][equip]['group'], config['equipment'][equip]['hrn'], pir,
-                                  config['equipment'][equip]['channels'])
+                channels = config['equipment'][equip]['channels']
+                resource = Sensor(self.listener, self.sender, self.DB, self.name, equip, type, group, hrn, tags,
+                                  pir, channels)
                 resource.connect()
             elif config['equipment'][equip]['type'] == 'thermo':
-                resource = VirtualAppliance(self.listener, self.sender, self.DB, self.name, equip,
-                                            config['equipment'][equip]['type'],
-                                            config['equipment'][equip]['group'], config['equipment'][equip]['hrn'])
+                resource = VirtualAppliance(self.listener, self.sender, self.DB, self.name, equip, type, group,
+                                            hrn, tags)
             self.resources[equip] = resource
         for prem in config['premises']:
             for terr in config['premises'][prem]:
@@ -98,15 +100,21 @@ class Facility:
             print(r.terra, r.code, r.name)
         return result
 
-    def get_resource(self, uid=None, group=None):
+
+    def get_resource(self, uid=None, group=None, tag=None):
         result = set()
+        print()
         if group:
             for res in self.resources:
                 if self.resources[res].group == group:
                     result.update({self.resources[res]})
-            return result
         if uid:
             return self.resources.get(uid, False)
+        if tag:
+            for res in self.resources:
+                if tag in self.resources[res].tags:
+                    result.update({self.resources[res]})
+        return result
 
     def state_updated(self, client, userdata, message):
         syracommon.log('New message in topic {}: {}'.format(message.topic, message.payload.decode("utf-8")))
@@ -163,10 +171,11 @@ class Premises:
 
 class Resource:
     
-    def __init__(self, listener, sender, db, obj_name, uid, type, group, hrn):
+    def __init__(self, listener, sender, db, obj_name, uid, type, group, hrn, tags):
         self.uid = uid
         self.type = type
         self.group = group
+        self.tags = tags
         self.hrn = hrn
         self.obj_name = obj_name
         self.topic = obj_name+'/'+self.type+'/'+self.uid
@@ -202,8 +211,8 @@ class VirtualAppliance(Resource):
 
 class Device(Resource):
 
-    def __init__(self, listener, sender, db, obj_name, uid, type, group, hrn, pir):
-        super().__init__(listener, sender, db, obj_name, uid, type, group, hrn)
+    def __init__(self, listener, sender, db, obj_name, uid, type, group, hrn, tags, pir):
+        super().__init__(listener, sender, db, obj_name, uid, type, group, hrn, tags)
         self.maintenance_topic = '{}/{}/{}'.format(obj_name, 'management', self.uid)
         self.status_topic = '{}/{}/{}'.format(obj_name, 'status', self.uid)
         self.status = None
@@ -311,8 +320,8 @@ class Switch(Device):
 
 class Sensor(Device):
 
-    def __init__(self, listener, sender, db, obj_name, uid, type, group, hrn, pir, channels):
-        super().__init__(listener, sender, db, obj_name, uid, type, group, hrn, pir)
+    def __init__(self, listener, sender, db, obj_name, uid, type, group, hrn, tags, pir, channels):
+        super().__init__(listener, sender, db, obj_name, uid, type, group, hrn, tags, pir)
         self.state = {}
         if channels.find(', ') > 0:
             self.channels = channels.split(', ')
@@ -354,6 +363,9 @@ class API:
         self.GROUPS = set()
         for res in self.facility.resources:
             self.GROUPS.update({self.facility.resources[res].group})
+        self.TAGS = set()
+        for res in self.facility.resources:
+            [self.TAGS.update({x}) for x in self.facility.resources[res].tags]
 
     def is_consistent_api_request(self, agr):
         try:
@@ -407,10 +419,8 @@ class API:
                     premise = self.facility.premises[prem]
                     if res in premise.resources:
                         prem_index = ('{}:{} '.format(premise.terra, premise.code))
-                        status_all.append({'uid': res.uid,
-                                                    'premise': prem_index,
-                                                    'ip': self.facility.DB.read_status(res.uid)[0][0]
-                                                       })
+                        status_all.append({'uid': res.uid, 'premise': prem_index,
+                                           'ip': self.facility.DB.read_status(res.uid)[0][0]})
         return status_all
 
     def get_resources(self, entities):
@@ -419,7 +429,10 @@ class API:
             if one in self.facility.resources:
                 resources.update({self.facility.resources[one]})
             elif one in self.GROUPS:
-                resources.update(self.facility.get_resource(self.facility, group=one))
+                resources.update(self.facility.get_resource(group=one))
+            elif one in self.TAGS:
+                resources.update(self.facility.get_resource(tag=one))
+
         return resources
 
     def get_structure(self, params):
@@ -444,12 +457,22 @@ class API:
             result = []
             response = self.facility.DB.get_quarantine()
             [result.append({'uid': s[0], 'ip': s[1]}) for s in response]
+        elif struct_type == 'tag':
+            result = []
+            tag_attr = params[1]
+            resources = self.get_resources([tag_attr])
+            for res in resources:
+                result.append({'uid': res.uid, 'type': res.type, 'name': res.hrn, 'state': res.get_state()})
+
         return result
 
     def get_state(self, params):
+        result = []
         entities = params[0]
         resources = self.get_resources(entities)
-        return check_states(resources)
+        for res in resources:
+            result.append({'uid': res.uid, 'type': res.type, 'name': res.hrn, 'state': res.get_state()})
+        return result
 
     def shift_resources(self, params):
         entities = params[0]
@@ -487,7 +510,6 @@ class API:
         for res in resources:
             if command in MAINT_COMMANDS:
                     getattr(res, MAINT_COMMANDS[command])()
-
         return check_states(resources)
 
     def check_for_newbies(self):

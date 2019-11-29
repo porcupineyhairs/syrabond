@@ -12,6 +12,52 @@ const colors ={
       0: "btn"
     }
 
+function getState(entity) {
+ const uri = 'http://127.0.0.1:5001/api/v02/state/';
+ const url = uri+entity;
+ var items = [];
+
+$.getJSON(url, function(data){
+  $.each( data.response, function (key, val)
+    {
+      items.push({key,val})
+    });
+});
+return items;
+}
+
+function getShortcuts() {
+  const uri = 'http://127.0.0.1:5001/api/v02/structure/tag/shortcut'
+  var switches = []
+  var sensors = []
+  $('.span4').button()
+  sensors.push( '<table class="table table-bordered table-condensed"><tr><td><b>Sensor</b></td><td><b>State</b></td></tr>' )
+  $.getJSON(uri, function(data) {
+    for (var i = 0; i < data.response.length; i++) {
+      const type = data.response[i].type, state = data.response[i].state, name = data.response[i].name, uid = data.response[i].uid
+      if (type == 'switch'){
+        switches.push( "<p>" + name + ' ' + '<button class="btn" data-toggle="button" res-uid=' + uid + '>' + counter_states[states[state]] + '</button></p>' );
+      }
+      if (type == 'sensor'){
+        var st = state.replace('hum', 'humidity')
+        sensors.push( '<tr><td>'+name+'</td><td>'+st+'</td></tr>' );
+      }
+    }
+    sensors.push( '</table>' )
+    $( "<ul/>", {
+      "class": "my-new-list",
+      "id": 'hui',
+      html: switches.join( "" )
+    }).appendTo( ".span4" );
+    $( "<ul/>", {
+      "class": "my-new-list",
+      "id": 'hui1',
+      html: sensors.join( "" )
+    }).appendTo( ".span8" );
+});
+
+}
+
 
 function getSwitches() {
   const uri = 'http://127.0.0.1:5001/api/v02/structure/groups'
@@ -37,10 +83,11 @@ function getSwitches() {
 }
 
 function getThermo() {
-  const uri = 'http://127.0.0.1:5001/api/v02/structure/thermo'
+  const thermo_uri = 'http://127.0.0.1:5001/api/v02/structure/thermo';
+  const temp_uri = 'http://127.0.0.1:5001/api/v02/state/temp';
 
-  $.getJSON(uri, function(data){
-    var items = []
+  $.getJSON(thermo_uri, function(data){
+    var items = [];
     $.each(data.response, function( key, val ) {
       items.push( '<p id=c-'+val.thermostat_id+'>'+val.name+': '+val.thermostat_state+'</p>' );
       items.push( '<input name="'+val.name+'"id="'+val.thermostat_id+'" type="range" min="0" max="30" value="'+val.thermostat_state+'" step="0.5" />');        
@@ -49,7 +96,21 @@ function getThermo() {
       "class": "my-new-list",
       "id": 'hui',
       html: items.join( "" )
-    }).appendTo( "body" );
+    }).appendTo( ".span4" );
+});
+
+  $.getJSON(temp_uri, function(data){
+    var items = [];
+    $.each(data.response, function( key, val ){
+      var left = val.name, right = val.state;
+      items.push({left, right});
+    });
+    var res = maketable(items);
+  $( "<ul/>", {
+      "class": "my-new-list",
+      "id": 'hui',
+      html: res.join( "" )
+    }).appendTo( ".span8" );
 });
 
 }
@@ -69,11 +130,10 @@ $.getJSON(self.apiuri, function(data) {
     }
 });
  
- 
  }
 
  function getQuarantine() {
-  const uri = 'http://127.0.0.1:5001/api/v02/structure/quarantine'
+  const uri = 'http://127.0.0.1:5001/api/v02/structure/quarantine';
 
   $.getJSON(uri, function(data){
     var items = []
@@ -90,6 +150,18 @@ $.getJSON(self.apiuri, function(data) {
     }).appendTo( "body" );
 });
 
+}
+
+function maketable(array){
+  var items = [];
+  items.push( '<table class="table table-bordered table-condensed"><tr><td><b>Sensor</b></td><td><b>State</b></td></tr>' );
+  $.each(array, function (key,val){
+    console.log(val)
+    items.push('<tr><td>'+val.left+'</td><td>'+val.right+'</td></tr>')
+
+  });
+  items.push('</table>');
+return items;
 }
 
 function viceversa(state) {
