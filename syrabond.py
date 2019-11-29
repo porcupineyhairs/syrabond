@@ -357,7 +357,8 @@ class API:
             'set': 'shift_prem_property',
             'maintenance': 'maint_device',
             'statusall': 'get_status_all',
-            'structure': 'get_structure'
+            'structure': 'get_struct',
+            'conf': 'get_scopes'
             }
 
         self.GROUPS = set()
@@ -435,16 +436,54 @@ class API:
 
         return resources
 
-    def get_structure(self, params):
+    def get_struct(self, params):
         result = {}
         struct_type = params[0][0]
+
+        if struct_type == 'scopes':
+            result.update({'groups': list(self.GROUPS)})
+            result.update({'tags': list(self.TAGS)})
+
+        elif struct_type == 'tags':
+            result.update({'tags': list(self.TAGS)})
+
+        elif struct_type == 'groups':
+            result.update({'groups': list(self.GROUPS)})
+
+        elif struct_type == 'premises':
+            premises = self.facility.premises
+            for prem in self.facility.premises:
+                thermo = ambient = None
+                try:
+                    thermo = premises[prem].thermostat.uid
+                    ambient = premises[prem].ambient.uid
+                except AttributeError:
+                    pass
+                result.update({prem: {'name': premises[prem].name, 'thermostat': thermo, 'ambient': ambient}})
+
+        return result
+
+    def get_structure(self, params):  # TODO To be destroyed
+        print(params)
+        arg = None
+        result = {}
+        struct_type = params[0][0]
+        if len(params) == 2:
+            arg = params[1]
         if struct_type == 'groups':
-            for group in self.GROUPS:
-                resources = self.get_resources([group])
-                res_list = []
-                for res in resources:
-                    res_list.append({'uid': res.uid, 'type': res.type, 'name': res.hrn, 'state': res.get_state()})
-                result.update({group: res_list})
+            if arg:
+                if arg in self.GROUPS:
+                    result = []
+                    resources = self.get_resources([arg])
+                    for res in resources:
+                        result.append({'uid': res.uid, 'type': res.type, 'name': res.hrn, 'state': res.get_state()})
+            else:
+                for group in self.GROUPS:
+                    resources = self.get_resources([group])
+                    res_list = []
+                    for res in resources:
+                        res_list.append({'uid': res.uid, 'type': res.type, 'name': res.hrn, 'state': res.get_state()})
+                    result.update({group: res_list})
         elif struct_type == 'thermo':
             for prem in self.facility.premises:
                 premise = self.facility.premises[prem]
@@ -464,6 +503,13 @@ class API:
             for res in resources:
                 result.append({'uid': res.uid, 'type': res.type, 'name': res.hrn, 'state': res.get_state()})
 
+        elif struct_type == 'scopes':
+            result = {}
+            result.update({'groups': list(self.GROUPS)})
+            result.update({'tags': list(self.TAGS)})
+
+
+
         return result
 
     def get_state(self, params):
@@ -471,7 +517,14 @@ class API:
         entities = params[0]
         resources = self.get_resources(entities)
         for res in resources:
-            result.append({'uid': res.uid, 'type': res.type, 'name': res.hrn, 'state': res.get_state()})
+            try:
+                prem = [x for x in self.facility.premises.values() if res in x.resources][0]
+            except IndexError:
+                prem = dumb_prem
+                prem.name = self.facility.name
+                prem.terra = '0'
+            result.append({'uid': res.uid, 'premise': prem.name, 'floor': prem.terra, 'type': res.type,
+                           'name': res.hrn, 'state': res.get_state()})
         return result
 
     def shift_resources(self, params):
@@ -531,4 +584,8 @@ def parse_topic(topic):
     if len(topic.split('/')) == 4:
         channel = topic.split('/')[3]
     return type, id, channel
+
+def dumb_prem():
+    name = 'hui'
+    terra = 'rul'
 

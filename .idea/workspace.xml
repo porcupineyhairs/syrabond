@@ -7,10 +7,8 @@
       <change beforePath="$PROJECT_DIR$/clientside/groups.html" afterPath="$PROJECT_DIR$/clientside/groups.html" />
       <change beforePath="$PROJECT_DIR$/clientside/heating.html" afterPath="$PROJECT_DIR$/clientside/heating.html" />
       <change beforePath="$PROJECT_DIR$/clientside/index.html" afterPath="$PROJECT_DIR$/clientside/index.html" />
-      <change beforePath="$PROJECT_DIR$/clientside/maintenance.html" afterPath="$PROJECT_DIR$/clientside/maintenance.html" />
-      <change beforePath="$PROJECT_DIR$/clientside/script.js" afterPath="$PROJECT_DIR$/clientside/script.js" />
-      <change beforePath="$PROJECT_DIR$/json/tags.json" afterPath="$PROJECT_DIR$/json/tags.json" />
       <change beforePath="$PROJECT_DIR$/syrabond.py" afterPath="$PROJECT_DIR$/syrabond.py" />
+      <change beforePath="$PROJECT_DIR$/syrarestful.py" afterPath="$PROJECT_DIR$/syrarestful.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -27,8 +25,8 @@
       <file leaf-file-name="syrabond.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/syrabond.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2130">
-              <caret line="474" column="21" lean-forward="false" selection-start-line="474" selection-start-column="21" selection-end-line="474" selection-end-column="21" />
+            <state relative-caret-position="-622">
+              <caret line="461" column="110" lean-forward="false" selection-start-line="461" selection-start-column="110" selection-end-line="461" selection-end-column="110" />
               <folding>
                 <element signature="e#0#17#0" expanded="true" />
               </folding>
@@ -49,8 +47,8 @@
       <file leaf-file-name="tags.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/json/tags.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="22" lean-forward="false" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+            <state relative-caret-position="180">
+              <caret line="12" column="1" lean-forward="true" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -69,8 +67,8 @@
       <file leaf-file-name="syrarestful.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/syrarestful.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="18" column="24" lean-forward="false" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
+            <state relative-caret-position="384">
+              <caret line="53" column="0" lean-forward="true" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -169,12 +167,12 @@
         <option value="$PROJECT_DIR$/mqttsender.py" />
         <option value="$PROJECT_DIR$/json/mysql.json" />
         <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/syrarestful.py" />
         <option value="$PROJECT_DIR$/json/equip.json" />
         <option value="$PROJECT_DIR$/json/bind.json" />
         <option value="$PROJECT_DIR$/global.json" />
         <option value="$PROJECT_DIR$/syradatabase.py" />
         <option value="$PROJECT_DIR$/json/tags.json" />
+        <option value="$PROJECT_DIR$/syrarestful.py" />
         <option value="$PROJECT_DIR$/syrabond.py" />
       </list>
     </option>
@@ -513,7 +511,14 @@
       <option name="project" value="LOCAL" />
       <updated>1574851823214</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="RESTful API v0.2">
+      <created>1575023934418</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1575023934418</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -533,8 +538,8 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329602" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29228857" sideWeight="0.5024665" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28606966" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2885572" sideWeight="0.8928823" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29228857" sideWeight="0.49753347" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28731343" sideWeight="0.8928823" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2960199" sideWeight="0.49753347" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4079602" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15277778" sideWeight="0.50581396" order="2" side_tool="true" content_ui="tabs" />
@@ -844,24 +849,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/syrarestful.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="24" lean-forward="false" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/json/tags.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="22" lean-forward="false" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/json/equip.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="230">
@@ -870,10 +857,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/json/tags.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="1" lean-forward="true" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/syrarestful.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="384">
+          <caret line="53" column="0" lean-forward="true" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/syrabond.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2130">
-          <caret line="474" column="21" lean-forward="false" selection-start-line="474" selection-start-column="21" selection-end-line="474" selection-end-column="21" />
+        <state relative-caret-position="-622">
+          <caret line="461" column="110" lean-forward="false" selection-start-line="461" selection-start-column="110" selection-end-line="461" selection-end-column="110" />
           <folding>
             <element signature="e#0#17#0" expanded="true" />
           </folding>

@@ -12,6 +12,7 @@ app = flask.Flask(__name__)
 
 @app.route('/api/v02/<path:params>', methods=['GET', 'POST'])
 def api_request(params):
+    print(params)
     return json.dumps(api.parse_request(params), ensure_ascii=False, indent=4, sort_keys=True)
 
 
@@ -52,4 +53,4 @@ def test(tst):
     return open('./clientside/{}'.format(tst)).read()
 
 if __name__ == '__main__':
-    app.run(port=5001, debug=True)
+    app.run(host='0.0.0.0', port=80, debug=True)
