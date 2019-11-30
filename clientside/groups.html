@@ -8,6 +8,7 @@
 <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-2.2.1.js"></script>
 <script src="/client/test/functions.js"></script>
+<script src="/client/test/bootstrap-button.js"></script>
 </head>
 <body>
     <div class="navbar">
@@ -15,7 +16,7 @@
             <a class="brand" href="#">Syrabond API Client</a>
             
             <ul class="nav nav-tabs">
-  <li><a href="main">Fast access view</a></li>
+  <li><a href="index">Fast access view</a></li>
   <li class="active"><a href="groups">Groups</a></li>
   <li><a href="heating">Heating</a></li>
   <li><a href="maintenance">Maintenance</a></li>
@@ -24,7 +25,9 @@
     <div id="main" class="container">
     </div>
 
-<script src="/client/test/script.js"></script>
+    <script type="text/javascript">
+    getSwitches();
+    </script>
 
 </body>
 </html>

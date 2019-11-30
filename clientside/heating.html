@@ -16,7 +16,7 @@
             <a class="brand" href="#">Syrabond API Client</a>
             
             <ul class="nav nav-tabs">
-  <li><a href="main">Fast access view</a></li>
+  <li><a href="index">Fast access view</a></li>
   <li><a href="groups">Groups</a></li>
   <li class="active"><a href="#">Heating</a></li>
   <li><a href="maintenance">Maintenance</a></li>
@@ -24,13 +24,16 @@
         </div>
     </div>
 
-<div>
-<script src="/client/test/heating.js"></script>
+<div class="row">
+  <div class="span4"></div>
+  <div id="zopa" class="span8"></div>
 </div>
 
 
+<script>
+  getThermo();
+</script>
 
-</div>
 
 </body>
 </html>

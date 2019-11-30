@@ -7,6 +7,9 @@
 <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script>
 <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-2.2.1.js"></script>
+<script src="/client/test/functions.js"></script>
+
+
 </head>
 <body>
     <div class="navbar">
@@ -14,49 +17,21 @@
             <a class="brand" href="#">Syrabond API Client</a>
             
             <ul class="nav nav-tabs">
-  <li><a href="main">Fast access view</a></li>
-  <li><a href="premises">Premises</a></li>
+  <li class="active"><a href="index">Fast access view</a></li>
   <li><a href="groups">Groups</a></li>
-  <li class="active"><a href="maintenance">Maintenance</a></li>
+  <li><a href="heating">Heating</a></li>
+  <li><a href="maintenance">Maintenance</a></li>
 </ul>
             
         </div>
     </div>
-    <div id="main" class="container">
 
-      	 
-<table class="table table-striped">
-    <tr><td><b>UID</b></td><td><b>Options</b></td></tr>
-    <!-- ko foreach: statuses -->
-    <tr>
-    	<td><p><b data-bind="text: uid"></b></p></td>
-        <td><span data-bind="text: ip() == 'offline' ? `OFFLINE ` : ip "></span><i data-bind="visible: ip() == 'offline'" class="icon-bell"></i></td>
-    </tr>
-    <!-- /ko -->
-</table>
-
-    </div>
+<div class="row">
+  <div class="span4"></div>
+  <div class="span8"></div>
+</div>
     <script type="text/javascript">
-
-        function StateView() {
-         var self = this;
-         self.apiuri = 'http://127.0.0.1:5001/api/statusall';
-         self.statuses = ko.observableArray();
-         
-        $.getJSON(self.apiuri, function(data) {
-            for (var i = 0; i < data.response.length; i++) {
-                self.statuses.push({
-                    uid: ko.observable(data.response[i].uid),
-                    premise: ko.observable(data.response[i].premise),
-                    ip: ko.observable(data.response[i].ip)
-                });
-            }
-        });
-         
-         
-         }
-        ko.applyBindings(new StateView(), $('#main')[0]);
-
+    getShortcuts();
     </script>
 </body>
 </html>
