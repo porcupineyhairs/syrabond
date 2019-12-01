@@ -146,7 +146,8 @@ function getThermo() {
         resp = data.response[0].state;
         temp = resp.substring(resp.indexOf('temp:')+5);
         cell_id = data.response[0].uid;
-        document.getElementById(cell_id).innerHTML = temp;
+        cell = document.getElementById(cell_id);
+        cell.innerHTML = temp;
       });
     });
 });
@@ -157,16 +158,16 @@ function getThermo() {
     var items = [];
     $.each(data.response, function( key, val ){
       var prem = val.premise
-      var state = '<p id=c-'+val.uid+'>'+val.state+'</p>';
+      var state = '<img src="/client/img/thermostat.png" class="img-rounded"><span id=c-'+val.uid+'> '+val.state+'</span>';
       var range = '<input name="'+val.name+'"id="'+val.uid+'" type="range" min="0" max="30" value="'+val.state+'" step="0.5" />'
       var temp_id = null
       //right = right.substring(right.indexOf('temp:')+5);
       $.each(match, function (k,v){
         if (v.thermo == val.uid) {
-          temp_id = '<p id='+v.ambient+'></p>';
+          temp_id = '<img src="/client/img/thermometer.png" class="img-rounded"><span id='+v.ambient+'></span>';
         };  
       });
-      items.push({prem, range, state, temp_id});
+      items.push({prem, temp_id, range, state});
     });
     var target = document.getElementById('zopa');
     res = tablemaker(items);
@@ -179,14 +180,14 @@ function getThermo() {
     const resuid = $(this).attr('id');
     const name = $(this).attr('name');
     const caption = 'c-'+resuid;
-    document.getElementById(caption).innerHTML = this.value;
+    document.getElementById(caption).innerHTML = ' '+this.value;
   });
 
    $("#zopa").on('change','input',function () {
     const resuid = $(this).attr('id');
     const name = $(this).attr('name');
     const caption = 'c-'+resuid;   
-    document.getElementById(caption).innerHTML = this.value;
+    document.getElementById(caption).innerHTML = ' '+this.value;
     $.post(api+resuid+'/'+this.value);
   });
 

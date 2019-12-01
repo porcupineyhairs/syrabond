@@ -508,8 +508,6 @@ class API:
             result.update({'groups': list(self.GROUPS)})
             result.update({'tags': list(self.TAGS)})
 
-
-
         return result
 
     def get_state(self, params):
