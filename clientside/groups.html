@@ -21,12 +21,24 @@
   <li><a href="heating">Heating</a></li>
   <li><a href="maintenance">Maintenance</a></li>
 </ul>
-            
-    <div id="main" class="container">
+        </div>
     </div>
+            
+<div class="row">
+  <div class="span1"></div>
+  <div class="span11" id="scopes"></div>
+</div>
+<br>
+<div class="row">
+  <div class="span1" id="dummy"></div>
+      <div class="span4" id="switches"></div>
+      <div class="span7" id="sensors"></div>
+</div>
 
     <script type="text/javascript">
-    getSwitches();
+    getStruct('scopes');
+    getScopesList();
+    shiftSwitch();
     </script>
 
 </body>

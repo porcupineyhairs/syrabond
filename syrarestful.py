@@ -12,7 +12,7 @@ app = flask.Flask(__name__)
 
 @app.route('/api/v02/<path:params>', methods=['GET', 'POST'])
 def api_request(params):
-    print(params)
+    #print(params)
     return json.dumps(api.parse_request(params), ensure_ascii=False, indent=4, sort_keys=True)
 
 

@@ -5,7 +5,6 @@ const state_uri = 'state/'
 const shift_uri = 'shift/'
 const structure_uri = 'structure/'
 const shortcut_uri = 'state/shortcut'
-const groups_uri = 'structure/groups'
 var groups = [], tags = []
 
 
@@ -22,13 +21,9 @@ const colors ={
       0: "btn"
     }
 
-function getScopes() {
-const uri = base_uri+state_uri+scopes_uri;
-var scopes = [];
-
-
-
-
+const channels_hrf = {
+  'hum': '<img src="/client/img/humidity.png" class="img-rounded">',
+  'temp': '<img src="/client/img/thermometer.png" class="img-rounded">'
 }
 
 
@@ -36,7 +31,6 @@ function getState(entity) {
  const uri = base_uri+state_uri;
  const url = uri+entity;
  var items = [];
-
 $.getJSON(url, function(data){
   $.each( data.response, function (key, val)
     {
@@ -46,60 +40,105 @@ $.getJSON(url, function(data){
 return items;
 }
 
-function getShortcuts() {
-  const uri = base_uri+shortcut_uri
+
+function getStruct(type) {
+  const uri = base_uri+structure_uri+type;
+  var items = [];
+  $.getJSON(uri, function(data){
+    $.each(data.response, function ( key, val){
+      for (var i = val.length - 1; i >= 0; i--) {
+        const group_name = val[i];
+            items.push( '<label class="checkbox inline">');
+            items.push( '<input type="checkbox" value="'+group_name+'">'+group_name+'</label>');
+      }
+    items.push('<br>');      
+    })
+  })
+  .always(function(){
+    document.getElementById('scopes').innerHTML = items.join("");
+  });
+}
+
+
+function getScope(scope) {
+  const uri = base_uri+state_uri+scope
   var switches = []
   var sensors = []
-  $('.span4').button()
-  sensors.push( '<table class="table table-bordered table-condensed"><tr><td><b>Sensor</b></td><td><b>State</b></td></tr>' )
+  var thermos = []
   $.getJSON(uri, function(data) {
     for (var i = 0; i < data.response.length; i++) {
       const type = data.response[i].type, state = data.response[i].state, name = data.response[i].name, uid = data.response[i].uid
       if (type == 'switch'){
-        switches.push( "<p>" + name + ' ' + '<button class="' + colors[states[state]]+ '" res-uid=' + uid + '>' + counter_states[states[state]] + '</button></p>' );
+        const name_cell = "<span>"+name+"</span>"
+        const button_cell = '<button class="' + colors[states[state]]+ '" res-uid=' + uid + '>' + counter_states[states[state]] + '</button>'
+        switches.push({name_cell, button_cell})
       }
       if (type == 'sensor'){
-        var st = state.replace('hum', 'humidity')
-        sensors.push( '<tr><td>'+name+'</td><td>'+st+'</td></tr>' );
+        var state_cell = []
+        premise = data.response[i].premise
+        $.each(state, function(channel, st){
+          console.log(channels_hrf[channel], st);
+          state_cell.push('<p>'+channels_hrf[channel]+st+'</p>');
+        });
+      const st = state_cell.join(' ')
+      sensors.push({premise, st});
+      }
+      if (type == 'thermo'){
+        var state_cell = []
+        premise = data.response[i].premise
+        $.each(state, function(channel, st){
+          console.log(channels_hrf[channel], st);
+          state_cell.push('<p>'+channels_hrf[channel]+st+'</p>');
+        });
+      const st = state_cell.join(' ')
+      sensors.push({premise, st});
       }
     }
-    sensors.push( '</table>' )
-    $( "<ul/>", {
-      "class": "my-new-list",
-      "id": 'hui',
-      html: switches.join( "" )
-    }).appendTo( ".span4" );
-    $( "<ul/>", {
-      "class": "my-new-list",
-      "id": 'hui1',
-      html: sensors.join( "" )
-    }).appendTo( ".span8" );
-});
-shiftSwitch();
+
+})
+  .always(function(){
+    console.log(switches)
+    if (switches.length > 0) {
+    res = tablemaker(switches);
+    res.id = 'table-sw-'+scope
+    $(".span4").append(res);
+    }
+
+    if (sensors.length > 0){
+    res = tablemaker(sensors);
+    res.id = 'table-sens-'+scope
+    $(".span7").append(res);
+    }
+
+  });
+
 }
 
-function getSwitches() {
-  const uri = base_uri+groups_uri
 
-  $.getJSON(uri, function(data){
-    var items = []
-    $.each(data.response, function( key, val ) {
-      if (val[0].type == 'switch') {
-      items.push( "<li>" + key + ": </li>" )};
-      $.each(val, function( k, v ) {
-        if (v.type == "switch") {
-            items.push( "<p>" + v.name + ' ' + '<button class="' + colors[states[v.state]]+ '" res-uid=' + v.uid + '>' + counter_states[states[v.state]] + '</button></p>' );
-                                        };
-        })        
-    });
-  $( "<ul/>", {
-      "class": "my-new-list",
-      "id": 'hui',
-      html: items.join( "" )
-    }).appendTo( "body" );
-});
-shiftSwitch();
+function getScopesList(){
+
+   $("#scopes").on('change','input',function () {
+    const scope = this.value;
+    const checked = this.checked;
+    console.log(scope, checked);
+    if (checked == true) {
+      getScope(scope);
+    } else {
+      if ($("#table-sw-"+scope).length > 0){
+        $("#table-sw-"+scope).remove()
+      };
+      if ($("#table-sens-"+scope).length > 0){
+        $("#table-sens-"+scope).remove()
+      };
+    };
+  });
+
+
+
+
 }
+
+
 
 function shiftSwitch(){
 
@@ -144,7 +183,7 @@ function getThermo() {
       url = temp_uri+val.ambient;
       $.getJSON(url, function(data){
         resp = data.response[0].state;
-        temp = resp.substring(resp.indexOf('temp:')+5);
+        temp = resp.temp;
         cell_id = data.response[0].uid;
         cell = document.getElementById(cell_id);
         cell.innerHTML = temp;
@@ -159,9 +198,8 @@ function getThermo() {
     $.each(data.response, function( key, val ){
       var prem = val.premise
       var state = '<img src="/client/img/thermostat.png" class="img-rounded"><span id=c-'+val.uid+'> '+val.state+'</span>';
-      var range = '<input name="'+val.name+'"id="'+val.uid+'" type="range" min="0" max="30" value="'+val.state+'" step="0.5" />'
+      var range = '<input name="'+val.name+'"id="'+val.uid+'" type="range" opacity="0.5" min="0" max="30" value="'+val.state+'" step="0.5" />'
       var temp_id = null
-      //right = right.substring(right.indexOf('temp:')+5);
       $.each(match, function (k,v){
         if (v.thermo == val.uid) {
           temp_id = '<img src="/client/img/thermometer.png" class="img-rounded"><span id='+v.ambient+'></span>';
@@ -171,19 +209,19 @@ function getThermo() {
     });
     var target = document.getElementById('zopa');
     res = tablemaker(items);
-    target.appendChild(res)
+    target.appendChild(res);
 });
 
 
 
-  $("#zopa").on('input','input',function () {
+  $("#thermostat").on('input','input',function () {
     const resuid = $(this).attr('id');
     const name = $(this).attr('name');
     const caption = 'c-'+resuid;
     document.getElementById(caption).innerHTML = ' '+this.value;
   });
 
-   $("#zopa").on('change','input',function () {
+   $("#thermostat").on('change','input',function () {
     const resuid = $(this).attr('id');
     const name = $(this).attr('name');
     const caption = 'c-'+resuid;   
@@ -208,6 +246,7 @@ $.getJSON(self.apiuri, function(data) {
     }
 });
  
+
  }
 
  function getQuarantine() {

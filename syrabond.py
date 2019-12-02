@@ -336,15 +336,20 @@ class Sensor(Device):
 
         if channel not in self.state or self.state[channel] != state:
             self.state.update({channel: state})
-            state_string = ''
-            for x in self.state:
-                state_string += '{}: {}, '.format(x, self.state[x])
-            self.update_state(state_string.rstrip(', '))
-        # TODO Update states in Web interface, database, etc.
+            self.update_state(self.state)
 
     def update_state(self, state):
-        self.DB.rewrite_state(self.uid, state)
-        syracommon.log('The state of {} ({}) changed to {}'.format(self.uid, self.hrn, state))
+        state_string = ', '
+        state_string = state_string.join([channel+': '+state[channel] for channel in state.keys()])
+        self.DB.rewrite_state(self.uid, state_string)
+        syracommon.log('The state of {} ({}) changed to {}'.format(self.uid, self.hrn, state_string))
+
+    def get_state(self):
+        state_string = self.DB.read_state(self.uid)[0][0]
+        splited = [s.split(': ') for s in state_string.split(', ')]
+        result = {}
+        [result.update({channel[0]: channel[1]}) for channel in splited]
+        return result
 
 
 class API:
@@ -438,17 +443,21 @@ class API:
 
     def get_struct(self, params):
         result = {}
-        struct_type = params[0][0]
+        struct_type = None
+        try:
+            struct_type = params[0][0]
+        except TypeError:
+            pass
 
         if struct_type == 'scopes':
             result.update({'groups': list(self.GROUPS)})
             result.update({'tags': list(self.TAGS)})
 
         elif struct_type == 'tags':
-            result.update({'tags': list(self.TAGS)})
+            return list(self.TAGS)
 
         elif struct_type == 'groups':
-            result.update({'groups': list(self.GROUPS)})
+            return list(self.GROUPS)
 
         elif struct_type == 'premises':
             premises = self.facility.premises
@@ -460,6 +469,10 @@ class API:
                 except AttributeError:
                     pass
                 result.update({prem: {'name': premises[prem].name, 'thermostat': thermo, 'ambient': ambient}})
+        elif struct_type == 'quarantine':
+            result = []
+            response = self.facility.DB.get_quarantine()
+            [result.append({'uid': s[0], 'ip': s[1]}) for s in response]
 
         return result
 
@@ -492,10 +505,7 @@ class API:
                                    'thermostat_state': premise.thermostat.state}})
                 except:
                     continue
-        elif struct_type == 'quarantine':
-            result = []
-            response = self.facility.DB.get_quarantine()
-            [result.append({'uid': s[0], 'ip': s[1]}) for s in response]
+
         elif struct_type == 'tag':
             result = []
             tag_attr = params[1]
@@ -521,8 +531,12 @@ class API:
                 prem = dumb_prem
                 prem.name = self.facility.name
                 prem.terra = '0'
-            result.append({'uid': res.uid, 'premise': prem.name, 'floor': prem.terra, 'type': res.type,
-                           'name': res.hrn, 'state': res.get_state()})
+            if isinstance(res, Sensor):
+                result.append({'uid': res.uid, 'premise': prem.name, 'floor': prem.terra, 'type': res.type,
+                           'channels': res.channels, 'name': res.hrn, 'state': res.get_state()})
+            else:
+                result.append({'uid': res.uid, 'premise': prem.name, 'floor': prem.terra, 'type': res.type,
+                               'name': res.hrn, 'state': res.get_state()})
         return result
 
     def shift_resources(self, params):
