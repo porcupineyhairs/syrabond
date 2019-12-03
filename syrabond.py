@@ -100,7 +100,6 @@ class Facility:
             print(r.terra, r.code, r.name)
         return result
 
-
     def get_resource(self, uid=None, group=None, tag=None):
         result = set()
         print()
@@ -372,6 +371,8 @@ class API:
         self.TAGS = set()
         for res in self.facility.resources:
             [self.TAGS.update({x}) for x in self.facility.resources[res].tags]
+        self.PREMS = set()
+        [self.PREMS.update({x}) for x in self.facility.premises]
 
     def is_consistent_api_request(self, agr):
         try:
@@ -438,6 +439,8 @@ class API:
                 resources.update(self.facility.get_resource(group=one))
             elif one in self.TAGS:
                 resources.update(self.facility.get_resource(tag=one))
+            elif one in self.PREMS:
+                resources.update(self.facility.premises[one].resources)
 
         return resources
 
@@ -460,15 +463,14 @@ class API:
             return list(self.GROUPS)
 
         elif struct_type == 'premises':
-            premises = self.facility.premises
-            for prem in self.facility.premises:
-                thermo = ambient = None
-                try:
-                    thermo = premises[prem].thermostat.uid
-                    ambient = premises[prem].ambient.uid
-                except AttributeError:
-                    pass
-                result.update({prem: {'name': premises[prem].name, 'thermostat': thermo, 'ambient': ambient}})
+            terras = set()
+            [terras.update(self.facility.premises[prem].terra) for prem in self.facility.premises]
+            for n in sorted(terras):
+                premises = [{'floor': self.facility.premises[prem].terra,
+                             'index': prem, 'name': self.facility.premises[prem].name}
+                            for prem in self.facility.premises if self.facility.premises[prem].terra == n]
+                result.update({n: premises})
+
         elif struct_type == 'quarantine':
             result = []
             response = self.facility.DB.get_quarantine()

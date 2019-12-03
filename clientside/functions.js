@@ -25,6 +25,28 @@ const channels_hrf = {
   'temp': '<img src="/client/img/thermometer.png" class="img-rounded">'
 }
 
+const custom_translator = {
+  "ru-RU":
+  {
+    "prem": "Помещения",
+    "shortcut": "Быстрый доступ",
+    "heating": "Отопление",
+    "groups": "Группы устройств",
+    "maint": "Служебное"
+  },
+  "en-US":
+  {
+    "prem": "Premises",
+    "shortcut": "Shortcut view",
+    "heating": "Heating",
+    "groups": "Groups",
+    "maint": "Maintenance"
+  }
+
+}
+
+
+
 
 function getState(entity) {
  const uri = base_uri+state_uri;
@@ -45,12 +67,22 @@ function getStruct(type) {
   var items = [];
   $.getJSON(uri, function(data){
     $.each(data.response, function ( key, val){
+      console.log(key,val)
+      items.push('<label>'+key+' </label>')
+      if (type == 'scopes'){
       for (var i = val.length - 1; i >= 0; i--) {
-        const group_name = val[i];
+        const scope_name = val[i];
             items.push( '<label class="checkbox inline">');
-            items.push( '<input type="checkbox" value="'+group_name+'">'+group_name+'</label>');
-      }
-    items.push('<br>');      
+            items.push( '<input type="checkbox" value="'+scope_name+'">'+scope_name+'</label>');
+      }}
+      if (type == 'premises'){
+      for (var i = val.length - 1; i >= 0; i--) {
+        const prem_name = val[i].name;
+        const prem_index = val[i].index
+            items.push( '<label class="checkbox inline">');
+            items.push( '<input type="checkbox" value="'+prem_index+'">'+prem_name+'</label>');
+      }}
+    //items.push('<br>');      
     })
   })
   .always(function(){
@@ -76,7 +108,6 @@ function getScope(scope) {
         var state_cell = []
         premise = data.response[i].premise
         $.each(state, function(channel, st){
-          console.log(channels_hrf[channel], st);
           state_cell.push('<p>'+channels_hrf[channel]+st+'</p>');
         });
       const st = state_cell.join(' ')
@@ -92,23 +123,22 @@ function getScope(scope) {
 
 })
   .always(function(){
-    console.log(switches)
     if (switches.length > 0) {
     res = tablemaker(switches);
     res.id = 'table-sw-'+scope
-    $(".span4").append(res);
+    $("#span-switches").append(res);
     }
 
     if (sensors.length > 0){
     res = tablemaker(sensors);
     res.id = 'table-sens-'+scope
-    $(".span7").append(res);
+    $("#span-sensors").append(res);
     }
 
     if (thermos.length > 0){
     res = tablemaker(thermos);
     res.id = 'table-ther-'+scope
-    $(".span7").append(res);
+    $("#span-thermos").append(res);
     }
 
   });
@@ -121,20 +151,23 @@ function getScopesList(){
    $("#scopes").on('change','input',function () {
     const scope = this.value;
     const checked = this.checked;
-    console.log(scope, checked);
     if (checked == true) {
       getScope(scope);
     } else {
-      if ($("#table-sw-"+scope).length > 0){
-        $("#table-sw-"+scope).remove()
+
+      var x = document.getElementById("table-sw-"+scope);
+      if (x != null){
+        x.remove();
       };
-      if ($("#table-sens-"+scope).length > 0){
-        $("#table-sens-"+scope).remove()
+      x = document.getElementById("table-sens-"+scope);
+      if (x != null){
+        x.remove();
       };
-      if ($("#table-ther-"+scope).length > 0){
-        $("#table-ther-"+scope).remove()
+      x = document.getElementById("table-ther-"+scope);
+      if (x != null){
+        x.remove();
       };
-    };
+      };
   });
 
 }
@@ -290,3 +323,27 @@ function viceversa(state) {
       }
       return counter_states[state]
 }
+
+function getNavbar(active) {
+  var lang = navigator.language || navigator.userLanguage;
+  if (custom_translator[lang] == null) {
+    lang = 'en-US'
+  }
+  var items = []
+  const key = active.split('/')[active.split('/').length-1]
+  items.push('<li><a href="index">'+custom_translator[lang]['shortcut']+'</a></li>');
+  items.push('<li><a href="premises">'+custom_translator[lang]['prem']+'</a></li>');
+  items.push('<li><a href="groups">'+custom_translator[lang]['groups']+'</a></li>');
+  items.push('<li><a href="heating">'+custom_translator[lang]['heating']+'</a></li>');
+  items.push('<li><a href="maintenance">'+custom_translator[lang]['maint']+'</a></li>');
+  $(".nav.nav-tabs").append(items.join(''));
+  $(".nav.nav-tabs").each(function(){
+        $(this).find('a').each(function(){
+          const ref = this.href.split('/')[this.href.split('/').length-1]
+          if (ref == key){
+          $(this).parent().addClass('active')
+        }
+        });
+    });
+}
+

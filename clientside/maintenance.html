@@ -8,18 +8,15 @@
 <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-2.2.1.js"></script>
 <script src="/client/test/functions.js"></script>
+<script src="/client/test/bootstrap-button.js"></script>
+
 </head>
 <body>
     <div class="navbar">
         <div class="navbar-inner">
             <a class="brand" href="#">Syrabond API Client</a>
             
-            <ul class="nav nav-tabs">
-  <li><a href="index">Fast access view</a></li>
-  <li><a href="groups">Groups</a></li>
-  <li><a href="heating">Heating</a></li>
-  <li class="active"><a href="#">Maintenance</a></li>
-</ul>
+            <ul class="nav nav-tabs"></ul>
         </div>
     </div>
 <div id="main" class="container">
@@ -38,6 +35,7 @@
 
     </div>
     <script type="text/javascript">
+        getNavbar(window.location.pathname);
         ko.applyBindings(new StateView(), $('#main')[0]);
         getQuarantine();
 
