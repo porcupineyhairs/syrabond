@@ -222,11 +222,14 @@ function getThermo() {
 
   $.getJSON(prem_uri, function(data){
     $.each(data.response, function( key, val ){
-      const t = val.thermostat, a = val.ambient
+      for (var i = val.length - 1; i >= 0; i--) {
+        const t = val[i].thermostat, a = val[i].ambient
         if (t!=null && a!=null) {
           var dict = {'thermo':t, 'ambient': a};
         match.push(dict);
         } 
+      }
+      
       
     });
 })

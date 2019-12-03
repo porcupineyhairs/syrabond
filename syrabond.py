@@ -467,7 +467,9 @@ class API:
             [terras.update(self.facility.premises[prem].terra) for prem in self.facility.premises]
             for n in sorted(terras):
                 premises = [{'floor': self.facility.premises[prem].terra,
-                             'index': prem, 'name': self.facility.premises[prem].name}
+                             'index': prem, 'name': self.facility.premises[prem].name,
+                             'ambient': get_uid(self.facility.premises[prem].ambient),
+                             'thermostat': get_uid(self.facility.premises[prem].thermostat)}
                             for prem in self.facility.premises if self.facility.premises[prem].terra == n]
                 result.update({n: premises})
 
@@ -583,7 +585,6 @@ class API:
         self.facility.listener.subscribe(self.facility.name+'/status/#')
 
 
-
 def check_states(resources):
     result = {}
     for res in resources:
@@ -599,7 +600,15 @@ def parse_topic(topic):
         channel = topic.split('/')[3]
     return type, id, channel
 
+
 def dumb_prem():
     name = 'hui'
     terra = 'rul'
+
+
+def get_uid(entity):
+        try:
+            return entity.uid
+        except AttributeError:
+            return None
 
