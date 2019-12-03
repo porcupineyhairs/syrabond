@@ -4,7 +4,6 @@ const scopes_uri = 'scopes'
 const state_uri = 'state/'
 const shift_uri = 'shift/'
 const structure_uri = 'structure/'
-const shortcut_uri = 'state/shortcut'
 var groups = [], tags = []
 
 
@@ -84,14 +83,10 @@ function getScope(scope) {
       sensors.push({premise, st});
       }
       if (type == 'thermo'){
-        var state_cell = []
         premise = data.response[i].premise
-        $.each(state, function(channel, st){
-          console.log(channels_hrf[channel], st);
-          state_cell.push('<p>'+channels_hrf[channel]+st+'</p>');
-        });
-      const st = state_cell.join(' ')
-      sensors.push({premise, st});
+        const st = '<img src="/client/img/thermostat.png" class="img-rounded"><span id=c-'+uid+'> '+state+'</span>';
+        const range = '<input name="'+name+'"id="'+uid+'" type="range" opacity="0.5" min="0" max="30" value="'+state+'" step="0.5" />'
+      thermos.push({premise, range, st});
       }
     }
 
@@ -107,6 +102,12 @@ function getScope(scope) {
     if (sensors.length > 0){
     res = tablemaker(sensors);
     res.id = 'table-sens-'+scope
+    $(".span7").append(res);
+    }
+
+    if (thermos.length > 0){
+    res = tablemaker(thermos);
+    res.id = 'table-ther-'+scope
     $(".span7").append(res);
     }
 
@@ -130,14 +131,13 @@ function getScopesList(){
       if ($("#table-sens-"+scope).length > 0){
         $("#table-sens-"+scope).remove()
       };
+      if ($("#table-ther-"+scope).length > 0){
+        $("#table-ther-"+scope).remove()
+      };
     };
   });
 
-
-
-
 }
-
 
 
 function shiftSwitch(){
@@ -161,11 +161,30 @@ $("body").on('click','button', function() {
 
 }
 
+function shiftThermo(id){
+  const api = base_uri+shift_uri;
+  $("#"+id).on('input','input',function () {
+    const resuid = $(this).attr('id');
+    const name = $(this).attr('name');
+    const caption = 'c-'+resuid;
+    document.getElementById(caption).innerHTML = ' '+this.value;
+  });
+
+   $("#"+id).on('change','input',function () {
+    const resuid = $(this).attr('id');
+    const name = $(this).attr('name');
+    const caption = 'c-'+resuid;   
+    document.getElementById(caption).innerHTML = ' '+this.value;
+    $.post(api+resuid+'/'+this.value);
+  });
+
+}
+
 function getThermo() {
   const thermo_uri = base_uri+state_uri+'thermostat';
   const temp_uri = base_uri+state_uri;
   const prem_uri = base_uri+structure_uri+'premises';
-  const api = base_uri+shift_uri;
+  
   var match = []
 
   $.getJSON(prem_uri, function(data){
@@ -192,7 +211,6 @@ function getThermo() {
 });
 
 
-
   $.getJSON(thermo_uri, function(data){
     var items = [];
     $.each(data.response, function( key, val ){
@@ -207,27 +225,10 @@ function getThermo() {
       });
       items.push({prem, temp_id, range, state});
     });
-    var target = document.getElementById('zopa');
+    var target = document.getElementById('thermostat');
     res = tablemaker(items);
     target.appendChild(res);
 });
-
-
-
-  $("#thermostat").on('input','input',function () {
-    const resuid = $(this).attr('id');
-    const name = $(this).attr('name');
-    const caption = 'c-'+resuid;
-    document.getElementById(caption).innerHTML = ' '+this.value;
-  });
-
-   $("#thermostat").on('change','input',function () {
-    const resuid = $(this).attr('id');
-    const name = $(this).attr('name');
-    const caption = 'c-'+resuid;   
-    document.getElementById(caption).innerHTML = ' '+this.value;
-    $.post(api+resuid+'/'+this.value);
-  });
 
 }
 
@@ -246,7 +247,6 @@ $.getJSON(self.apiuri, function(data) {
     }
 });
  
-
  }
 
  function getQuarantine() {
