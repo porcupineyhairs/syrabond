@@ -1,5 +1,5 @@
 import pymysql
-import syracommon
+from syrabond import common
 from time import sleep
 
 
@@ -10,7 +10,7 @@ class Mysql:
         self.read_buffer = set()
         self.cursor_locked = False
         self.buffer_locked = False
-        conf = syracommon.extract_config('mysql.json')
+        conf = common.extract_config('mysql.json')
         self.debug = bool(conf['debug'])
         self.con = pymysql.connect(conf['host'], conf['user'], conf['password'], conf['database'], connect_timeout=30)
         self.cursor = self.con.cursor()

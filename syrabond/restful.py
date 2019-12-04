@@ -1,17 +1,23 @@
 import flask
 import json
-import syracommon
-from syrabond import API
+from syrabond import common
+from syrabond.api import API
 
 
-conf = syracommon.extract_config('global.json')
+conf = common.extract_config('global.json')
 api = API(conf['facility_name'])
 conf.clear()
 app = flask.Flask(__name__)
 
 
 @app.route('/api/v02/<path:params>', methods=['GET', 'POST'])
-def api_request(params):
+def get_api_request(params):
+    #print(params)
+    return json.dumps(api.parse_request(params), ensure_ascii=False, indent=4, sort_keys=True)
+
+
+@app.route('/api/v02/<path:params>', methods=['GET', 'POST'])
+def postapi_request(params):
     #print(params)
     return json.dumps(api.parse_request(params), ensure_ascii=False, indent=4, sort_keys=True)
 
