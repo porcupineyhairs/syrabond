@@ -47,6 +47,12 @@ class Mysql:
         if not self.send_read_query(query):
             self.create_status_row(uid)
 
+    def del_resource_rows(self, uid):
+        query = 'DELETE FROM Res_state WHERE uid = \'{}\''.format(uid)
+        self.send_write_query(query)
+        query = 'DELETE FROM Dev_status WHERE uid = \'{}\''.format(uid)
+        self.send_write_query(query)
+
     def create_state_row(self, uid):
         query = 'INSERT INTO Res_state (uid, state) VALUES (\'{}\', \'{}\')'.format(uid, 'None')
         self.send_write_query(query)

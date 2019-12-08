@@ -17,16 +17,18 @@ class Facility:
         if listen:
             self.listener = mqttsender.Mqtt('syrabond_listener_' + uniqid, config='mqtt.json', clean_session=True)
             self.listener.subscribe('{}/{}/#'.format(self.name, 'status'))  # TODO Dehardcode status topic
+            self.listener.subscribe('{}/{}/#'.format('common', 'welcome'))  # TODO Dehardcode welcome topic
         else:
             self.listener = mqttsender.Dumb()
         self.sender = mqttsender.Mqtt('syrabond_sender_' + uniqid, config='mqtt.json', clean_session=True)
         confs = common.extract_config('confs.json')
+        self.equip_conf_file = confs['equipment']
         config = {}
         for conf in confs:
             config[conf] = common.extract_config((confs[conf]))
             if not config[conf]:
                 common.log('Unable to parse configuration file {}. Giving up...'.format(confs[conf]),
-                           log_type='debug')
+                           log_type='error')
                 exit()
         for equip in config['equipment']:
             type = config['equipment'][equip]['type']
@@ -138,13 +140,53 @@ class Facility:
                         self.resources[id].update_status(msg)
                     else:
                         self.DB.rewrite_quarantine(id, msg)
+                elif type == 'welcome':
+                        self.DB.rewrite_quarantine(id, msg)
 
         self.listener.message_buffer.clear()
         self.listener.message_buffer_lock = False
 
+    def add_new_resourse(self, type: str, uid: str, group: str, hrn: str, **kwargs: list) -> bool:
 
-    def add_new_resourse(self):
-        pass
+            if type == 'switch':
+                print('here1')
+                resource = Switch(self.listener, self.sender, self.DB, self.name, uid, type, group, hrn, [], False)
+                self.resources[uid] = resource
+                print(resource.state)
+                resource.update_state('OFF')  # TODO Retrieve real device state
+                print('here2')
+                print(resource.state)
+            elif type == 'sensor':
+                channels = kwargs['channels']
+                print(uid, type, group, hrn, [], False, channels)
+                resource = Sensor(self.listener, self.sender, self.DB, self.name, uid, type, group, hrn, [],
+                                  False, channels)
+                self.resources[uid] = resource
+            self.update_equip_conf()
+            return True
+
+
+    def update_equip_conf(self):
+        conf = {}
+        for id in self.resources:
+            type = channels = group = hrn = pir = None
+            res = self.resources[id]
+            content = dir(res)
+            uid = id
+            if 'type' in content:
+                type = res.type
+            if 'channels' in content:
+                channels = res.channels
+            if 'group' in content:
+                group = res.group
+            if 'hrn' in content:
+                hrn = res.hrn
+            if 'pir' in content:
+                pir = res.pir
+            conf.update({uid: {'type': type, 'channels': channels, 'group': group, 'hrn': hrn, 'pir': pir}})
+        common.rewrite_config(self.equip_conf_file, conf)
+        #print(conf)
+
 
 
 class Premises:
@@ -214,9 +256,7 @@ class Device(Resource):
         self.status_topic = '{}/{}/{}'.format(obj_name, 'status', self.uid)
         self.status = None
         self.pir = pir
-
         self.DB.check_status_row_exist(self.uid)
-        # self.listener.subscribe(self.status_topic) Deprecated. Now subscribing to ../status/#
 
         if pir:
             self.pir_topic = self.topic+'/'+pir
@@ -261,6 +301,7 @@ class Device(Resource):
     def update_status(self, status):
         self.status = status
         self.DB.rewrite_status(self.uid, self.status)
+
 
 class Switch(Device):
 
@@ -320,10 +361,10 @@ class Sensor(Device):
     def __init__(self, listener, sender, db, obj_name, uid, type, group, hrn, tags, pir, channels):
         super().__init__(listener, sender, db, obj_name, uid, type, group, hrn, tags, pir)
         self.state = {}
-        if channels.find(', ') > 0:
+        if isinstance(channels, str):
             self.channels = channels.split(', ')
         else:
-            self.channels = [channels]
+            self.channels = channels
 
     def connect(self):
         for channel in self.channels:
@@ -345,7 +386,21 @@ class Sensor(Device):
         state_string = self.DB.read_state(self.uid)[0][0]
         splited = [s.split(': ') for s in state_string.split(', ')]
         result = {}
-        [result.update({channel[0]: channel[1]}) for channel in splited]
-        return result
+        try:
+            [result.update({channel[0]: channel[1]}) for channel in splited]
+            return result
+        except IndexError:
+            return result
 
 
+def parse_topic(topic):
+    type = id = channel = None
+    splited = topic.split('/')
+    if len(splited) == 4:
+        type = topic.split('/')[1]
+        id = topic.split('/')[2]
+        channel = topic.split('/')[3]
+    elif len(splited) == 3:
+        type = topic.split('/')[1]
+        id = topic.split('/')[2]
+    return type, id, channel
