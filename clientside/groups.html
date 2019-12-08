@@ -8,25 +8,32 @@
 <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-2.2.1.js"></script>
 <script src="/client/test/functions.js"></script>
-<script src="/client/test/bootstrap-button.js"></script>
 </head>
 <body>
     <div class="navbar">
         <div class="navbar-inner">
-            <a class="brand" href="#">Syrabond API Client</a>
-            
-            <ul class="nav nav-tabs">
-  <li><a href="index">Fast access view</a></li>
-  <li class="active"><a href="groups">Groups</a></li>
-  <li><a href="heating">Heating</a></li>
-  <li><a href="maintenance">Maintenance</a></li>
-</ul>
-            
-    <div id="main" class="container">
+            <a class="brand" href="index">Syrabond API Client</a>
+            <ul class="nav nav-tabs"></ul>
+        </div>
     </div>
+            
+<div class="row">
+  <div class="span1"></div>
+  <div class="span11" id="scopes"></div>
+</div>
+<br>
+<div class="row">
+  <div class="span1" id="dummy"></div>
+      <div class="span4" id="span-switches"></div>
+      <div class="span7" id="span-sensors"><div id="span-thermos"></div></div>
+</div>
 
     <script type="text/javascript">
-    getSwitches();
+    getNavbar(window.location.pathname);
+    getStruct('scopes');
+    getScopesList();
+    shiftSwitch();
+    shiftThermo('span-thermos');
     </script>
 
 </body>

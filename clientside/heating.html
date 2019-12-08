@@ -13,26 +13,22 @@
 <body>
     <div class="navbar">
         <div class="navbar-inner">
-            <a class="brand" href="#">Syrabond API Client</a>
-            
-            <ul class="nav nav-tabs">
-  <li><a href="index">Fast access view</a></li>
-  <li><a href="groups">Groups</a></li>
-  <li class="active"><a href="#">Heating</a></li>
-  <li><a href="maintenance">Maintenance</a></li>
-</ul>
+            <a class="brand" href="index">Syrabond API Client</a>
+            <ul class="nav nav-tabs"></ul>
         </div>
     </div>
 
 <div class="row">
   <div class="span4"></div>
-  <div id="zopa" class="span8"></div>
+  <div id="thermostat" class="span8"></div>
 </div>
 
 
 
 <script>
+  getNavbar(window.location.pathname);
   getThermo();
+  shiftThermo('thermostat');
 </script>
 
 

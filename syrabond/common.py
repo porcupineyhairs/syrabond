@@ -32,6 +32,16 @@ Opening file <param> and extracting json to dict.
     return items
 
 
+def rewrite_config(file_name, content):
+    try:
+        with open(confs_dir+'/'+file_name, 'w') as f:
+             f.write(json.dumps(content, ensure_ascii=False, indent=4, sort_keys=True))
+    except Exception as e:
+        print(e)
+        return False
+    return True
+
+
 logging_levels = {
     'CRITICAL': 50,
     'ERROR': 40,

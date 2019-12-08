@@ -8,38 +8,58 @@
 <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-2.2.1.js"></script>
 <script src="/client/test/functions.js"></script>
+
 </head>
 <body>
     <div class="navbar">
         <div class="navbar-inner">
-            <a class="brand" href="#">Syrabond API Client</a>
+            <a class="brand" href="index">Syrabond API Client</a>
             
-            <ul class="nav nav-tabs">
-  <li><a href="index">Fast access view</a></li>
-  <li><a href="groups">Groups</a></li>
-  <li><a href="heating">Heating</a></li>
-  <li class="active"><a href="#">Maintenance</a></li>
-</ul>
+            <ul class="nav nav-tabs"></ul>
         </div>
     </div>
 <div id="main" class="container">
 
 <h4>Devices onboard</h4>
-<table class="table table-striped">
-    <tr><td><b>UID</b></td><td>Location</td><td><b>Options</b></td></tr>
-    <!-- ko foreach: statuses -->
-    <tr>
-    	<td><p data-bind="text: uid"></p></td>
-      <td><p data-bind="text: premise"></p></td>
-        <td><span data-bind="text: ip() == 'offline' ? `OFFLINE ` : ip "></span><span data-bind="visible: ip() == 'offline'" class="label label-important">!</span></td>
-    </tr>
-    <!-- /ko -->
+<table class="table table-striped" id="all-devices">
 </table>
+<h4>New devices</h4>
+<div id="new-form">
+  </div>
+<div id='quarantine'>
+</div>
 
     </div>
+
+<!-- Modal -->
+<div id="edit-device-mod" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h4 id="modal-label"></h4>
+  </div>
+  <div class="modal-body">
+  <form class="form-horizontal" id="device-prop">
+    <label id='label-hrn'></label>
+    <input id='input-hrn' name="name" type="textarea" placeholder="Type name" class="span5">
+    <label id='label-group'></label>
+    <select id='select-group' name="group"></select>
+    <span id='label-tags'></span>
+    <div id='div-tags'></div>
+    
+  </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary" id="button-sub-mod" data-dismiss="modal" aria-hidden="true">Save changes</button>
+    <button class="btn btn-danger" id="button-delete-mod" allign="left" data-dismiss="modal" aria-hidden="true">Delete device</button>
+  </div>
+</div>
+
     <script type="text/javascript">
-        ko.applyBindings(new StateView(), $('#main')[0]);
+        getNavbar(window.location.pathname);
+        StateView();
         getQuarantine();
+        devManage();
 
     </script>
 </body>

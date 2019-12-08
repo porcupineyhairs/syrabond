@@ -1,8 +1,8 @@
 import paho.mqtt.client as mqtt
 import sys
 from time import sleep
-from syracommon import extract_config
-from syracommon import log
+from syrabond.common import extract_config
+from syrabond.common import log
 
 
 class Mqtt:

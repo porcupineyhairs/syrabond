@@ -1,6 +1,6 @@
 {
   "facility_name": "sh",
-  "working_dir": "/home/pi/syrabond/python",
+  "working_dir": "/Users/egor/PycharmProjects/syrabond",
   "topics":
   {
     "global_ping": "globalping",

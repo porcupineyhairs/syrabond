@@ -1,118 +1,129 @@
 {
-  "switch-d1ca3e00-v0.1":
-  {
-    "type": "switch",
-    "channels": "1",
-    "group": "amb",
-    "hrn": "рождественская иллюминация"
-  },
-  "switch-fcfe3a00-v0.1":
-  {
-    "type": "switch",
-    "channels": "1",
-    "group": "lights",
-    "hrn": "свет на кухне"
-  },
-  "switch-f76eaf00-v0.1":
-  {
-    "type": "switch",
-    "channels": "1",
-    "group": "lights",
-    "hrn": "свет на террасе"
-  },
-  "si-1e110800-v0.1":
-  {
-    "type": "sensor",
-    "channels": "temp, hum",
-    "group": "temp",
-    "hrn": "Атмосфера в гостинной"
-  },
-
-  "switch-fdfe3a00-v0.1":
-  {
-    "type": "switch",
-    "channels": "1",
-    "group": "lights",
-    "hrn": "свет в спальне"
-  },
-    "switch-1603eb00-v0.1":
-  {
-    "type": "switch",
-    "channels": "1",
-    "group": "vent",
-    "hrn": "вытяжка"
-  },
-    "switch-de387a00-v0.1":
-  {
-    "type": "switch",
-    "channels": "1",
-    "group": "vent",
-    "hrn": "приточка"
-  },
-  "switch-93902400-v0.1":
-  {
-    "type": "switch",
-    "channels": "1",
-    "group": "lights",
-    "hrn": "свет на складе",
-    "pir": "pir"
-  },
-  "si-47354100-v0.1":
-  {
-    "type": "sensor",
-    "channels": "temp, hum",
-    "group": "temp",
-    "hrn": "Атмосфера в спальне"
-  },
-  "bme-cab62d00-v0.1":
-  {
-    "type": "sensor",
-    "channels": "temp",
-    "group": "temp",
-    "hrn": "Температура в гостевой спальне"
-  },
-  "switch-aa7a3700-v0.1":
-  {
-    "type": "switch",
-    "channels": "1",
-    "group": "lights",
-    "hrn": "свет в гардеробной",
-    "pir": "pir"
-  },
-  "thermo1.1":
-  {
-    "type": "thermo",
-    "group": "thermostat",
-    "hrn": "Термостат в санузле"
-  },
-    "thermo1.2":
-  {
-    "type": "thermo",
-    "group": "thermostat",
-    "hrn": "Термостат в мастерской"
-  },
-    "thermo1.4":
-  {
-    "type": "thermo",
-    "group": "thermostat",
-    "hrn": "Термостат в гостинной"
-  },
-    "thermo2.1":
-  {
-    "type": "thermo",
-    "group": "thermostat",
-    "hrn": "Термостат в ванной"
-  },
-    "thermo2.3":
-  {
-    "type": "thermo",
-    "group": "thermostat",
-    "hrn": "Термостат в спальне"
-  },
-    "thermo2.4":
-  {
-    "type": "thermo",
-    "group": "thermostat",
-    "hrn": "Термостат в гостевой"
-  }
+    "bme-cab62d00-v0.1": {
+        "channels": [
+            "temp"
+        ],
+        "group": "temp",
+        "hrn": "Температура в гостевой спальне",
+        "pir": false,
+        "type": "sensor"
+    },
+    "si-1e110800-v0.1": {
+        "channels": [
+            "temp",
+            "hum"
+        ],
+        "group": "temp",
+        "hrn": "Атмосфера в гостинной",
+        "pir": false,
+        "type": "sensor"
+    },
+    "si-47354100-v0.1": {
+        "channels": [
+            "temp",
+            "hum"
+        ],
+        "group": "temp",
+        "hrn": "Атмосфера в спальне",
+        "pir": false,
+        "type": "sensor"
+    },
+    "switch-1603eb00-v0.1": {
+        "channels": null,
+        "group": "vent",
+        "hrn": "вытяжка",
+        "pir": false,
+        "type": "switch"
+    },
+    "switch-93902400-v0.1": {
+        "channels": null,
+        "group": "lights",
+        "hrn": "свет на складе",
+        "pir": "pir",
+        "type": "switch"
+    },
+    "switch-aa7a3700-v0.1": {
+        "channels": null,
+        "group": "lights",
+        "hrn": "свет в гардеробной",
+        "pir": "pir",
+        "type": "switch"
+    },
+    "switch-d1ca3e00-v0.1": {
+        "channels": null,
+        "group": "amb",
+        "hrn": "рождественская иллюминация",
+        "pir": false,
+        "type": "switch"
+    },
+    "switch-de387a00-v0.1": {
+        "channels": null,
+        "group": "vent",
+        "hrn": "приточка",
+        "pir": false,
+        "type": "switch"
+    },
+    "switch-f76eaf00-v0.1": {
+        "channels": null,
+        "group": "lights",
+        "hrn": "свет на террасе",
+        "pir": false,
+        "type": "switch"
+    },
+    "switch-fcfe3a00-v0.1": {
+        "channels": null,
+        "group": "lights",
+        "hrn": "свет на кухне",
+        "pir": false,
+        "type": "switch"
+    },
+    "switch-fdfe3a00-v0.1": {
+        "channels": null,
+        "group": "lights",
+        "hrn": "свет в спальне",
+        "pir": false,
+        "type": "switch"
+    },
+    "thermo1.1": {
+        "channels": null,
+        "group": "thermostat",
+        "hrn": "Термостат в санузле",
+        "pir": null,
+        "type": "thermo"
+    },
+    "thermo1.2": {
+        "channels": null,
+        "group": "thermostat",
+        "hrn": "Термостат в мастерской",
+        "pir": null,
+        "type": "thermo"
+    },
+    "thermo1.4": {
+        "channels": null,
+        "group": "thermostat",
+        "hrn": "Термостат в гостинной",
+        "pir": null,
+        "type": "thermo"
+    },
+    "thermo2.1": {
+        "channels": null,
+        "group": "thermostat",
+        "hrn": "Термостат в ванной",
+        "pir": null,
+        "type": "thermo"
+    },
+    "thermo2.3": {
+        "channels": null,
+        "group": "thermostat",
+        "hrn": "Термостат в спальне",
+        "pir": null,
+        "type": "thermo"
+    },
+    "thermo2.4": {
+        "channels": null,
+        "group": "thermostat",
+        "hrn": "Термостат в гостевой",
+        "pir": null,
+        "type": "thermo"
+    }
 }

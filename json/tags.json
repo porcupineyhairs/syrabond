@@ -4,7 +4,10 @@
     "switch-fdfe3a00-v0.1",
     "si-1e110800-v0.1",
     "switch-f76eaf00-v0.1",
-    "si-47354100-v0.1"],
+    "si-47354100-v0.1",
+  "thermo1.4",
+  "thermo2.1",
+  "thermo2.3"],
 
   "ogorod":
   ["switch-aa7a3700-v0.1",

@@ -14,24 +14,25 @@
 <body>
     <div class="navbar">
         <div class="navbar-inner">
-            <a class="brand" href="#">Syrabond API Client</a>
+            <a class="brand" href="index">Syrabond API Client</a>
             
             <ul class="nav nav-tabs">
-  <li class="active"><a href="index">Fast access view</a></li>
-  <li><a href="groups">Groups</a></li>
-  <li><a href="heating">Heating</a></li>
-  <li><a href="maintenance">Maintenance</a></li>
 </ul>
             
         </div>
     </div>
 
 <div class="row">
-  <div class="span4"></div>
-  <div class="span8"></div>
+  <div class="span1" id="dummy"></div>
+  <div class="span4" id="span-switches"></div>
+  <div class="span4" id="span-sensors"></div>
+  <div class="span4" id="span-thermos"></div>
 </div>
     <script type="text/javascript">
-    getShortcuts();
+    getNavbar(window.location.pathname);
+    getScope('shortcut');
+    shiftThermo('span-thermos');
+    shiftSwitch();
     </script>
 </body>
 </html>
