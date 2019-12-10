@@ -4,7 +4,7 @@ from time import sleep
 
 
 sh = restful.API('sh', listen=True)
-i = 30
+i = 50
 while i > 0:
     sh.facility.listener.check_for_messages()
     sleep(0.1)

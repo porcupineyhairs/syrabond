@@ -9,7 +9,7 @@ def get_config():
     try:
      with open("/network.json") as f:
        data = json.loads(f.read())
-       return (data)
+       return data
     except (OSError, ValueError):
         print("Couldn't load /network.json")
         ap_if = network.WLAN(network.AP_IF)

@@ -26,7 +26,7 @@ class Http:
         self.protocol_version = "HTTP/1.0"
         self.raw_requestline = b''
         self.mainloop_disactive = False
-        self.command, self.path, self.close_connection, self.request_version = None
+        self.command, self.path, self.requestline, self.close_connection, self.request_version = None
 
     def get_request(self):
         try:

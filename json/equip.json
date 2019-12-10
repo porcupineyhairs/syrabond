@@ -8,6 +8,15 @@
         "pir": false,
         "type": "sensor"
     },
+    "dhtsensor-da18b100-v0.1": {
+        "channels": [
+            "temp"
+        ],
+        "group": "temp",
+        "hrn": "температура в ванной",
+        "pir": false,
+        "type": "sensor"
+    },
     "si-1e110800-v0.1": {
         "channels": [
             "temp",

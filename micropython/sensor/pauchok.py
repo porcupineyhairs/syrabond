@@ -62,6 +62,7 @@ class Mqttsender:
             return is_error
 
     def send(self, topic, message, retain=True):
+        is_error = False
         print('Sending ' + str(message) + ' in topic ' + str(topic) + '...')
         try:
             if not isinstance(topic, bytes):
@@ -76,7 +77,7 @@ class Mqttsender:
             print (e)
             is_error = True
         finally:
-            return (is_error)
+            return is_error
 
     def subscribe(self, topic):
         is_error = False
@@ -126,11 +127,12 @@ class Mqttsender:
             state = module.get_state()
             self.send(self.topic_state, state)
 
+
 def get_config(filename):
     try:
         with open(filename) as f:
             config = json.loads(f.read())
-            return (config)
+            return config
     except (OSError, ValueError):
         print("Couldn't load config ", filename)
         print('Starting webrepl and reboot after 2 min.')

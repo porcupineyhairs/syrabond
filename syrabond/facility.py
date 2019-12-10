@@ -1,4 +1,5 @@
 from syrabond import mqttsender, common, database
+import syrasql as orm
 from uuid import uuid1
 from sys import exit
 
@@ -12,6 +13,7 @@ class Facility:
         self.tags = {}
         self.name = name
         self.DB = database.Mysql()  # TODO Choose DB interface with config
+        self.dbo = orm.DBO(self)
         uniqid = str(uuid1())
         common.log('Creating Syrabond instance with uuid ' + uniqid)
         self.welcome_topic = '{}/{}/'.format('common', 'welcome')
@@ -31,29 +33,26 @@ class Facility:
                 common.log('Unable to parse configuration file {}. Giving up...'.format(confs[conf]),
                            log_type='error')
                 exit()
-        for equip in config['equipment']:
-            type = config['equipment'][equip]['type']
-            group = config['equipment'][equip]['group']
-            hrn = config['equipment'][equip]['hrn']
+        resources_loaded = self.dbo.load_resources()
+        for res in resources_loaded:
             tags = []
+            channels = None
             for tag in config['tags']:
-                if equip in config['tags'][tag]:
+                if res.uid in config['tags'][tag]:
                     tags.append(tag)
-            pir = False
-            channels = config['equipment'][equip]['channels']
-            pir = config['equipment'][equip]['pir']
-            if config['equipment'][equip]['type'] == 'switch':
+            if res.channels:
+                channels = res.channels.split(',')
+            if res.type == 'switch':
                 resource = Switch(self.listener, self.sender, self.DB, self.name,
-                                  equip, type, group, hrn, tags, pir, channels)
-            elif config['equipment'][equip]['type'] == 'sensor':
-                channels = config['equipment'][equip]['channels']
+                                  res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
+            elif res.type == 'sensor':
                 resource = Sensor(self.listener, self.sender, self.DB, self.name,
-                                  equip, type, group, hrn, tags, pir, channels)
-                resource.connect()
-            elif config['equipment'][equip]['type'] == 'thermo':
-                resource = VirtualAppliance(self.listener, self.sender, self.DB, self.name, equip, type, group,
-                                            hrn, tags)
-            self.resources[equip] = resource
+                                  res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
+            elif res.type == 'thermo':
+                resource = VirtualAppliance(self.listener, self.sender, self.DB, self.name,
+                                            res.uid, res.type, res.group, res.hrn, tags)
+            self.resources[res.uid] = resource
+
         for prem in config['premises']:
             for terr in config['premises'][prem]:
                 thermo = ambient_sensor = lights = lights_lvl = pres = None
@@ -378,6 +377,7 @@ class Sensor(Device):
             self.channels = channels.split(', ')
         else:
             self.channels = channels
+        self.connect()
 
     def connect(self):
         for channel in self.channels:

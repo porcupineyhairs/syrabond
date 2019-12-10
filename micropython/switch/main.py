@@ -5,32 +5,35 @@ import pauchok
 import switch
 
 # ---------------------- common section ---------------------------
-init_topic = 'common/welcome/'
 sta_if = network.WLAN(network.STA_IF)
-netconf = None
+netconf = 0
 while not netconf:
     if sta_if.isconnected():
         netconf = sta_if.ifconfig()
+ip = netconf[0]
 config = pauchok.get_config('conf.json')
 mqtt = config['mqtt']
 module = config['module']
-sleep_time = int(config["sleep_time"])
-debug = bool(config['debug'])
-inited = bool(config['inited'])
-ip = netconf[0]
+period = int(config["period"])
+interval = int(config["interval"])/period
+debug = config['debug']
+inited = config['inited']
 uniqid = module['type']+'-'+ubinascii.hexlify(machine.unique_id()).decode()+'-v'+module['ver']
 config.clear()
+led = module['led']
+
 mqttsender = pauchok.Mqttsender(mqtt, ip, uniqid)
 mqttsender.connect()
 
+init_topic = 'common/welcome/'
 if not inited:
     mqttsender.send(init_topic+uniqid, ip)
 else:
     mqttsender.send(mqttsender.topic_lastwill, ip)
-
 topic = mqtt['object']+'/'+mqtt['channel']+'/'+uniqid
 mqtt.clear()
 # ---------------------- end common section -----------------------
+
 is_error = False
 if 'button' in module:
     button = int(module['button'])
