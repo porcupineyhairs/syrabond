@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4fc2e0fc-acda-4d3b-b22a-2fa2a04360b6" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/_mac/git.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/_mac/laf.xml" afterPath="" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -26,16 +24,6 @@
               <folding>
                 <element signature="e#0#49#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="api.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/syrabond/api.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3390">
-              <caret line="226" column="16" lean-forward="false" selection-start-line="226" selection-start-column="16" selection-end-line="226" selection-end-column="16" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -96,11 +84,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="scen.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="scen.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scen.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="315">
               <caret line="25" column="28" lean-forward="false" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sendsms.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/sendsms.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="13" lean-forward="false" selection-start-line="0" selection-start-column="13" selection-end-line="0" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -209,6 +207,7 @@
         <option value="$PROJECT_DIR$/json/equip.json" />
         <option value="$PROJECT_DIR$/syrabond/facility.py" />
         <option value="$PROJECT_DIR$/syrasql.py" />
+        <option value="$PROJECT_DIR$/sendsms.py" />
       </list>
     </option>
   </component>
@@ -780,7 +779,21 @@
       <option name="project" value="LOCAL" />
       <updated>1575979203930</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="BREAKING CHANGE: Ability to add resources from quarantine list and edit properties (hrn, group, tags).">
+      <created>1575979244361</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1575979244361</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Uploaded Micropython part of the system.">
+      <created>1575980140459</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1575980140459</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TodoView">
@@ -794,8 +807,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15715292" sideWeight="0.49418604" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15715292" sideWeight="0.49418604" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329602" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29228857" sideWeight="0.5024665" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28606966" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -886,7 +900,8 @@
     <MESSAGE value="fix: Premises API request now give back thermostat and ambient sensor again." />
     <MESSAGE value="BREAKING CHANGE: Syrabond is a package from now." />
     <MESSAGE value="BREAKING CHANGE: Ability to add resources from quarantine list and edit properties (hrn, group, tags)." />
-    <option name="LAST_COMMIT_MESSAGE" value="BREAKING CHANGE: Ability to add resources from quarantine list and edit properties (hrn, group, tags)." />
+    <MESSAGE value="Uploaded Micropython part of the system." />
+    <option name="LAST_COMMIT_MESSAGE" value="Uploaded Micropython part of the system." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1128,16 +1143,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sendsms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#13#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/syrasql.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
@@ -1152,6 +1157,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
           <caret line="25" column="28" lean-forward="false" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sendsms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="13" lean-forward="false" selection-start-line="0" selection-start-column="13" selection-end-line="0" selection-end-column="13" />
           <folding />
         </state>
       </provider>
