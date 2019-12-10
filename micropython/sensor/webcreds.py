@@ -26,6 +26,7 @@ class Http:
         self.protocol_version = "HTTP/1.0"
         self.raw_requestline = b''
         self.mainloop_disactive = False
+        self.command, self.path, self.close_connection, self.request_version = None
 
     def get_request(self):
         try:
@@ -76,15 +77,13 @@ class Http:
             if version_number >= (1, 1) and self.protocol_version >= "HTTP/1.1":
                 self.close_connection = 0
             if version_number >= (2, 0):
-                self.send_response(505,
-                                "Invalid HTTP Version (%s)" % base_version_number)
+                self.send_response(505, "Invalid HTTP Version (%s)" % base_version_number)
                 return False
         elif len(words) == 2:
             command, path = words
             self.close_connection = 1
             if command != 'GET':
-                self.send_response(400,
-                                "Bad HTTP/0.9 request type (%r)" % command)
+                self.send_response(400, "Bad HTTP/0.9 request type (%r)" % command)
                 return False
         elif not words:
             return False
@@ -113,8 +112,6 @@ class Http:
             return
 
     def send_response(self, code, message=None):
-        """Send the response header.
-        """
         if self.request_version != 'HTTP/0.9':
             data = "%s %d %s\r\n" % (self.protocol_version, code, message)
             self.s.send(data.encode())
@@ -122,18 +119,15 @@ class Http:
         self.send_header('Server', self.version_string())
 
     def send_header(self, keyword, value):
-        """Send a MIME header."""
         if self.request_version != 'HTTP/0.9':
             data = "%s: %s\r\n" % (keyword, value)
             self.s.send(data.encode())
 
     def end_headers(self):
-        """Send the blank line ending the MIME headers."""
         if self.request_version != 'HTTP/0.9':
             self.s.send(b"\r\n")
 
     def version_string(self):
-        """Return the server software version string."""
         return self.server_version + ' ' + self.sys_version
 
     def show_page(self, page):
