@@ -35,8 +35,8 @@ class Mqtt:
         return True
 
     def mqttsend(self, topic, msg):
-        if topic.find(self.root+'/'):
-            topic = self.root+'/'+topic
+        # if topic.find(self.root+'/'):
+        #     topic = self.root+'/'+topic
         if not self.connected:
             self.connect()
         log('Sending {} to {}...'.format(msg, topic))
@@ -54,8 +54,8 @@ class Mqtt:
         return True
 
     def subscribe(self, topic):
-        if topic.find(self.root+'/'):
-            topic = self.root+'/'+topic
+        # if topic.find(self.root+'/'):
+        #     topic = self.root+'/'+topic
         while not self.connected:
             if not self.connect():
                 sleep(5)

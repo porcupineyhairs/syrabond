@@ -23,6 +23,7 @@ Opening file <param> and extracting json to dict.
     :param file_name: path to config file
     """
     try:
+        print(confs_dir+'/'+file_name)
         f = open(confs_dir+'/'+file_name, 'r')
         items = json.loads(f.read())
         f.close()
@@ -50,7 +51,8 @@ logging_levels = {
     'DEBUG': 10
 }
 
-confs_dir = '.'
+#confs_dir = '/home/pi/syrabond/python'
+confs_dir = '/Users/egor/PycharmProjects/syrabond'
 conf = extract_config('global.json')
 chdir(conf['working_dir'])
 log_file = '{}/{}'.format(conf['working_dir'], conf['log_file'])

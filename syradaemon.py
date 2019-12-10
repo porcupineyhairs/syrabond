@@ -1,10 +1,12 @@
 #!/usr/bin/python3
-import syrabond
+from os import chdir
 from time import sleep
+from syrabond import facility
 
 blocking = True
 
-sh = syrabond.Facility('sh')
+chdir('/home/pi/syrabond/python')
+sh = facility.Facility('sh')
 
 if blocking:
     while True:

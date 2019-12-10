@@ -37,6 +37,10 @@ class Mysql:
         query = 'SELECT uid, ip FROM Res_quarantine'
         return self.send_read_query(query)
 
+    def del_from_quarantine(self, uid):
+        query = 'DELETE FROM Res_quarantine WHERE uid = \'{}\''.format(uid)
+        self.send_write_query(query)
+
     def check_state_row_exist(self, uid):
         query = 'SELECT uid FROM Res_state WHERE uid = \'{}\''.format(uid)
         if not self.send_read_query(query):

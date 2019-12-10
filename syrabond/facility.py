@@ -14,10 +14,11 @@ class Facility:
         self.DB = database.Mysql()  # TODO Choose DB interface with config
         uniqid = str(uuid1())
         common.log('Creating Syrabond instance with uuid ' + uniqid)
+        self.welcome_topic = '{}/{}/'.format('common', 'welcome')
         if listen:
             self.listener = mqttsender.Mqtt('syrabond_listener_' + uniqid, config='mqtt.json', clean_session=True)
             self.listener.subscribe('{}/{}/#'.format(self.name, 'status'))  # TODO Dehardcode status topic
-            self.listener.subscribe('{}/{}/#'.format('common', 'welcome'))  # TODO Dehardcode welcome topic
+            self.listener.subscribe(self.welcome_topic+'#')  # TODO Dehardcode welcome topic
         else:
             self.listener = mqttsender.Dumb()
         self.sender = mqttsender.Mqtt('syrabond_sender_' + uniqid, config='mqtt.json', clean_session=True)
@@ -39,14 +40,15 @@ class Facility:
                 if equip in config['tags'][tag]:
                     tags.append(tag)
             pir = False
-            if 'pir' in config['equipment'][equip]:
-                pir = config['equipment'][equip]['pir']
+            channels = config['equipment'][equip]['channels']
+            pir = config['equipment'][equip]['pir']
             if config['equipment'][equip]['type'] == 'switch':
-                resource = Switch(self.listener, self.sender, self.DB, self.name, equip, type, group, hrn, tags, pir)
+                resource = Switch(self.listener, self.sender, self.DB, self.name,
+                                  equip, type, group, hrn, tags, pir, channels)
             elif config['equipment'][equip]['type'] == 'sensor':
                 channels = config['equipment'][equip]['channels']
-                resource = Sensor(self.listener, self.sender, self.DB, self.name, equip, type, group, hrn, tags,
-                                  pir, channels)
+                resource = Sensor(self.listener, self.sender, self.DB, self.name,
+                                  equip, type, group, hrn, tags, pir, channels)
                 resource.connect()
             elif config['equipment'][equip]['type'] == 'thermo':
                 resource = VirtualAppliance(self.listener, self.sender, self.DB, self.name, equip, type, group,
@@ -138,8 +140,6 @@ class Facility:
                 elif type == 'status':
                     if id in self.resources:
                         self.resources[id].update_status(msg)
-                    else:
-                        self.DB.rewrite_quarantine(id, msg)
                 elif type == 'welcome':
                         self.DB.rewrite_quarantine(id, msg)
 
@@ -149,13 +149,10 @@ class Facility:
     def add_new_resourse(self, type: str, uid: str, group: str, hrn: str, **kwargs: list) -> bool:
 
             if type == 'switch':
-                print('here1')
                 resource = Switch(self.listener, self.sender, self.DB, self.name, uid, type, group, hrn, [], False)
                 self.resources[uid] = resource
                 print(resource.state)
                 resource.update_state('OFF')  # TODO Retrieve real device state
-                print('here2')
-                print(resource.state)
             elif type == 'sensor':
                 channels = kwargs['channels']
                 print(uid, type, group, hrn, [], False, channels)
@@ -163,8 +160,13 @@ class Facility:
                                   False, channels)
                 self.resources[uid] = resource
             self.update_equip_conf()
+            self.welcome_new_device(uid)
             return True
 
+    def welcome_new_device(self, uid):
+        self.resources[uid].device_init()
+        self.sender.mqttsend(self.welcome_topic+uid, '')  # Empty message to cancel retained
+        self.DB.del_from_quarantine(uid)
 
     def update_equip_conf(self):
         conf = {}
@@ -223,9 +225,9 @@ class Resource:
         self.DB = db
         self.state = None  # TODO Get from DB on startup. DONE!
         self.DB.check_state_row_exist(self.uid)
-        self.init_state()
+        self.check_state()
 
-    def init_state(self):
+    def check_state(self):
         self.state = self.get_state()
 
     def update_state(self, state):
@@ -250,16 +252,17 @@ class VirtualAppliance(Resource):
 
 class Device(Resource):
 
-    def __init__(self, listener, sender, db, obj_name, uid, type, group, hrn, tags, pir):
+    def __init__(self, listener, sender, db, obj_name, uid, type, group, hrn, tags, pir, channels):
         super().__init__(listener, sender, db, obj_name, uid, type, group, hrn, tags)
         self.maintenance_topic = '{}/{}/{}'.format(obj_name, 'management', self.uid)
         self.status_topic = '{}/{}/{}'.format(obj_name, 'status', self.uid)
         self.status = None
         self.pir = pir
+        self.channels = channels
         self.DB.check_status_row_exist(self.uid)
 
         if pir:
-            self.pir_topic = self.topic+'/'+pir
+            self.pir_topic = self.topic+'/'+'pir'  # TODO Dehardcode
             self.listener.subscribe(self.pir_topic)
             self.pir_direct = True
 
@@ -269,6 +272,7 @@ class Device(Resource):
         self.repl_off = 'ISAAK'
         self.reboot = 'ZARATUSTRA'
         self.gimme_state = 'STATE'
+        self.init = 'INITIALIZE'
 
     def request_state(self):
         try:
@@ -280,6 +284,13 @@ class Device(Resource):
     def device_reboot(self):
         try:
             self.sender.mqttsend(self.maintenance_topic, self.reboot)
+        except Exception as e:
+            print(e)
+            return False
+
+    def device_init(self):
+        try:
+            self.sender.mqttsend(self.maintenance_topic, self.init)
         except Exception as e:
             print(e)
             return False
@@ -301,6 +312,8 @@ class Device(Resource):
     def update_status(self, status):
         self.status = status
         self.DB.rewrite_status(self.uid, self.status)
+
+
 
 
 class Switch(Device):
@@ -359,7 +372,7 @@ class Switch(Device):
 class Sensor(Device):
 
     def __init__(self, listener, sender, db, obj_name, uid, type, group, hrn, tags, pir, channels):
-        super().__init__(listener, sender, db, obj_name, uid, type, group, hrn, tags, pir)
+        super().__init__(listener, sender, db, obj_name, uid, type, group, hrn, tags, pir, channels)
         self.state = {}
         if isinstance(channels, str):
             self.channels = channels.split(', ')

@@ -35,18 +35,32 @@
         "pir": false,
         "type": "switch"
     },
+    "switch-57088100-v0.1": {
+        "channels": null,
+        "group": "amb",
+        "hrn": "переносной удлинитель",
+        "pir": false,
+        "type": "switch"
+    },
+    "switch-81c15d00-v0.1": {
+        "channels": null,
+        "group": "lights",
+        "hrn": "свет в мастерской",
+        "pir": false,
+        "type": "switch"
+    },
     "switch-93902400-v0.1": {
         "channels": null,
         "group": "lights",
         "hrn": "свет на складе",
-        "pir": "pir",
+        "pir": true,
         "type": "switch"
     },
     "switch-aa7a3700-v0.1": {
         "channels": null,
         "group": "lights",
         "hrn": "свет в гардеробной",
-        "pir": "pir",
+        "pir": true,
         "type": "switch"
     },
     "switch-d1ca3e00-v0.1": {
@@ -81,6 +95,13 @@
         "channels": null,
         "group": "lights",
         "hrn": "свет в спальне",
+        "pir": false,
+        "type": "switch"
+    },
+    "switch-ff015e00-v0.1": {
+        "channels": null,
+        "group": "lights",
+        "hrn": "свет в гостиной",
         "pir": false,
         "type": "switch"
     },

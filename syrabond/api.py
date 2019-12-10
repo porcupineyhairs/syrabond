@@ -223,6 +223,7 @@ class API:
         entities = params[0]
         resources = self.get_resources(entities)
         for res in resources:
+            res.check_state()
             try:
                 prem = [x for x in self.facility.premises.values() if res in x.resources][0]
             except IndexError:
