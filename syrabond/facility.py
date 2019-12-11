@@ -131,7 +131,8 @@ class Facility:
     def message_handler(self):
         """
         The function to be involved in the main loop of daemon.
-        It checks the MQTT message buffer, parse messages and acts depending of.
+        It checks the MQTT message buffer, parse messages and acts depending of content.
+        The main goal is to update states in DB.
         """
         self.listener.message_buffer_lock = True
         if self.listener.message_buffer:

@@ -3,6 +3,8 @@ from os import chdir
 from time import sleep
 from syrabond import facility
 
+"""Demo daemon that receive and handle messages in loop"""
+
 blocking = True
 
 chdir('/home/pi/syrabond/python')
