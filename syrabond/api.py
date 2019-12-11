@@ -2,6 +2,9 @@ from syrabond import facility
 
 
 class API:
+    """
+    The wrapper for Facility to be used with REST.
+    """
     def __init__(self, facility_name, listen=False):
         self.facility = facility.Facility(facility_name, listen=listen)
 
@@ -37,6 +40,7 @@ class API:
          for x in self.facility.resources if self.facility.resources[x].type == 'sensor']
 
     def is_consistent_api_request(self, agr):
+        """Checking if the argument is tuple and keyword is in special dict"""
         try:
             if isinstance(agr, tuple) and len(agr) >= 2:
                 if agr[0][0] in self.GET_ACTIONS or agr[0][0] in self.POST_ACTIONS:
@@ -47,10 +51,12 @@ class API:
             return False
 
     def get_direct(self, keyword, entities, param):
+        """Call the function by keyword using special dict"""
         method = self.GET_ACTIONS[keyword]
         return getattr(self, method)((entities, param))
 
     def post_direct(self, action, keyword, data):
+        """Call the function by action keyword using special dict"""
         if action in self.POST_ACTIONS and is_correct_post_params(data):
             method = self.POST_ACTIONS[action]
             getattr(self, method)(keyword, data)
@@ -94,6 +100,7 @@ class API:
         return status_all
 
     def get_resources(self, entities):
+        """Returns the set of resources within specified entities (could be uids or various scopes)"""
         resources = set()
         facility_resources = self.facility.resources.copy()
         facility_premises = self.facility.premises.copy()
@@ -112,6 +119,7 @@ class API:
         return resources
 
     def get_struct(self, params):
+        """Returns various structures to build the web pages."""
         result = {}
         struct_type = None
         try:
@@ -174,51 +182,11 @@ class API:
 
         return result
 
-    def get_structure(self, params):  # TODO To be destroyed
-        print(params)
-        arg = None
-        result = {}
-        struct_type = params[0][0]
-        if len(params) == 2:
-            arg = params[1]
-        if struct_type == 'groups':
-            if arg:
-                if arg in self.GROUPS:
-                    result = []
-                    resources = self.get_resources([arg])
-                    for res in resources:
-                        result.append({'uid': res.uid, 'type': res.type, 'name': res.hrn, 'state': res.get_state()})
-            else:
-                for group in self.GROUPS:
-                    resources = self.get_resources([group])
-                    res_list = []
-                    for res in resources:
-                        res_list.append({'uid': res.uid, 'type': res.type, 'name': res.hrn, 'state': res.get_state()})
-                    result.update({group: res_list})
-        elif struct_type == 'thermo':
-            for prem in self.facility.premises:
-                premise = self.facility.premises[prem]
-                try:
-                    result.update({prem: {'name': premise.name, 'thermostat_id': premise.thermostat.uid,
-                                          'thermostat_state': premise.thermostat.state}})
-                except:
-                    continue
-
-        elif struct_type == 'tag':
-            result = []
-            tag_attr = params[1]
-            resources = self.get_resources([tag_attr])
-            for res in resources:
-                result.append({'uid': res.uid, 'type': res.type, 'name': res.hrn, 'state': res.get_state()})
-
-        elif struct_type == 'scopes':
-            result = {}
-            result.update({'groups': list(self.GROUPS)})
-            result.update({'tags': list(self.TAGS)})
-
-        return result
-
     def get_state(self, params):
+        """
+        Returns the dict of specified resources properties and states.
+        Accepts various entities as arg: ids and scopes.
+        """
         result = []
         entities = params[0]
         resources = self.get_resources(entities)
