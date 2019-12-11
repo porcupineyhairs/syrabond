@@ -174,7 +174,7 @@ class Facility:
         self.welcome_new_device(uid)
         return True
 
-    def welcome_new_device(self, uid):
+    def welcome_new_device(self, uid: str):
         """Initialize new device"""
         self.resources[uid].device_init()
         self.sender.mqttsend(self.welcome_topic+uid, '')  # Empty message to cancel retained
