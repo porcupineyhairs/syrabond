@@ -3,8 +3,11 @@ from datetime import datetime
 import logging
 from os import chdir
 
+"""Common functions to be used in modules and classes of Syrabond."""
+
 
 def log(line, log_type='info'):
+    """Wrapper for logging. Writes line to log adding datetime."""
     time_string = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
     print(time_string, line)
     if log_type == 'info':
@@ -18,7 +21,7 @@ def log(line, log_type='info'):
 def extract_config(file_name):
     # type: (str) -> dict
     """
-Opening file <param> and extracting json to dict.
+    Opens file and extracting json to dict.
     :rtype: dict
     :param file_name: path to config file
     """
@@ -29,7 +32,7 @@ Opening file <param> and extracting json to dict.
         f.close()
     except Exception as e:
         print(e)
-        return False
+        return {}
     return items
 
 

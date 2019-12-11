@@ -4,6 +4,7 @@ from time import sleep
 
 
 class Mysql:
+    """Old-style database handling class. Will be deprecated soon to use ORM."""
 
     def __init__(self):
         self.write_buffer = set()
