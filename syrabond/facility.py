@@ -15,8 +15,8 @@ class Facility:
         self.virtual_apls = {}
         self.tags = {}
         self.name = name
-        self.DB = database.Mysql()  # TODO Choose DB interface with config
-        self.dbo = orm.DBO()
+        self.DB = database.Mysql()  # TODO Gonna be deprecated
+        self.dbo = orm.DBO('mysql')  # TODO Choose DB interface with config
         uniqid = str(uuid1())
         common.log('Creating Syrabond instance with uuid ' + uniqid)
         self.welcome_topic = '{}/{}/'.format('common', 'welcome')
@@ -47,13 +47,13 @@ class Facility:
             if res.channels:
                 channels = res.channels.split(',')
             if res.type == 'switch':
-                resource = Switch(self.listener, self.sender, self.name, self.DB,
+                resource = Switch(self.listener, self.sender, self.name, self.dbo,
                                   res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
             elif res.type == 'sensor':
-                resource = Sensor(self.listener, self.sender, self.name, self.DB,
+                resource = Sensor(self.listener, self.sender, self.name, self.dbo,
                                   res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
             elif res.type == 'thermo':
-                resource = VirtualAppliance(self.listener, self.sender, self.name, self.DB,
+                resource = VirtualAppliance(self.listener, self.sender, self.name, self.dbo,
                                             res.uid, res.type, res.group, res.hrn, tags)
             if resource:
                 self.resources[res.uid] = resource
@@ -83,7 +83,7 @@ class Facility:
             if self.resources[binding].type == 'thermo':
                 self.premises[prem].thermostat = self.resources[binding]
                 self.premises[prem].thermostat.topic = (
-                        self.premises[prem].thermostat.obj_name
+                        self.name
                         + '/' + self.premises[prem].thermostat.type
                         + '/' + prem
                 )
@@ -243,7 +243,7 @@ class Resource:
     tags: list of associated tags.
     """
     
-    def __init__(self, listener, sender, basename, db, uid, type, group, hrn, tags):
+    def __init__(self, listener, sender, basename, dbo, uid, type, group, hrn, tags):
         self.uid = uid
         self.type = type
         self.group = group
@@ -252,9 +252,8 @@ class Resource:
         self.topic = basename+'/'+self.type+'/'+self.uid
         self.sender = sender
         self.listener = listener
-        self.DB = db
-        self.state = None  # TODO Get from DB on startup. DONE!
-        self.DB.check_state_row_exist(self.uid)
+        self.dbo = dbo
+        self.state = None
         self.check_state()
 
     def check_state(self):
@@ -263,11 +262,11 @@ class Resource:
     def update_state(self, state):
         if not self.state == state:
             self.state = state
-            self.DB.rewrite_state(self.uid, self.state)
+            self.dbo.update_state(self.uid, self.state)
             common.log('The state of {} ({}) changed to {}'.format(self.uid, self.hrn, self.state))
 
     def get_state(self):
-        return self.DB.read_state(self.uid)[0][0]
+        return self.dbo.get_state(self.uid)
 
 
 class VirtualAppliance(Resource):
@@ -297,7 +296,6 @@ class Device(Resource):
         self.status = None
         self.pir = pir
         self.channels = channels
-        self.DB.check_status_row_exist(self.uid)
 
         if pir:
             self.pir_topic = self.topic+'/'+'pir'  # TODO Dehardcode
@@ -349,7 +347,7 @@ class Device(Resource):
 
     def update_status(self, status):
         self.status = status
-        self.DB.rewrite_status(self.uid, self.status)
+        self.dbo.update_status(self.uid, self.status)
 
 
 class Switch(Device):
@@ -408,8 +406,8 @@ class Switch(Device):
 
 class Sensor(Device):
     """Class to represent sensors"""
-    def __init__(self, listener, sender, basename, db, uid, type, group, hrn, tags, pir, channels):
-        super().__init__(listener, sender, basename, db, uid, type, group, hrn, tags, pir, channels)
+    def __init__(self, listener, sender, basename, dbo, uid, type, group, hrn, tags, pir, channels):
+        super().__init__(listener, sender, basename, dbo, uid, type, group, hrn, tags, pir, channels)
         self.state = {}
         if isinstance(channels, str):
             self.channels = channels.split(', ')
@@ -430,18 +428,19 @@ class Sensor(Device):
     def update_state(self, state):
         state_string = ', '
         state_string = state_string.join([channel+': '+state[channel] for channel in state.keys()])
-        self.DB.rewrite_state(self.uid, state_string)
+        self.dbo.update_state(self.uid, state_string)
         common.log('The state of {} ({}) changed to {}'.format(self.uid, self.hrn, state_string))
 
     def get_state(self):
-        state_string = self.DB.read_state(self.uid)[0][0]
-        splited = [s.split(': ') for s in state_string.split(', ')]
         result = {}
-        try:
-            [result.update({channel[0]: channel[1]}) for channel in splited]
-            return result
-        except IndexError:
-            return result
+        state_string = self.dbo.get_state(self.uid)
+        if state_string:
+            splited = [s.split(': ') for s in state_string.split(', ')]
+            try:
+                [result.update({channel[0]: channel[1]}) for channel in splited]
+            except IndexError:
+                pass
+        return result
 
 
 def parse_topic(topic: str):

@@ -306,9 +306,12 @@ function getThermo() {
       $.getJSON(url, function(data){
         resp = data.response[0].state;
         temp = resp.temp;
+        
         cell_id = data.response[0].uid;
-        cell = document.getElementById(cell_id);
-        cell.innerHTML = temp;
+        console.log(cell_id);
+        //cell = document.getElementById(cell_id);
+        //cell.innerHTML = temp;
+        $('#'+cell_id).html(temp);
       });
     });
 });
