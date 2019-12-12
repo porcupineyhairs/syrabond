@@ -39,7 +39,8 @@ while True:   # Main loop to control appliances with keyboard input
             r.device_reboot()
         elif com == 'w':
             r.webrepl('on')
-        else:
+        elif com.isdigit():
+            r.set_state(com)
             break
         sleep(0.5)
     elif choice == 'A':
