@@ -490,6 +490,7 @@ function devManage(){
   const d_uri = base_uri+del_uri+'device'
   const div_tags = 'div-tags';
   const select_group = 'select-group'
+  var tag_add_locker = false
   $("#button-delete-mod").html(custom_translator[lang]['del'])
   $("#button-sub-mod").html(custom_translator[lang]['save'])
   $('#input-newtag').attr("placeholder", custom_translator[lang]['add_tag'])
@@ -528,9 +529,6 @@ function devManage(){
               addCheckbox(div_tags, resp_tags[i], false);
             }
           }
-          //$('#'+div_tags).append('<label class="checkbox inline">');
-          //$('#'+div_tags).append(' <input id="input-newtag" name="newtag" type="textarea" placeholder="New tag..." class="input-small">' );
-          //$('#'+div_tags).append('</label>');
       })
       
     })
@@ -567,10 +565,19 @@ $("#button-delete-mod").on('click',  function() {
       StateView();
     });
 
-$("#input-newtag").on('focusout', function() {
+$("#input-newtag").on('focusout', function () {
+  if (tag_add_locker == false) {
+      tag_add_locker = true;
       addCheckbox(div_tags, this.value, true);
-      $(this).hide()
-    });
+      $(this).hide();
+    }});
+$("#input-newtag").on('keypress',function(e) {
+    if (e.which == 13 && tag_add_locker == false) {
+      tag_add_locker = true;
+      addCheckbox(div_tags, this.value, true);
+      $(this).hide();
+    }
+});
 
 }
 

@@ -24,7 +24,10 @@ class API:
             'edit': 'edit_entity',
             'delete': 'del_entity'
         }
+        self.TAGS = self.GROUPS = self.PREMS = self.TYPES = self.SENSOR_CHANNELS = None
+        self.init_scopes()
 
+    def init_scopes(self):
         self.GROUPS = set()
         for res in self.facility.resources:
             self.GROUPS.update({self.facility.resources[res].group})
@@ -293,6 +296,7 @@ class API:
             else:
                 self.facility.resources[uid].tags = []
         self.facility.update_device(uid)
+        self.init_scopes()
 
     def delete_device(self, data):  # TODO add result
         device_params = parse_form_json(data)

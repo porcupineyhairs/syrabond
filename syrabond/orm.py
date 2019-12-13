@@ -95,7 +95,9 @@ class DBO:
         res.type = entity.type
         res.hrn = entity.hrn
         res.group = entity.group
-        res.channels = entity.channels
+        res.channels = ''
+        if entity.channels:
+            res.channels = ', '.join(entity.channels)
         session.commit()
         session.close()
         self.update_tags(entity.uid, entity.tags)
