@@ -84,7 +84,6 @@ function getStruct(type) {
   var items = [];
   $.getJSON(uri, function(data){
     $.each(data.response, function ( key, val){
-      console.log(val)
       if (type == 'scopes'){
       items.push('<label>'+key+' </label>')
       for (var i = val.length - 1; i >= 0; i--) {

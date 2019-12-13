@@ -142,6 +142,8 @@ class Facility:
                         self.resources[id].pir_direct_react(msg)
                 elif channel == 'temp' or channel == 'hum':
                     self.resources[id].set_channel_state(channel, msg)
+                elif type == 'switch':
+                    self.resources[id].update_state(msg.capitalize())
                 elif type == 'thermo':
                     self.premises[id].thermostat.update_state(msg)
                 elif type == 'status':
@@ -298,6 +300,7 @@ class Device(Resource):
         self.status = None
         self.pir = pir
         self.channels = channels
+        self.connect()
 
         if pir:
             self.pir_topic = self.topic+'/'+'pir'  # TODO Dehardcode
@@ -311,6 +314,10 @@ class Device(Resource):
         self.reboot = 'ZARATUSTRA'
         self.gimme_state = 'STATE'
         self.init = 'INITIALIZE'
+
+    def connect(self):
+        """Will be used in children classes"""
+        pass
 
     def request_state(self):
         try:
@@ -354,6 +361,9 @@ class Device(Resource):
 
 class Switch(Device):
     """Class to represent switches"""
+
+    def connect(self):
+        self.listener.subscribe(self.topic)
 
     def toggle(self):
         self.get_state()
@@ -415,7 +425,6 @@ class Sensor(Device):
             self.channels = channels.split(', ')
         else:
             self.channels = channels
-        self.connect()
 
     def connect(self):
         for channel in self.channels:

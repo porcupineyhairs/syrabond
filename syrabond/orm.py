@@ -1,5 +1,4 @@
 import sqlalchemy as sql
-from sqlalchemy import delete
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Integer, Column, String, Boolean, ForeignKey
 from sqlalchemy.orm import sessionmaker
