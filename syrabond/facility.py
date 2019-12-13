@@ -38,12 +38,9 @@ class Facility:
                 exit()
         resources_loaded = self.dbo.load_resources()  # Loading resources params from DB and creating instances
         for res in resources_loaded:
-            tags = []
             channels = None
             resource = None
-            for tag in config['tags']:
-                if res.uid in config['tags'][tag]:
-                    tags.append(tag)
+            tags = self.dbo.get_tags(res.uid)
             if res.channels:
                 channels = res.channels.split(',')
             if res.type == 'switch':

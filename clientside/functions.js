@@ -285,9 +285,13 @@ function getThermo() {
   const temp_uri = base_uri+get_uri+state_uri;
   const prem_uri = base_uri+get_uri+structure_uri+'premises';
   
-  var match = []
+  var match = [];
+  var items = [];
 
-  $.getJSON(prem_uri, function(data){
+  thermo = $.getJSON(thermo_uri);
+  prem = $.getJSON(prem_uri);
+
+  prem.always(function(data){
     $.each(data.response, function( key, val ){
       for (var i = val.length - 1; i >= 0; i--) {
         const t = val[i].thermostat, a = val[i].ambient
@@ -296,45 +300,39 @@ function getThermo() {
         match.push(dict);
         } 
       }
-      
-      
     });
-})
-  .always(function(){
+
+    thermo.always(function(data){
+      $.each(data.response, function( key, val ){
+          var prem = val.premise
+          var state = '<img src="/client/img/thermostat.png" class="img-rounded"><span id=c-'+val.uid+'> '+val.state+'</span>';
+          var range = '<input name="'+val.name+'"id="'+val.uid+'" type="range" opacity="0.5" min="0" max="30" value="'+val.state+'" step="0.5" />'
+          var temp_id = null
+          $.each(match, function (k,v){
+            if (v.thermo == val.uid) {
+              temp_id = '<img src="/client/img/thermometer.png" class="img-rounded"><span id='+v.ambient+'></span>';
+            };  
+          });
+          items.push({prem, temp_id, range, state});
+        });
+    var target = document.getElementById('thermostat');
+    res = tablemaker(items);
+    target.appendChild(res);
     $.each(match, function( key, val ){
       url = temp_uri+val.ambient;
       $.getJSON(url, function(data){
         resp = data.response[0].state;
         temp = resp.temp;
-        
         cell_id = data.response[0].uid;
-        console.log(cell_id);
-        //cell = document.getElementById(cell_id);
-        //cell.innerHTML = temp;
-        $('#'+cell_id).html(temp);
+        cell = document.getElementById(cell_id);
+        cell.innerHTML = temp;
       });
     });
-});
 
+  })
+    
+  })
 
-  $.getJSON(thermo_uri, function(data){
-    var items = [];
-    $.each(data.response, function( key, val ){
-      var prem = val.premise
-      var state = '<img src="/client/img/thermostat.png" class="img-rounded"><span id=c-'+val.uid+'> '+val.state+'</span>';
-      var range = '<input name="'+val.name+'"id="'+val.uid+'" type="range" opacity="0.5" min="0" max="30" value="'+val.state+'" step="0.5" />'
-      var temp_id = null
-      $.each(match, function (k,v){
-        if (v.thermo == val.uid) {
-          temp_id = '<img src="/client/img/thermometer.png" class="img-rounded"><span id='+v.ambient+'></span>';
-        };  
-      });
-      items.push({prem, temp_id, range, state});
-    });
-    var target = document.getElementById('thermostat');
-    res = tablemaker(items);
-    target.appendChild(res);
-});
 
 }
 

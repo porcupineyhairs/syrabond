@@ -29,7 +29,7 @@ for r in sh.facility.resources:  # Building appliances list
 while True:   # Main loop to control appliances with keyboard input
     choice = input('Индекс (#) или API (A)? ')
     if choice.isdigit() and int(choice):
-        com = input('on (1) | off (0) | reboot (r) | webrepl (w) | set (s+<state>')
+        com = input('on (1) | off (0) | reboot (r) | webrepl (w) | set (s+<state>) ')
         r = switches[int(choice)]
         if com == '1':
             r.on()

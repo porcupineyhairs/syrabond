@@ -1,4 +1,5 @@
 import sqlalchemy as sql
+from sqlalchemy import delete
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Integer, Column, String, Boolean, ForeignKey
 from sqlalchemy.orm import sessionmaker
@@ -45,8 +46,13 @@ class DBO:
 
     def update_state(self, uid, state):
         session = self.Session()
-        res = session.query(Resource).filter_by(uid=uid).first()
-        res.state = [State(state=state)]
+        if session.query(State).filter_by(resource=uid).first():
+            session.query(State).filter_by(resource=uid).update({'state': state})
+        else:
+            res = session.query(Resource).filter_by(uid=uid).first()
+            res.state = [State(state=state)]
+
+        #res.state = [State(state=state)]
         session.commit()
 
     def get_state(self, uid):
@@ -67,6 +73,23 @@ class DBO:
         session.commit()
         session.close()
 
+    def update_tags(self, uid, tags):
+        session = self.Session()
+        res = session.query(Resource).filter_by(uid=uid).first()
+        res.tags = [Tags(tag=tag) for tag in tags]
+        session.query(Tags).filter_by(resource=None).delete(synchronize_session='fetch')
+        session.commit()
+        session.close()
+
+    def get_tags(self, uid):
+        session = self.Session()
+        res = session.query(Resource).filter_by(uid=uid).first()
+        if res.tags:
+            return [tag.tag for tag in res.tags]
+        else:
+            return []
+
+
 class Resource(Base):
     """
     Table for resources list with uid primary key.
@@ -81,6 +104,7 @@ class Resource(Base):
     pir = Column(Boolean)
     state = relationship("State")
     status = relationship("Status")
+    tags = relationship("Tags")
 
     def __repr__(self):
         return "<Resource(uid='{}'>".format(self.uid)
@@ -106,4 +130,15 @@ class Status(Base):
 
     def __repr__(self):
         return "<Status(status='{}'>".format(self.status)
+
+
+class Tags(Base):
+    """Table containing tags."""
+    __tablename__ = 'tags'
+    id = Column(Integer, primary_key=True)
+    tag = Column(String(40))
+    resource = Column(String(40), ForeignKey('resources.uid'))
+
+    def __repr__(self):
+        return "<Tags(tag='{}'>".format(self.tag)
 
