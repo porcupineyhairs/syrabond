@@ -27,7 +27,7 @@ class DBO:
             result.append(res)
         return result
 
-    def rewrite_resources(self, resources: dict):
+    def rewrite_resources(self, resources: dict):  # TODO Check is it needed to truncate table first
         session = self.Session()
         session.begin()
         res_list = []
@@ -88,6 +88,17 @@ class DBO:
             return [tag.tag for tag in res.tags]
         else:
             return []
+
+    def update_resource_properties(self, entity):
+        session = self.Session()
+        res = session.query(Resource).filter_by(uid=entity.uid).first()
+        res.type = entity.type
+        res.hrn = entity.hrn
+        res.group = entity.group
+        res.channels = entity.channels
+        session.commit()
+        session.close()
+        self.update_tags(entity.uid, entity.tags)
 
 
 class Resource(Base):

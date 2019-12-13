@@ -177,7 +177,12 @@ class Facility:
         self.sender.mqttsend(self.welcome_topic+uid, '')  # Empty message to cancel retained
         self.DB.del_from_quarantine(uid)
 
-    def update_equip_conf(self):
+    def update_device(self, uid):
+        """Update device properties via ORM"""
+        res = self.resources[uid]
+        self.dbo.update_resource_properties(res)
+
+    def update_equip_conf(self):  # TODO Change and use only for backup purposes
         conf = {}
         for id in self.resources:
             type = channels = group = hrn = pir = None

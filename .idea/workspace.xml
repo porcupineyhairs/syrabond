@@ -4,8 +4,8 @@
     <list default="true" id="4fc2e0fc-acda-4d3b-b22a-2fa2a04360b6" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/clientside/functions.js" afterPath="$PROJECT_DIR$/clientside/functions.js" />
-      <change beforePath="$PROJECT_DIR$/json/equip.json" afterPath="$PROJECT_DIR$/json/equip.json" />
-      <change beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
+      <change beforePath="$PROJECT_DIR$/clientside/maintenance.html" afterPath="$PROJECT_DIR$/clientside/maintenance.html" />
+      <change beforePath="$PROJECT_DIR$/syrabond/api.py" afterPath="$PROJECT_DIR$/syrabond/api.py" />
       <change beforePath="$PROJECT_DIR$/syrabond/facility.py" afterPath="$PROJECT_DIR$/syrabond/facility.py" />
       <change beforePath="$PROJECT_DIR$/syrabond/orm.py" afterPath="$PROJECT_DIR$/syrabond/orm.py" />
     </list>
@@ -21,11 +21,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="facility.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="facility.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/syrabond/facility.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="106">
-              <caret line="43" column="28" lean-forward="false" selection-start-line="43" selection-start-column="28" selection-end-line="43" selection-end-column="28" />
+            <state relative-caret-position="252">
+              <caret line="182" column="48" lean-forward="false" selection-start-line="182" selection-start-column="48" selection-end-line="182" selection-end-column="48" />
               <folding>
                 <element signature="e#0#54#0" expanded="true" />
               </folding>
@@ -36,7 +36,7 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
+            <state relative-caret-position="404">
               <caret line="29" column="46" lean-forward="false" selection-start-line="29" selection-start-column="46" selection-end-line="29" selection-end-column="46" />
               <folding />
             </state>
@@ -53,11 +53,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="api.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="api.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/syrabond/api.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2958">
-              <caret line="12" column="33" lean-forward="false" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
+            <state relative-caret-position="378">
+              <caret line="285" column="54" lean-forward="false" selection-start-line="285" selection-start-column="54" selection-end-line="285" selection-end-column="54" />
               <folding />
             </state>
           </provider>
@@ -66,8 +66,8 @@
       <file leaf-file-name="orm.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/syrabond/orm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="90" column="0" lean-forward="false" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
+            <state relative-caret-position="32">
+              <caret line="102" column="0" lean-forward="false" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
               </folding>
@@ -100,7 +100,6 @@
       <find>check_status_row_exist</find>
       <find>#</find>
       <find>dumb_prem</find>
-      <find>edit_entity</find>
       <find>statusall</find>
       <find>welcome</find>
       <find>self.resources[id].update_status(msg)</find>
@@ -115,6 +114,7 @@
       <find>equip_conf_file</find>
       <find>is_correct</find>
       <find>DB</find>
+      <find>edit_entity</find>
     </findStrings>
     <replaceStrings>
       <replace>resource</replace>
@@ -167,7 +167,6 @@
         <option value="$PROJECT_DIR$/json/premises.json" />
         <option value="$PROJECT_DIR$/syrabond/syrasql.py" />
         <option value="$PROJECT_DIR$/syrasql.py" />
-        <option value="$PROJECT_DIR$/syrabond/api.py" />
         <option value="$PROJECT_DIR$/syrabond/restful.py" />
         <option value="$PROJECT_DIR$/syrabond/mqttsender.py" />
         <option value="$PROJECT_DIR$/syrabond/common.py" />
@@ -178,6 +177,7 @@
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/syrabond/orm.py" />
         <option value="$PROJECT_DIR$/syrabond/facility.py" />
+        <option value="$PROJECT_DIR$/syrabond/api.py" />
       </list>
     </option>
   </component>
@@ -462,13 +462,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1571988612919</updated>
-    </task>
-    <task id="LOCAL-00010" summary="dehardcoding logging levels and config dir">
-      <created>1572532059615</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1572532059615</updated>
     </task>
     <task id="LOCAL-00011" summary="dehardcoding logging levels and config dir">
       <created>1572532496210</created>
@@ -806,7 +799,14 @@
       <option name="project" value="LOCAL" />
       <updated>1576160311667</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="minor: Tags now lives in DB.">
+      <created>1576248144265</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1576248144267</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TodoView">
@@ -820,14 +820,15 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15715292" sideWeight="0.49418604" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="1.0" sideWeight="0.5109232" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329602" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2853688" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.49576783" sideWeight="0.8830162" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4401451" sideWeight="0.48907682" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2394196" sideWeight="0.8830162" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12575574" sideWeight="0.48907682" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22370012" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15277778" sideWeight="0.50581396" order="2" side_tool="true" content_ui="tabs" />
@@ -897,7 +898,8 @@
     <MESSAGE value="minor: some vars declared in __init__" />
     <MESSAGE value="feature: resources config now loads from database." />
     <MESSAGE value="minor: Some docstrings added." />
-    <option name="LAST_COMMIT_MESSAGE" value="minor: Some docstrings added." />
+    <MESSAGE value="minor: Tags now lives in DB." />
+    <option name="LAST_COMMIT_MESSAGE" value="minor: Tags now lives in DB." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1145,14 +1147,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="29" column="46" lean-forward="false" selection-start-line="29" selection-start-column="46" selection-end-line="29" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/json/mysql.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -1197,11 +1191,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/syrabond/api.py">
+    <entry file="file://$PROJECT_DIR$/syrabond/facility.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2958">
-          <caret line="12" column="33" lean-forward="false" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
-          <folding />
+        <state relative-caret-position="252">
+          <caret line="182" column="48" lean-forward="false" selection-start-line="182" selection-start-column="48" selection-end-line="182" selection-end-column="48" />
+          <folding>
+            <element signature="e#0#54#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1215,21 +1211,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/syrabond/orm.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="90" column="0" lean-forward="false" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
+        <state relative-caret-position="32">
+          <caret line="102" column="0" lean-forward="false" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/syrabond/facility.py">
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="106">
-          <caret line="43" column="28" lean-forward="false" selection-start-line="43" selection-start-column="28" selection-end-line="43" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#54#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="404">
+          <caret line="29" column="46" lean-forward="false" selection-start-line="29" selection-start-column="46" selection-end-line="29" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/syrabond/api.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="285" column="54" lean-forward="false" selection-start-line="285" selection-start-column="54" selection-end-line="285" selection-end-column="54" />
+          <folding />
         </state>
       </provider>
     </entry>

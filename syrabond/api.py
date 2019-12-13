@@ -185,7 +185,7 @@ class API:
     def get_state(self, params):
         """
         Returns the dict of specified resources properties and states.
-        Accepts various entities as arg: ids and scopes.
+        Accepts various entities as arg&
         """
         result = []
         entities = params[0]
@@ -279,14 +279,20 @@ class API:
     def edit_device(self, data):  # TODO add result
         device_params = parse_form_json(data)
         print(device_params)
+        uid = device_params['uid']
+        group = device_params['group']
+        hrn = device_params['name']
         if self.is_correct_exist_device_params(device_params):
-            self.facility.resources[device_params['uid']].group = device_params['group']
-            self.facility.resources[device_params['uid']].hrn = device_params['name']
+            self.facility.resources[uid].group = group
+            self.facility.resources[uid].hrn = hrn
             if 'tags' in device_params:
-                self.facility.resources[device_params['uid']].tags = device_params['tags']
+                self.facility.resources[uid].tags = device_params['tags']
+                for tag in device_params['tags']:
+                    if not tag in self.TAGS:
+                        self.TAGS.update(tag)
             else:
-                self.facility.resources[device_params['uid']].tags = []
-        self.facility.update_equip_conf()
+                self.facility.resources[uid].tags = []
+        self.facility.update_device(uid)
 
     def delete_device(self, data):  # TODO add result
         device_params = parse_form_json(data)

@@ -38,7 +38,10 @@ const custom_translator = {
     "groups": "Группы устройств",
     "maint": "Служебное",
     "add": "Добавить устройство",
-    "new_dev_name_placeholder": "Описание..."
+    "new_dev_name_placeholder": "Описание...",
+    "add_tag": "Новый тэг...",
+    "del": "Удалить",
+    "save": "Сохранить"
   },
   "en-US":
   {
@@ -48,7 +51,10 @@ const custom_translator = {
     "groups": "Groups",
     "maint": "Maintenance",
     "add": "Add device",
-    "new_dev_name_placeholder": "Device caption"
+    "new_dev_name_placeholder": "Device caption",
+    "add_tag": "Add tag...",
+    "del": "Delete",
+    "save": "Save"
   }
 
 }
@@ -480,9 +486,13 @@ $.getJSON(uri, function(data) {
 
 function devManage(){
   const post_uri = base_uri+edit_uri+'device'
+  const new_uri = base_uri+add_uri
   const d_uri = base_uri+del_uri+'device'
   const div_tags = 'div-tags';
   const select_group = 'select-group'
+  $("#button-delete-mod").html(custom_translator[lang]['del'])
+  $("#button-sub-mod").html(custom_translator[lang]['save'])
+  $('#input-newtag').attr("placeholder", custom_translator[lang]['add_tag'])
   $("#all-devices").on('click', 'tr', function() {
     const uid = this.firstChild.innerHTML;
     $("#button-sub-mod").val(uid);
@@ -518,6 +528,9 @@ function devManage(){
               addCheckbox(div_tags, resp_tags[i], false);
             }
           }
+          //$('#'+div_tags).append('<label class="checkbox inline">');
+          //$('#'+div_tags).append(' <input id="input-newtag" name="newtag" type="textarea" placeholder="New tag..." class="input-small">' );
+          //$('#'+div_tags).append('</label>');
       })
       
     })
@@ -552,6 +565,11 @@ $("#button-delete-mod").on('click',  function() {
         });
       $("#all-devices").html('');
       StateView();
+    });
+
+$("#input-newtag").on('focusout', function() {
+      addCheckbox(div_tags, this.value, true);
+      $(this).hide()
     });
 
 }
