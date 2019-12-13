@@ -143,7 +143,7 @@ class Facility:
                 elif channel == 'temp' or channel == 'hum':
                     self.resources[id].set_channel_state(channel, msg)
                 elif type == 'switch':
-                    self.resources[id].update_state(msg.capitalize())
+                    self.resources[id].update_state(msg.upper())
                 elif type == 'thermo':
                     self.premises[id].thermostat.update_state(msg)
                 elif type == 'status':
