@@ -9,7 +9,7 @@ class Facility:
     All of resources are stored in dicts.
     """
 
-    def __init__(self, name: str, listen=True):
+    def __init__(self, name: str, listen=False):
         self.premises = {}
         self.resources = {}
         self.virtual_apls = {}
@@ -17,6 +17,7 @@ class Facility:
         self.name = name
         self.DB = database.Mysql()  # TODO Gonna be deprecated
         self.dbo = orm.DBO('mysql')  # TODO Choose DB interface with config
+        self.dbo.truncate_entropy()
         uniqid = str(uuid1())
         common.log('Creating Syrabond instance with uuid ' + uniqid)
         self.welcome_topic = '{}/{}/'.format('common', 'welcome')
@@ -130,6 +131,7 @@ class Facility:
         The function to be involved in the main loop of daemon.
         It checks the MQTT message buffer, parse messages and acts depending of content.
         The main goal is to update states in DB.
+        After every state msg increase entropy.
         """
         self.listener.message_buffer_lock = True
         if self.listener.message_buffer:
@@ -151,7 +153,8 @@ class Facility:
                         self.resources[id].update_status(msg)
                 elif type == 'welcome':
                         self.DB.rewrite_quarantine(id, msg)
-
+                if type == 'switch' or type == 'sensor' or type == 'thermo':
+                    self.dbo.increase_entropy()
         self.listener.message_buffer.clear()
         self.listener.message_buffer_lock = False
 

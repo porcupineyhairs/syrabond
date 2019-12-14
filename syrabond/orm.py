@@ -101,6 +101,24 @@ class DBO:
         session.close()
         self.update_tags(entity.uid, entity.tags)
 
+    def get_entropy(self):
+        session = self.Session()
+        entity = session.query(Entropy).filter_by(id=1).first()
+        return entity.entropy
+
+    def truncate_entropy(self):
+        session = self.Session()
+        session.query(Entropy).delete()
+        session.commit()
+
+    def increase_entropy(self):
+        session = self.Session()
+        entity = session.query(Entropy).filter_by(id=1).first()
+        if entity:
+            entity.entropy += 1
+        else:
+            session.add(Entropy(id=1, entropy=0))
+        session.commit()
 
 class Resource(Base):
     """
@@ -153,4 +171,14 @@ class Tags(Base):
 
     def __repr__(self):
         return "<Tags(tag='{}'>".format(self.tag)
+
+
+class Entropy(Base):
+    """Table to hold entropy."""
+    __tablename__ = 'entropy'
+    id = Column(Integer, primary_key=True)
+    entropy = Column(Integer)
+
+    def __repr__(self):
+        return "<Entropy(entropy='{}'>".format(self.tag)
 

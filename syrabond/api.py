@@ -15,7 +15,8 @@ class API:
             'maintenance': 'maint_device',
             'statusall': 'get_status_all',
             'structure': 'get_struct',
-            'conf': 'get_scopes'
+            'conf': 'get_scopes',
+            'entro': 'get_entropy'
         }
 
         self.POST_ACTIONS = {
@@ -92,6 +93,9 @@ class API:
 
     def request_device_state(self, uids, format):
         pass
+
+    def get_entropy(self, null):
+        return self.facility.dbo.get_entropy()
 
     def get_status_all(self, null):
         status_all = []

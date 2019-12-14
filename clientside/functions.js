@@ -565,13 +565,13 @@ $("#button-delete-mod").on('click',  function() {
     });
 
 $("#input-newtag").on('focusout', function () {
-  if (tag_add_locker == false) {
+  if (tag_add_locker == false && this.value != '') {
       tag_add_locker = true;
       addCheckbox(div_tags, this.value, true);
       $(this).hide();
     }});
 $("#input-newtag").on('keypress',function(e) {
-    if (e.which == 13 && tag_add_locker == false) {
+    if (e.which == 13 && tag_add_locker == false && this.value != '') {
       tag_add_locker = true;
       addCheckbox(div_tags, this.value, true);
       $(this).hide();

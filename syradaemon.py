@@ -8,7 +8,7 @@ from syrabond import facility
 blocking = True
 
 chdir('/home/pi/syrabond/python')
-sh = facility.Facility('sh')
+sh = facility.Facility('sh', listen=True)
 
 if blocking:
     while True:
