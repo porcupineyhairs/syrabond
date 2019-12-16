@@ -673,11 +673,11 @@ setTimeout(function() {
         complete: checkEntropy,
         timeout: 500
         })
- }, 15000);
+ }, 1000);
 }
 
 function update() {
-  setInterval(updateStates, 5000);
+  setInterval(updateStates, 15000);
 }
 
 function tablemaker(array) {
