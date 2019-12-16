@@ -1,6 +1,6 @@
 import sqlalchemy as sql
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Integer, Column, String, Boolean, ForeignKey
+from sqlalchemy import Integer, Column, String, Boolean, ForeignKey, CHAR
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import relationship
 
@@ -24,6 +24,14 @@ class DBO:
         result = []
         for res in session.query(Resource):
             result.append(res)
+        session.close()
+        return result
+
+    def load_scenarios(self):
+        session = self.Session()
+        result = []
+        for scen in session.query(Scenario):
+            result.append({'hrn': scen.hrn, 'conditions': scen.conditions, 'effect': scen.effect})
         session.close()
         return result
 
@@ -51,7 +59,7 @@ class DBO:
         else:
             res = session.query(Resource).filter_by(uid=uid).first()
             res.state = [State(state=state)]
-
+        session.query(Tags).filter_by(resource=None).delete(synchronize_session='fetch')
         #res.state = [State(state=state)]
         session.commit()
         session.close()
@@ -71,6 +79,7 @@ class DBO:
         session = self.Session()
         res = session.query(Resource).filter_by(uid=uid).first()
         res.status = [Status(status=status)]
+        session.query(Tags).filter_by(resource=None).delete(synchronize_session='fetch')
         session.commit()
         session.close()
 
@@ -111,7 +120,6 @@ class DBO:
             return entity.entropy
         else:
             return 0
-        session.close()
 
     def truncate_entropy(self):
         session = self.Session()
@@ -125,7 +133,8 @@ class DBO:
         if entity:
             entity.entropy += 1
         else:
-            session.add(Entropy(id=1, entropy=0))
+            session.add(Entropy(id=1,
+                                entropy=0))
         session.commit()
         session.close()
 
@@ -191,3 +200,40 @@ class Entropy(Base):
     def __repr__(self):
         return "<Entropy(entropy='{}'>".format(self.tag)
 
+
+class Scenario(Base):
+    """Table for scernario's conditions."""
+    __tablename__ = 'scenarios'
+    id = Column(Integer, primary_key=True)
+    hrn = Column(String(50))
+    conditions = relationship("Conditions")
+    effect = relationship("Map")
+
+    def __repr__(self):
+        return "<Scenario(id='{}')>".format(self.id)
+
+
+class Map(Base):
+    """Table for scernario's conditions."""
+    __tablename__ = 'maps'
+    id = Column(Integer, primary_key=True)
+    resource = Column(String(40), ForeignKey('resources.uid'))
+    state = Column(String(40))
+    scenario = Column(Integer, ForeignKey('scenarios.id'))
+
+    def __repr__(self):
+        return "<Map(id='{}')>".format(self.id)
+
+
+class Conditions(Base):
+    """Table for scernario's conditions."""
+    __tablename__ = 'conditions'
+    id = Column(Integer, primary_key=True)
+    resource = Column(String(40), ForeignKey('resources.uid'))
+    positive = Column(Boolean)
+    compare = Column(CHAR)
+    state = Column(String(40))
+    scenario = Column(Integer, ForeignKey('scenarios.id'))
+
+    def __repr__(self):
+        return "<Conditions(id='{}')>".format(self.id)

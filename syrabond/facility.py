@@ -1,4 +1,4 @@
-from syrabond import mqttsender, common, database, orm
+from syrabond import mqttsender, common, database, orm, automation
 from uuid import uuid1
 from sys import exit
 
@@ -54,6 +54,24 @@ class Facility:
                                             res.uid, res.type, res.group, res.hrn, tags)
             if resource:
                 self.resources[res.uid] = resource
+
+        scenarios_loaded = self.dbo.load_scenarios()  # Loading resources params from DB and creating instances
+        for scen in scenarios_loaded:
+            conditions = {}
+            effect = []
+            hrn = scen['hrn']
+            for cond_conf in scen['conditions']:
+                res = cond_conf.resource
+                cond = automation.Conditions(
+                    self.resources[res], cond_conf.positive, cond_conf.compare, cond_conf.state)
+                conditions.update({res: cond})
+            for effect_conf in scen['effect']:
+                res = effect_conf.resource
+                eff = automation.Map(self.resources[res], effect_conf.state)
+                effect.append(eff)
+            scn = automation.Scenario(hrn, conditions, effect)
+            for cond in scn.conditions:
+                scn.conditions[cond].resource.scens.add(scn)
 
         for prem in config['premises']:
             for terr in config['premises'][prem]:
@@ -259,6 +277,7 @@ class Resource:
         self.listener = listener
         self.dbo = dbo
         self.state = None
+        self.scens = set()
         self.check_state()
 
     def check_state(self):
@@ -269,7 +288,7 @@ class Resource:
             self.state = state
             self.dbo.update_state(self.uid, self.state)
             common.log('The state of {} ({}) changed to {}'.format(self.uid, self.hrn, self.state))
-            self.sender.mqttsend('sh/entropy', self.uid, retain=True)
+
 
     def get_state(self):
         return self.dbo.get_state(self.uid)
@@ -363,6 +382,15 @@ class Device(Resource):
 
 class Switch(Device):
     """Class to represent switches"""
+
+    def update_state(self, state):
+        if not self.state == state:
+            self.state = state
+            self.dbo.update_state(self.uid, self.state)
+            common.log('The state of {} ({}) changed to {}'.format(self.uid, self.hrn, self.state))
+            for scen in self.scens:
+                if scen.check_conditions(self):
+                    scen.workout()
 
     def connect(self):
         self.listener.subscribe(self.topic)
