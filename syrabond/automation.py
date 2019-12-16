@@ -1,4 +1,4 @@
-from syrabond import facility
+import syrabond.facility
 
 
 class StateEngine:
@@ -37,7 +37,7 @@ class Map:
         self.state = state
 
     def activate(self):
-        if isinstance(self.resource, facility.Switch):
+        if isinstance(self.resource, syrabond.facility.Switch):
             self.resource.turn(self.state)
 
 
