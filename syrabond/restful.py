@@ -11,10 +11,17 @@ conf.clear()
 app = flask.Flask(__name__)
 
 
-@app.route('/api/v02/get/<path:params>', methods=['GET', 'POST'])
+@app.route('/api/v02/get/<path:params>', methods=['GET', 'PUT', 'POST'])
 def get_api_request(params):
     """Handles GET API requests, returns jsoned structures of facility, states of devices, etc."""
-    return json.dumps(api.parse_request(params), ensure_ascii=False, indent=4, sort_keys=True)
+    if flask.request.is_json:
+        type = 'json'
+        print(type, flask.request.json)
+        return json.dumps(api.parse_request(type, params, flask.request.json), ensure_ascii=False, indent=4, sort_keys=True)
+    else:
+        type = 'raw'
+        print(params)
+        return json.dumps(api.parse_request(type, params), ensure_ascii=False, indent=4, sort_keys=True)
 
 
 @app.route('/api/v02/add/<path:params>', methods=['POST'])

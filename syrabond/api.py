@@ -15,8 +15,7 @@ class API:
             'maintenance': 'maint_device',
             'statusall': 'get_status_all',
             'structure': 'get_struct',
-            'conf': 'get_scopes',
-            'entro': 'get_entropy'
+            'conf': 'get_scopes'
         }
 
         self.POST_ACTIONS = {
@@ -55,26 +54,30 @@ class API:
             return False
 
     def get_direct(self, keyword, entities, param):
-        """Call the function by keyword using special dict"""
+        """Call the function by keyword using GET_ACTIONS dict"""
         method = self.GET_ACTIONS[keyword]
         return getattr(self, method)((entities, param))
 
     def post_direct(self, action, keyword, data):
-        """Call the function by action keyword using special dict"""
+        """Call the function by action keyword using POST_ACTIONS dict"""
         if action in self.POST_ACTIONS and is_correct_post_params(data):
             method = self.POST_ACTIONS[action]
             getattr(self, method)(keyword, data)
 
-    def parse_request(self, request):
+    def parse_request(self, type, request, data=None):
         entities = param = None
         if request:
             args = [s.strip().lower() for s in request.split('/')]
             keyword = args[0].lower()
             if keyword in self.GET_ACTIONS:
-                if len(args) > 1:
-                    entities = [s.lower().strip() for s in args[1].split(',')]
-                    if len(args) > 2:
-                        param = args[2].lower()
+                if type == 'raw':
+                        if len(args) > 1:
+                            entities = [s.lower().strip() for s in args[1].split(',')]
+                            if len(args) > 2:
+                                param = args[2].lower()
+                elif type == 'json' and data:
+                    if isinstance(data, list):
+                        entities = data
                 return {'response': self.get_direct(keyword, entities, param)}
             else:
                 return {'response': 'bad request'}, 400
@@ -93,9 +96,6 @@ class API:
 
     def request_device_state(self, uids, format):
         pass
-
-    def get_entropy(self, null):
-        return self.facility.dbo.get_entropy()
 
     def get_status_all(self, null):
         status_all = []

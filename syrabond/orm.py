@@ -16,7 +16,7 @@ class DBO:
         self.engine = sql.create_engine('mysql+pymysql://{}:{}@{}/{}'.format(  # TODO Make dependence to sql_engine
                 config['user'], config['password'], config['host'], config['database']))
         self.Session = sessionmaker(bind=self.engine)
-        #connection = self.engine.connect()
+        self.engine.connect()
         Base.metadata.create_all(self.engine)
 
     def load_resources(self):
@@ -24,6 +24,7 @@ class DBO:
         result = []
         for res in session.query(Resource):
             result.append(res)
+        session.close()
         return result
 
     def rewrite_resources(self, resources: dict):  # TODO Check is it needed to truncate table first
@@ -53,6 +54,7 @@ class DBO:
 
         #res.state = [State(state=state)]
         session.commit()
+        session.close()
 
     def get_state(self, uid):
         session = self.Session()
@@ -88,6 +90,7 @@ class DBO:
         else:
             return []
 
+
     def update_resource_properties(self, entity):
         session = self.Session()
         res = session.query(Resource).filter_by(uid=entity.uid).first()
@@ -104,12 +107,17 @@ class DBO:
     def get_entropy(self):
         session = self.Session()
         entity = session.query(Entropy).filter_by(id=1).first()
-        return entity.entropy
+        if entity:
+            return entity.entropy
+        else:
+            return 0
+        session.close()
 
     def truncate_entropy(self):
         session = self.Session()
         session.query(Entropy).delete()
         session.commit()
+        session.close()
 
     def increase_entropy(self):
         session = self.Session()
@@ -119,6 +127,7 @@ class DBO:
         else:
             session.add(Entropy(id=1, entropy=0))
         session.commit()
+        session.close()
 
 class Resource(Base):
     """

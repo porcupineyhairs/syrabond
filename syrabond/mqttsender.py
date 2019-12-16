@@ -40,13 +40,13 @@ class Mqtt:
         log('Connected to broker on {} as {}'.format(self.broker, self.name))
         return True
 
-    def mqttsend(self, topic, msg):
+    def mqttsend(self, topic: str, msg: str, retain=False):
         """Sends msg to topic. Logs activity and errors."""
         if not self.connected:
             self.connect()
         log('Sending {} to {}...'.format(msg, topic))
         try:
-            self.client.publish(topic, msg)
+            self.client.publish(topic, msg, retain=retain)
         except Exception as e:
             log('Error while sending: {}.'.format(e), log_type='error')
             return False

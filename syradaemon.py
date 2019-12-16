@@ -7,7 +7,8 @@ from syrabond import facility
 
 blocking = True
 
-chdir('/home/pi/syrabond/python')
+#chdir('/home/pi/syrabond/python')
+chdir('/Users/egor/PycharmProjects/syrabond/')
 sh = facility.Facility('sh', listen=True)
 
 if blocking:

@@ -17,7 +17,6 @@ class Facility:
         self.name = name
         self.DB = database.Mysql()  # TODO Gonna be deprecated
         self.dbo = orm.DBO('mysql')  # TODO Choose DB interface with config
-        self.dbo.truncate_entropy()
         uniqid = str(uuid1())
         common.log('Creating Syrabond instance with uuid ' + uniqid)
         self.welcome_topic = '{}/{}/'.format('common', 'welcome')
@@ -153,10 +152,9 @@ class Facility:
                         self.resources[id].update_status(msg)
                 elif type == 'welcome':
                         self.DB.rewrite_quarantine(id, msg)
-                if type == 'switch' or type == 'sensor' or type == 'thermo':
-                    self.dbo.increase_entropy()
         self.listener.message_buffer.clear()
         self.listener.message_buffer_lock = False
+
 
     def add_new_resourse(self, type: str, uid: str, group: str, hrn: str, **kwargs: list) -> bool:
         """Create new resource instance and update config. To be used with API."""
@@ -271,6 +269,7 @@ class Resource:
             self.state = state
             self.dbo.update_state(self.uid, self.state)
             common.log('The state of {} ({}) changed to {}'.format(self.uid, self.hrn, self.state))
+            self.sender.mqttsend('sh/entropy', self.uid, retain=True)
 
     def get_state(self):
         return self.dbo.get_state(self.uid)

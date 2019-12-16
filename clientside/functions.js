@@ -8,7 +8,9 @@ const scopes_uri = 'scopes'
 const state_uri = 'state/'
 const shift_uri = 'shift/'
 const structure_uri = 'structure/'
-var groups = [], tags = []
+const entro_uri = 'entro'
+var groups = [], tags = [], page_resources = [];
+var entropy
 var lang = navigator.language || navigator.userLanguage;
 
 const states = {
@@ -65,19 +67,19 @@ if (custom_translator[lang] == null) {
 
 
 
-function getState(entity) {
- const uri = base_uri+get_uri+state_uri;
- const url = uri+entity;
- var items = [];
-prom = $.getJSON(url, function(data){
-  $.each( data.response, function (key, val)
-    {
-      items.push({key,val})
-    });
-});
+function getState(entities) {
+const uri = base_uri+get_uri+state_uri;
+//const url = uri+entity;
+var items = [];
+prom = $.ajax({
+          url:uri,
+          type:"PUT",
+          data:JSON.stringify(entities),
+          contentType:"application/json; charset=utf-8",
+          dataType:"json"
+        });
 return prom;
 }
-
 
 function getStruct(type) {
   const uri = base_uri+get_uri+structure_uri+type;
@@ -149,11 +151,6 @@ function getS(type) {
   return prom;
 }
 
-
-
-
-
-
 function getScope(scope) {
   const uri = base_uri+get_uri+state_uri+scope
   var switches = []
@@ -166,6 +163,7 @@ function getScope(scope) {
         const name_cell = "<span>"+name+"</span>"
         const button_cell = '<button class="' + colors[states[state]]+ '" res-uid=' + uid + '>' + counter_states[states[state]] + '</button>'
         switches.push({name_cell, button_cell})
+        page_resources.push(uid);
       }
       if (type == 'sensor'){
         var state_cell = [];
@@ -174,16 +172,18 @@ function getScope(scope) {
           premise = data.response[i].name;
         }
         $.each(state, function(channel, st){
-          state_cell.push('<p>'+channels_hrf[channel]+st+'</p>');
+          state_cell.push('<p res-uid="'+uid+'-'+channel+'">'+channels_hrf[channel]+st+'</p>');
         });
       const st = state_cell.join(' ')
       sensors.push({premise, st});
+      page_resources.push(uid);
       }
       if (type == 'thermo'){
         premise = data.response[i].premise
-        const st = '<img src="/client/img/thermostat.png" class="img-rounded"><span id=c-'+uid+'> '+state+'</span>';
-        const range = '<input name="'+name+'"id="'+uid+'" type="range" opacity="0.5" min="0" max="30" value="'+state+'" step="0.5" />'
+        const st = '<img src="/client/img/thermostat.png" class="img-rounded"><span id=c-'+uid+' res-uid="'+uid+'"> '+state+'</span>';
+        const range = '<input name="'+name+'"id="'+uid+'" type="range" opacity="0.5" min="0" max="30" value="'+state+'" step="0.5" />';
       thermos.push({premise, range, st});
+      page_resources.push(uid);
       }
     }
 
@@ -212,7 +212,6 @@ function getScope(scope) {
     $("#span-thermos").append(res);
     $(res).show(200);
     }
-
   });
 
 }
@@ -263,7 +262,6 @@ $("body").on('click','button', function() {
       })
 
   });
-
 }
 
 function shiftThermo(id){
@@ -333,12 +331,8 @@ function getThermo() {
         cell.innerHTML = temp;
       });
     });
-
   })
-    
   })
-
-
 }
 
 function StateView() {
@@ -577,10 +571,114 @@ $("#input-newtag").on('keypress',function(e) {
       $(this).hide();
     }
 });
+}
+
+function updateState(res) {
+console.log(res)
+  if (page_resources.length > 0){
+    if ($.inArray(res, page_resources) != -1){
+      var actual_state = getState([res])
+      actual_state.always(function(data){
+        obj = data.response[0]
+      if (obj.type == 'switch'){
+        var new_state = obj.state;
+        var uid = obj.uid;
+        var state = viceversa($("[res-uid='"+uid+"']").html());
+        if (state != new_state){
+          new_state = viceversa(new_state);
+          $("button[res-uid='"+uid+"']").text(new_state);
+          //$("button[res-uid='"+resuid+"']").button('toggle')
+          $("button[res-uid='"+uid+"']").addClass(colors[Math.abs(states[new_state]-1)]).removeClass(colors[(states[new_state])])
+        }
+      }
+    })
+    }
+  }
 
 }
 
+function updateStates() {
+  console.log('update')
+  if (page_resources.length > 0){
+    var actual_states = getState(page_resources);
+    actual_states.always(function(data){
+      for (var i = data.response.length - 1; i >= 0; i--) {
+          var new_state = data.response[i].state;
+          var uid = data.response[i].uid;
+          var type = data.response[i].type;
+        if (type == 'switch'){
+          var state = viceversa($("[res-uid='"+uid+"']").html());
+          if (state != new_state){
+            new_state = viceversa(new_state);
+            $("button[res-uid='"+uid+"']").text(new_state);
+            //$("button[res-uid='"+resuid+"']").button('toggle')
+            $("button[res-uid='"+uid+"']").addClass(colors[Math.abs(states[new_state]-1)]).removeClass(colors[(states[new_state])])
+          }
+        }
+        if (type == 'thermo'){
+          var res = "span[res-uid='"+uid+"']";
+          if ($(res).html() !== new_state.toString()){
+            var inp = document.getElementById(uid);
+            inp.value = new_state;
+            $(res).html(new_state);
+            
+            }
+          const st = '<img src="/client/img/thermostat.png" class="img-rounded"><span id=c-'+uid+' res-uid="'+uid+'"> '+state+'</span>';
+        const range = '<input name="'+name+'"id="'+uid+'" type="range" opacity="0.5" min="0" max="30" value="'+state+'" step="0.5" />';
+        }
+        
+        if (type == 'sensor') {
+          $.each(new_state, function(channel, st){
+            var res = "p[res-uid='"+uid+"-"+channel+"']";
+            if ($(res).html() != channels_hrf[channel]+st){
+            //$(res).hide(100);
+            $(res).html(channels_hrf[channel]+st);
+            //$(res).show(100);
+            }
+        });
+        }
+        
+        }
+    })
+    for (var i = page_resources.length - 1; i >= 0; i--) {
+      
+      res = $("[res-uid='"+page_resources[i]+"']")
+    }
+  }
+}
 
+
+function checkEntropy() {
+setTimeout(function() {
+ $.ajax({
+        url: base_uri+get_uri+entro_uri,
+        headers: {
+        'Content-Type': 'text/html'
+        },
+        type: "GET",
+        success: function(data) {
+        if (data == null) {
+              console.log('no data!');
+        } else {
+          if (data.response != null) {
+            entropy = data.response;
+            //updateStates();
+            updateState(entropy);
+          }
+              
+        }
+
+        },
+        dataType: "json",
+        complete: checkEntropy,
+        timeout: 500
+        })
+ }, 15000);
+}
+
+function update() {
+  setInterval(updateStates, 5000);
+}
 
 function tablemaker(array) {
   var table = document.createElement('table');
