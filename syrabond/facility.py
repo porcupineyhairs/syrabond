@@ -251,6 +251,21 @@ class Premises:
         self.ventilation = None
 
 
+class Control:
+    """
+    Non-MQTT virtual control appliances.
+    Useful for UI elements to represent automation conditions.
+    """
+
+    def __init__(self, uid, type, hrn):
+        self.uid = uid
+        self.type = type
+        self.hrn = hrn
+        self.state = None
+
+
+
+
 class Resource:
     """
     The class to represent appliances.

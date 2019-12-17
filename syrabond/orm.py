@@ -59,7 +59,7 @@ class DBO:
         else:
             res = session.query(Resource).filter_by(uid=uid).first()
             res.state = [State(state=state)]
-        session.query(Tags).filter_by(resource=None).delete(synchronize_session='fetch')
+        session.query(State).filter_by(resource=None).delete(synchronize_session='fetch')
         #res.state = [State(state=state)]
         session.commit()
         session.close()
@@ -79,7 +79,7 @@ class DBO:
         session = self.Session()
         res = session.query(Resource).filter_by(uid=uid).first()
         res.status = [Status(status=status)]
-        session.query(Tags).filter_by(resource=None).delete(synchronize_session='fetch')
+        session.query(Status).filter_by(resource=None).delete(synchronize_session='fetch')
         session.commit()
         session.close()
 

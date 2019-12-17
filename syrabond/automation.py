@@ -6,7 +6,7 @@ class StateEngine:
         self.resources = {}
 
 
-class Scenario:  # TODO Add comparison rules for conditions
+class Scenario:  # TODO Add comparison rules for conditions (and | or)
 
     def __init__(self, hrn: str, conditions, effect):
         self.hrn = hrn
@@ -39,6 +39,8 @@ class Map:
     def activate(self):
         if isinstance(self.resource, syrabond.facility.Switch):
             self.resource.turn(self.state)
+        elif isinstance(self.resource, syrabond.facility.VirtualAppliance):
+            self.resource.set_state(self.state)
 
 
 class Conditions:
