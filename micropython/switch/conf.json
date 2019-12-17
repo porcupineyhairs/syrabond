@@ -1,0 +1,24 @@
+{
+      "mqtt": {
+        "server": "192.168.88.12",
+        "user": "dev",
+        "pass": "whatever",
+        "object": "sh",
+        "channel": "switch",
+        "keepalive": "300"
+              },
+      "module": {
+          "type": "switch",
+          "pin": "12",
+          "led": "13",
+          "button": "0",
+          "level": "1",
+          "ver": "0.1"
+                },
+
+  "sleep_time": "1",
+  "debug": "",
+  "inited": ""
+
+
+}

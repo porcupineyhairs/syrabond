@@ -2,6 +2,9 @@ from syrabond import facility
 
 
 class API:
+    """
+    The wrapper for Facility to be used with REST.
+    """
     def __init__(self, facility_name, listen=False):
         self.facility = facility.Facility(facility_name, listen=listen)
 
@@ -21,7 +24,10 @@ class API:
             'edit': 'edit_entity',
             'delete': 'del_entity'
         }
+        self.TAGS = self.GROUPS = self.PREMS = self.TYPES = self.SENSOR_CHANNELS = None
+        self.init_scopes()
 
+    def init_scopes(self):
         self.GROUPS = set()
         for res in self.facility.resources:
             self.GROUPS.update({self.facility.resources[res].group})
@@ -37,6 +43,7 @@ class API:
          for x in self.facility.resources if self.facility.resources[x].type == 'sensor']
 
     def is_consistent_api_request(self, agr):
+        """Checking if the argument is tuple and keyword is in special dict"""
         try:
             if isinstance(agr, tuple) and len(agr) >= 2:
                 if agr[0][0] in self.GET_ACTIONS or agr[0][0] in self.POST_ACTIONS:
@@ -47,24 +54,30 @@ class API:
             return False
 
     def get_direct(self, keyword, entities, param):
+        """Call the function by keyword using GET_ACTIONS dict"""
         method = self.GET_ACTIONS[keyword]
         return getattr(self, method)((entities, param))
 
     def post_direct(self, action, keyword, data):
+        """Call the function by action keyword using POST_ACTIONS dict"""
         if action in self.POST_ACTIONS and is_correct_post_params(data):
             method = self.POST_ACTIONS[action]
             getattr(self, method)(keyword, data)
 
-    def parse_request(self, request):
+    def parse_request(self, type, request, data=None):
         entities = param = None
         if request:
             args = [s.strip().lower() for s in request.split('/')]
             keyword = args[0].lower()
             if keyword in self.GET_ACTIONS:
-                if len(args) > 1:
-                    entities = [s.lower().strip() for s in args[1].split(',')]
-                    if len(args) > 2:
-                        param = args[2].lower()
+                if type == 'raw':
+                        if len(args) > 1:
+                            entities = [s.lower().strip() for s in args[1].split(',')]
+                            if len(args) > 2:
+                                param = args[2].lower()
+                elif type == 'json' and data:
+                    if isinstance(data, list):
+                        entities = data
                 return {'response': self.get_direct(keyword, entities, param)}
             else:
                 return {'response': 'bad request'}, 400
@@ -94,6 +107,7 @@ class API:
         return status_all
 
     def get_resources(self, entities):
+        """Returns the set of resources within specified entities (could be uids or various scopes)"""
         resources = set()
         facility_resources = self.facility.resources.copy()
         facility_premises = self.facility.premises.copy()
@@ -112,6 +126,7 @@ class API:
         return resources
 
     def get_struct(self, params):
+        """Returns various structures to build the web pages."""
         result = {}
         struct_type = None
         try:
@@ -174,55 +189,16 @@ class API:
 
         return result
 
-    def get_structure(self, params):  # TODO To be destroyed
-        print(params)
-        arg = None
-        result = {}
-        struct_type = params[0][0]
-        if len(params) == 2:
-            arg = params[1]
-        if struct_type == 'groups':
-            if arg:
-                if arg in self.GROUPS:
-                    result = []
-                    resources = self.get_resources([arg])
-                    for res in resources:
-                        result.append({'uid': res.uid, 'type': res.type, 'name': res.hrn, 'state': res.get_state()})
-            else:
-                for group in self.GROUPS:
-                    resources = self.get_resources([group])
-                    res_list = []
-                    for res in resources:
-                        res_list.append({'uid': res.uid, 'type': res.type, 'name': res.hrn, 'state': res.get_state()})
-                    result.update({group: res_list})
-        elif struct_type == 'thermo':
-            for prem in self.facility.premises:
-                premise = self.facility.premises[prem]
-                try:
-                    result.update({prem: {'name': premise.name, 'thermostat_id': premise.thermostat.uid,
-                                          'thermostat_state': premise.thermostat.state}})
-                except:
-                    continue
-
-        elif struct_type == 'tag':
-            result = []
-            tag_attr = params[1]
-            resources = self.get_resources([tag_attr])
-            for res in resources:
-                result.append({'uid': res.uid, 'type': res.type, 'name': res.hrn, 'state': res.get_state()})
-
-        elif struct_type == 'scopes':
-            result = {}
-            result.update({'groups': list(self.GROUPS)})
-            result.update({'tags': list(self.TAGS)})
-
-        return result
-
     def get_state(self, params):
+        """
+        Returns the dict of specified resources properties and states.
+        Accepts various entities as arg&
+        """
         result = []
         entities = params[0]
         resources = self.get_resources(entities)
         for res in resources:
+            res.check_state()
             try:
                 prem = [x for x in self.facility.premises.values() if res in x.resources][0]
             except IndexError:
@@ -310,14 +286,21 @@ class API:
     def edit_device(self, data):  # TODO add result
         device_params = parse_form_json(data)
         print(device_params)
+        uid = device_params['uid']
+        group = device_params['group']
+        hrn = device_params['name']
         if self.is_correct_exist_device_params(device_params):
-            self.facility.resources[device_params['uid']].group = device_params['group']
-            self.facility.resources[device_params['uid']].hrn = device_params['name']
+            self.facility.resources[uid].group = group
+            self.facility.resources[uid].hrn = hrn
             if 'tags' in device_params:
-                self.facility.resources[device_params['uid']].tags = device_params['tags']
+                self.facility.resources[uid].tags = device_params['tags']
+                for tag in device_params['tags']:
+                    if not tag in self.TAGS:
+                        self.TAGS.update(tag)
             else:
-                self.facility.resources[device_params['uid']].tags = []
-        self.facility.update_equip_conf()
+                self.facility.resources[uid].tags = []
+        self.facility.update_device(uid)
+        self.init_scopes()
 
     def delete_device(self, data):  # TODO add result
         device_params = parse_form_json(data)

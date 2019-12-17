@@ -11,26 +11,36 @@ conf.clear()
 app = flask.Flask(__name__)
 
 
-@app.route('/api/v02/get/<path:params>', methods=['GET', 'POST'])
+@app.route('/api/v02/get/<path:params>', methods=['GET', 'PUT', 'POST'])
 def get_api_request(params):
-    return json.dumps(api.parse_request(params), ensure_ascii=False, indent=4, sort_keys=True)
+    """Handles GET API requests, returns jsoned structures of facility, states of devices, etc."""
+    if flask.request.is_json:
+        type = 'json'
+        print(type, flask.request.json)
+        return json.dumps(api.parse_request(type, params, flask.request.json), ensure_ascii=False, indent=4, sort_keys=True)
+    else:
+        type = 'raw'
+        print(params)
+        return json.dumps(api.parse_request(type, params), ensure_ascii=False, indent=4, sort_keys=True)
 
 
 @app.route('/api/v02/add/<path:params>', methods=['POST'])
 def post_add_request(params):
-    print(flask.request.data)
+    """Handles POST API requests adding new entities (devices, premises, tags, etc.)"""
     api.post_direct('add', params, flask.request.json)
     return 'ok'
 
 
 @app.route('/api/v02/edit/<path:params>', methods=['POST'])
 def post_edit_request(params):
+    """Handles POST API requests changing exist entities (devices, premises, tags, etc.)"""
     api.post_direct('edit', params, flask.request.json)
     return 'ok'
 
 
 @app.route('/api/v02/delete/<path:params>', methods=['POST'])
 def post_delete_request(params):
+    """Handles POST API requests deleting exist entities (devices, premises, tags, etc.)"""
     api.post_direct('delete', params, flask.request.json)
     return 'ok'
 

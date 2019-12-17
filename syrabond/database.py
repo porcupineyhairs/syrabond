@@ -4,6 +4,7 @@ from time import sleep
 
 
 class Mysql:
+    """Old-style database handling class. Will be deprecated soon to use ORM."""
 
     def __init__(self):
         self.write_buffer = set()
@@ -36,6 +37,10 @@ class Mysql:
     def get_quarantine(self):
         query = 'SELECT uid, ip FROM Res_quarantine'
         return self.send_read_query(query)
+
+    def del_from_quarantine(self, uid):
+        query = 'DELETE FROM Res_quarantine WHERE uid = \'{}\''.format(uid)
+        self.send_write_query(query)
 
     def check_state_row_exist(self, uid):
         query = 'SELECT uid FROM Res_state WHERE uid = \'{}\''.format(uid)

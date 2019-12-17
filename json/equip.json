@@ -5,7 +5,16 @@
         ],
         "group": "temp",
         "hrn": "Температура в гостевой спальне",
-        "pir": false,
+        "pir": null,
+        "type": "sensor"
+    },
+    "dhtsensor-da18b100-v0.1": {
+        "channels": [
+            "temp"
+        ],
+        "group": "temp",
+        "hrn": "температура в ванной",
+        "pir": null,
         "type": "sensor"
     },
     "si-1e110800-v0.1": {
@@ -15,7 +24,7 @@
         ],
         "group": "temp",
         "hrn": "Атмосфера в гостинной",
-        "pir": false,
+        "pir": null,
         "type": "sensor"
     },
     "si-47354100-v0.1": {
@@ -24,64 +33,85 @@
             "hum"
         ],
         "group": "temp",
-        "hrn": "Атмосфера в спальне",
-        "pir": false,
+        "hrn": "датчик в спальне",
+        "pir": null,
         "type": "sensor"
     },
     "switch-1603eb00-v0.1": {
         "channels": null,
         "group": "vent",
         "hrn": "вытяжка",
-        "pir": false,
+        "pir": null,
+        "type": "switch"
+    },
+    "switch-57088100-v0.1": {
+        "channels": null,
+        "group": "amb",
+        "hrn": "переносной удлинитель",
+        "pir": null,
+        "type": "switch"
+    },
+    "switch-81c15d00-v0.1": {
+        "channels": null,
+        "group": "lights",
+        "hrn": "свет в мастерской",
+        "pir": null,
         "type": "switch"
     },
     "switch-93902400-v0.1": {
         "channels": null,
         "group": "lights",
         "hrn": "свет на складе",
-        "pir": "pir",
+        "pir": true,
         "type": "switch"
     },
     "switch-aa7a3700-v0.1": {
         "channels": null,
         "group": "lights",
         "hrn": "свет в гардеробной",
-        "pir": "pir",
+        "pir": true,
         "type": "switch"
     },
     "switch-d1ca3e00-v0.1": {
         "channels": null,
         "group": "amb",
         "hrn": "рождественская иллюминация",
-        "pir": false,
+        "pir": null,
         "type": "switch"
     },
     "switch-de387a00-v0.1": {
         "channels": null,
         "group": "vent",
         "hrn": "приточка",
-        "pir": false,
+        "pir": null,
         "type": "switch"
     },
     "switch-f76eaf00-v0.1": {
         "channels": null,
         "group": "lights",
         "hrn": "свет на террасе",
-        "pir": false,
+        "pir": null,
         "type": "switch"
     },
     "switch-fcfe3a00-v0.1": {
         "channels": null,
         "group": "lights",
         "hrn": "свет на кухне",
-        "pir": false,
+        "pir": null,
         "type": "switch"
     },
     "switch-fdfe3a00-v0.1": {
         "channels": null,
         "group": "lights",
         "hrn": "свет в спальне",
-        "pir": false,
+        "pir": null,
+        "type": "switch"
+    },
+    "switch-ff015e00-v0.1": {
+        "channels": null,
+        "group": "lights",
+        "hrn": "свет в гостиной",
+        "pir": null,
         "type": "switch"
     },
     "thermo1.1": {

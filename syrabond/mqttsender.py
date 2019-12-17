@@ -6,6 +6,12 @@ from syrabond.common import log
 
 
 class Mqtt:
+    """
+    Wrapper class for paho.mqtt.client.
+    Handles connecting, subscribing, receiving and sending MQTT-messages.
+    Holds the messages in own message buffer that used by other classes to get messages.
+    Accepts mqtt.json file in config dir to get config.
+    """
 
     def __init__(self, name, config='mqtt.json', clean_session=True):
         self.connected = False
@@ -34,14 +40,13 @@ class Mqtt:
         log('Connected to broker on {} as {}'.format(self.broker, self.name))
         return True
 
-    def mqttsend(self, topic, msg):
-        if topic.find(self.root+'/'):
-            topic = self.root+'/'+topic
+    def mqttsend(self, topic: str, msg: str, retain=False):
+        """Sends msg to topic. Logs activity and errors."""
         if not self.connected:
             self.connect()
         log('Sending {} to {}...'.format(msg, topic))
         try:
-            self.client.publish(topic, msg)
+            self.client.publish(topic, msg, retain=retain)
         except Exception as e:
             log('Error while sending: {}.'.format(e), log_type='error')
             return False
@@ -54,8 +59,7 @@ class Mqtt:
         return True
 
     def subscribe(self, topic):
-        if topic.find(self.root+'/'):
-            topic = self.root+'/'+topic
+        """Subscribes to the topic specifies. Logs activity and errors."""
         while not self.connected:
             if not self.connect():
                 sleep(5)

@@ -1,0 +1,26 @@
+{
+      "mqtt": {
+        "server": "192.168.88.12",
+        "user": "dev",
+        "pass": "kal1966",
+        "object": "sh",
+        "channel": "sensor",
+        "keepalive": "600"
+              },
+      "module": {
+          "type": "dhtsensor",
+          "dht_type": 11,
+          "dht_pin": 2,
+          "mismatch_temp": -1,
+          "mismatch_hum": 0,
+          "led": 2,
+          "ver": "0.1"
+                },
+
+  "interval": "600",
+  "period": "10",
+  "debug": false,
+  "inited": false
+
+
+}

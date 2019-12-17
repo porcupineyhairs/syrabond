@@ -1,10 +1,15 @@
 #!/usr/bin/python3
-import syrabond
+from os import chdir
 from time import sleep
+from syrabond import facility
+
+"""Demo daemon that receive and handle messages in loop"""
 
 blocking = True
 
-sh = syrabond.Facility('sh')
+#chdir('/home/pi/syrabond/python')
+chdir('/Users/egor/PycharmProjects/syrabond/')
+sh = facility.Facility('sh', listen=True)
 
 if blocking:
     while True:

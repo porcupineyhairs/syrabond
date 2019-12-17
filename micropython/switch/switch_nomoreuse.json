@@ -1,0 +1,18 @@
+{
+"mqtt": {
+        "server": "192.168.88.12",
+        "user": "dev",
+        "pass": "kal1966",
+        "client_id": "ESP_",
+        "HBtopic": "sh/status/",
+        "devicename": "SH-sw-pump"
+        },
+"topic": "sh/equip/pump",
+"pin": "12",
+"led": "13",
+"button": "0",
+"iterations": "8",
+"level": "1",
+
+"debug": "False"
+}
