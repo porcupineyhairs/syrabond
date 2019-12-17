@@ -13,7 +13,7 @@ class DBO:
 
     def __init__(self, sql_engine: str):
         config = common.extract_config(sql_engine+'.json')
-        self.engine = sql.create_engine('mysql+pymysql://{}:{}@{}/{}'.format(  # TODO Make dependence to sql_engine
+        self.engine = sql.create_engine('mysql+pymysql://{}:{}@{}/{}?charset=utf8'.format(  # TODO Make dependence to sql_engine
                 config['user'], config['password'], config['host'], config['database']))
         self.Session = sessionmaker(bind=self.engine)
         self.engine.connect()
