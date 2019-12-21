@@ -63,23 +63,25 @@ class Facility:
                 self.resources[res.uid] = resource
 
     def build_scenarios(self):
-        scenarios_loaded = self.dbo.load_scenarios()  # Loading resources params from DB and creating instances
+        scenarios_loaded = self.dbo.load_scenarios('cond')  # TODO Dehardcode
         for scen in scenarios_loaded:
-            conditions = {}
-            effect = []
-            hrn = scen['hrn']
-            for cond_conf in scen['conditions']:
-                res = cond_conf.resource
-                cond = automation.Conditions(
-                    self.resources[res], cond_conf.positive, cond_conf.compare, cond_conf.state)
-                conditions.update({res: cond})
-            for effect_conf in scen['effect']:
-                res = effect_conf.resource
-                eff = automation.Map(self.resources[res], effect_conf.state)
-                effect.append(eff)
-            scn = automation.Scenario(hrn, conditions, effect)
-            for cond in scn.conditions:
-                scn.conditions[cond].resource.scens.add(scn)
+            if scen['type'] == 'cond':
+                conditions = {}
+                effect = []
+                hrn = scen['hrn']
+                for cond_conf in scen['conditions']:
+                    res = cond_conf.resource
+                    cond = automation.Conditions(
+                        self.resources[res], cond_conf.positive, cond_conf.compare, cond_conf.state)
+                    conditions.update({res: cond})
+                for effect_conf in scen['effect']:
+                    res = effect_conf.resource
+                    eff = automation.Map(self.resources[res], effect_conf.state)
+                    effect.append(eff)
+                scn = automation.Scenario(hrn, conditions, effect)
+                for cond in scn.conditions:
+                    scn.conditions[cond].resource.scens.add(scn)
+
 
     def build_premises(self, config):
         for prem in config:
@@ -98,8 +100,7 @@ class Facility:
 
                 premise = Premises(prem, terr, config[prem][terr]['hrn'],
                                    ambient_sensor, lights, thermo, lights_lvl, pres)
-                # todo prohibit "." in the name of terra
-                self.premises[prem+'.'+terr] = premise
+                self.premises[f'{prem}.{terr}'] = premise  # todo prohibit "." in the name of terra (frontend)
 
     def build_bindings(self, config):
         for binding in config:
@@ -182,7 +183,6 @@ class Facility:
                         self.DB.rewrite_quarantine(id, msg)
         self.listener.message_buffer.clear()
         self.listener.message_buffer_lock = False
-
 
     def add_new_resourse(self, type: str, uid: str, group: str, hrn: str, **kwargs: list) -> bool:
         """Create new resource instance and update config. To be used with API."""
