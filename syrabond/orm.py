@@ -1,4 +1,5 @@
 import sqlalchemy as sql
+
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Integer, Column, String, Boolean, ForeignKey, CHAR
 from sqlalchemy.orm import sessionmaker

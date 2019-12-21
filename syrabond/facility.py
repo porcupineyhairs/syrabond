@@ -36,6 +36,13 @@ class Facility:
                 common.log('Unable to parse configuration file {}. Giving up...'.format(confs[conf]),
                            log_type='error')
                 exit()
+        self.build_resources()
+        self.build_scenarios()
+        self.build_premises(config['premises'])
+        self.build_bindings(config['bind'])
+        config.clear()
+
+    def build_resources(self):
         resources_loaded = self.dbo.load_resources()  # Loading resources params from DB and creating instances
         for res in resources_loaded:
             channels = None
@@ -55,6 +62,7 @@ class Facility:
             if resource:
                 self.resources[res.uid] = resource
 
+    def build_scenarios(self):
         scenarios_loaded = self.dbo.load_scenarios()  # Loading resources params from DB and creating instances
         for scen in scenarios_loaded:
             conditions = {}
@@ -73,26 +81,29 @@ class Facility:
             for cond in scn.conditions:
                 scn.conditions[cond].resource.scens.add(scn)
 
-        for prem in config['premises']:
-            for terr in config['premises'][prem]:
+    def build_premises(self, config):
+        for prem in config:
+            for terr in config[prem]:
                 thermo = ambient_sensor = lights = lights_lvl = pres = None
-                if 'thermo' in config['premises'][prem][terr]:
-                    thermo = self.resources[config['premises'][prem][terr]['thermo']]
-                if 'ambient_sensor' in config['premises'][prem][terr]:
-                    ambient_sensor = self.resources[config['premises'][prem][terr]['ambient_sensor']]
-                if 'lights' in config['premises'][prem][terr]:
-                    lights = [self.resources[res] for res in config['premises'][prem][terr]['lights']]
-                if 'lights_lvl' in config['premises'][prem][terr]:
-                    lights_lvl = self.resources[config['premises'][prem][terr]['lights_lvl']]
-                if 'pres' in config['premises'][prem][terr]:
-                    pres = self.resources[config['premises'][prem][terr]['pres']]
+                if 'thermo' in config[prem][terr]:
+                    thermo = self.resources[config[prem][terr]['thermo']]
+                if 'ambient_sensor' in config[prem][terr]:
+                    ambient_sensor = self.resources[config[prem][terr]['ambient_sensor']]
+                if 'lights' in config[prem][terr]:
+                    lights = [self.resources[res] for res in config[prem][terr]['lights']]
+                if 'lights_lvl' in config[prem][terr]:
+                    lights_lvl = self.resources[config[prem][terr]['lights_lvl']]
+                if 'pres' in config[prem][terr]:
+                    pres = self.resources[config[prem][terr]['pres']]
 
-                premise = Premises(prem, terr, config['premises'][prem][terr]['hrn'],
-                                 ambient_sensor, lights, thermo, lights_lvl, pres)
+                premise = Premises(prem, terr, config[prem][terr]['hrn'],
+                                   ambient_sensor, lights, thermo, lights_lvl, pres)
                 # todo prohibit "." in the name of terra
                 self.premises[prem+'.'+terr] = premise
-        for binding in config['bind']:
-            prem = config['bind'][binding]
+
+    def build_bindings(self, config):
+        for binding in config:
+            prem = config[binding]
             self.premises[prem].resources.append(self.resources[binding])
             # connecting thermostates
             if self.resources[binding].type == 'thermo':
@@ -103,7 +114,6 @@ class Facility:
                         + '/' + prem
                 )
                 self.premises[prem].thermostat.connect()
-        config.clear()
 
     def get_premises(self, terra=None, code=None, tag=None):
         result = []
