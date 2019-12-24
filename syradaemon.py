@@ -30,11 +30,6 @@ if blocking:
         sh.message_handler()
         i += 1
         sleep(0.1)
-
-        """
-        Timechecker for unlimited jsons with
-        time: action
-        """
 else:
     sh.listener.wait_for_messages()
 

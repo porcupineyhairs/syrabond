@@ -14,13 +14,16 @@ class TimeEngine:
         scens = orm.load_scenarios('time')
         for scen in scens:
             effect = []
-            sch = self.Schedule(scen['schedule'])
+            schedule = []
+            active = scen['active']
+            for schedule_conf in scen['schedule']:
+                schedule.append(self.Schedule(schedule_conf))
             for effect_conf in scen['effect']:
                 res = effect_conf.resource
                 eff = Map(facility.resources[res], effect_conf.state)
                 effect.append(eff)
-            self.scenarios.append(self.Scenario(scen['hrn'], sch, effect))
-        log('TimeEngine started.')
+            self.scenarios.append(self.Scenario(active, scen['hrn'], schedule, effect))
+        log('TimeEngine engaged.')
 
     def add_scen(self):
         pass
@@ -30,9 +33,10 @@ class TimeEngine:
         now = {'weekday': time.localtime(time.time()).tm_wday,
                'time': [time.localtime(time.time()).tm_hour, time.localtime(time.time()).tm_min]}
         for scen in self.scenarios:
-            if now['weekday'] in scen.schedule.days:
-                if now['time'] == scen.schedule.start_time:
-                    result.append(scen)
+            for schedule in scen.schedule:
+                if now['weekday'] in schedule.days and scen.active:
+                    if now['time'] == schedule.start_time:
+                        result.append(scen)
         if result:
             log(f"TimeEngine: It's time for scenarios: {[x.hrn for x in result]}")
         return result
@@ -43,7 +47,9 @@ class TimeEngine:
             self.start_time = [int(x) for x in schedule[0].start.split(',')]
 
     class Scenario:
-        def __init__(self, hrn, schedule, effect):
+        def __init__(self, active, hrn, schedule, effect):
+            self.type = 'time'
+            self.active = active
             self.hrn = hrn
             self.schedule = schedule
             self.effect = effect
@@ -58,7 +64,9 @@ class TimeEngine:
 
 class Scenario:  # TODO Add comparison rules for conditions (and | or)
 
-    def __init__(self, hrn: str, conditions, effect):
+    def __init__(self, active: bool, hrn: str, conditions, effect):
+        self.type = 'cond'
+        self.active = active
         self.hrn = hrn
         self.conditions = conditions
         self.effect = effect
@@ -95,7 +103,8 @@ class Map:
 
 class Conditions:
 
-    def __init__(self, resource, positive, compare, state):
+    def __init__(self, id, resource, positive, compare, state):
+        self.id = id
         self.resource = resource
         self.positive = positive
         self.compare = compare

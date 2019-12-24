@@ -32,7 +32,8 @@ class DBO:
         session = self.Session()
         result = []
         for scen in session.query(Scenario).filter_by(type=type):
-            result.append({'type': scen.type, 'hrn': scen.hrn, 'conditions': scen.conditions,
+            result.append({'id': scen.id, 'type': scen.type, 'active': scen.active,
+                           'hrn': scen.hrn, 'conditions': scen.conditions,
                            'schedule': scen.schedule, 'effect': scen.effect})
         session.close()
         return result

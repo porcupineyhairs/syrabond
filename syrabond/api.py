@@ -15,7 +15,8 @@ class API:
             'maintenance': 'maint_device',
             'statusall': 'get_status_all',
             'structure': 'get_struct',
-            'conf': 'get_scopes'
+            'conf': 'get_scopes',
+            'scenarios': 'get_scenarios'
         }
 
         self.POST_ACTIONS = {
@@ -105,6 +106,34 @@ class API:
             if isinstance(res, facility.Device):
                 status_all.append({'uid': res.uid, 'name': res.hrn, 'ip': self.facility.DB.read_status(res.uid)[0][0]})
         return status_all
+
+    def get_scenarios(self, params):
+        type = params[0][0]
+        result = []
+        scenarios_loaded = self.facility.dbo.load_scenarios(type)
+        if type == 'cond':
+            for scen in scenarios_loaded:
+                id = scen['id']
+                active = scen['active']
+                hrn = scen['hrn']
+                conditions = []
+                for cond in scen['conditions']:
+                    conditions.append({'id': cond.id, 'resource': cond.resource, 'positive': cond.positive,
+                                       'compare': cond.compare, 'state': cond.state})
+                result.append({'id': id, 'type': type, 'active': active, 'name': hrn, 'conditions': conditions
+                               })
+        elif type == 'time':
+            for scen in scenarios_loaded:
+                id = scen['id']
+                active = scen['active']
+                hrn = scen['hrn']
+                schedule = []
+                for sched in scen['schedule']:
+                    schedule.append({'id': sched.id, 'weekdays': sched.weekdays, 'start_time': sched.start})
+                result.append({'id': id, 'type': type, 'active': active, 'name': hrn, 'schedule': schedule
+                               })
+
+        return result
 
     def get_resources(self, entities):
         """Returns the set of resources within specified entities (could be uids or various scopes)"""

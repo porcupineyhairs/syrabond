@@ -68,20 +68,21 @@ class Facility:
             if scen['type'] == 'cond':
                 conditions = {}
                 effect = []
+                active = scen['active']
                 hrn = scen['hrn']
                 for cond_conf in scen['conditions']:
                     res = cond_conf.resource
+                    id = cond_conf.id
                     cond = automation.Conditions(
-                        self.resources[res], cond_conf.positive, cond_conf.compare, cond_conf.state)
+                        id, self.resources[res], cond_conf.positive, cond_conf.compare, cond_conf.state)
                     conditions.update({res: cond})
                 for effect_conf in scen['effect']:
                     res = effect_conf.resource
                     eff = automation.Map(self.resources[res], effect_conf.state)
                     effect.append(eff)
-                scn = automation.Scenario(hrn, conditions, effect)
+                scn = automation.Scenario(active, hrn, conditions, effect)
                 for cond in scn.conditions:
                     scn.conditions[cond].resource.scens.add(scn)
-
 
     def build_premises(self, config):
         for prem in config:
@@ -414,7 +415,7 @@ class Switch(Device):
             self.dbo.update_state(self.uid, self.state)
             common.log('The state of {} ({}) changed to {}'.format(self.uid, self.hrn, self.state))
             for scen in self.scens:
-                if scen.check_conditions(self):
+                if scen.check_conditions(self) and scen.active:
                     scen.workout()
 
     def connect(self):

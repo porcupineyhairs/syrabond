@@ -9,6 +9,7 @@ const state_uri = 'state/'
 const shift_uri = 'shift/'
 const structure_uri = 'structure/'
 const entro_uri = 'entro'
+const scens_uri = 'scenarios/'
 var groups = [], tags = [], page_resources = [];
 var entropy
 var lang = navigator.language || navigator.userLanguage;
@@ -39,11 +40,19 @@ const custom_translator = {
     "heating": "Отопление",
     "groups": "Группы устройств",
     "maint": "Служебное",
+    "scenaries": "Сценарии",
     "add": "Добавить устройство",
     "new_dev_name_placeholder": "Описание...",
     "add_tag": "Новый тэг...",
     "del": "Удалить",
-    "save": "Сохранить"
+    "save": "Сохранить",
+    1: "Пн",
+    2: "Вт",
+    3: "Ср",
+    4: "Чт",
+    5: "Пт",
+    6: "Сб",
+    7: "Вс"
   },
   "en-US":
   {
@@ -52,11 +61,19 @@ const custom_translator = {
     "heating": "Heating",
     "groups": "Groups",
     "maint": "Maintenance",
+    "scenaries": "Scenaries",
     "add": "Add device",
     "new_dev_name_placeholder": "Device caption",
     "add_tag": "Add tag...",
     "del": "Delete",
-    "save": "Save"
+    "save": "Save",
+    1: "Пн",
+    2: "Вт",
+    3: "Ср",
+    4: "Чт",
+    5: "Пт",
+    6: "Сб",
+    7: "Вс"
   }
 
 }
@@ -104,7 +121,7 @@ function getStruct(type) {
       if (type == 'types'){
         items.push(val);
       }
-    //items.push('<br>');      
+    //items.push('<br>');
     })
   })
   .always(function(){
@@ -130,7 +147,7 @@ function getS(type) {
       }
     items.push({key, list});
     }
-      
+
       if (type == 'premises'){
       items.push('<label>'+key+' </label>')
       for (var i = val.length - 1; i >= 0; i--) {
@@ -145,7 +162,7 @@ function getS(type) {
       if (type.indexOf('#') == 0){
         items.push(val);
       }
-    //items.push('<br>');      
+    //items.push('<br>');
     })
   })
   return prom;
@@ -276,7 +293,7 @@ function shiftThermo(id){
    $("#"+id).on('change','input',function () {
     const resuid = $(this).attr('id');
     const name = $(this).attr('name');
-    const caption = 'c-'+resuid;   
+    const caption = 'c-'+resuid;
     document.getElementById(caption).innerHTML = ' '+this.value;
     $.post(api+resuid+'/'+this.value);
   });
@@ -287,7 +304,7 @@ function getThermo() {
   const thermo_uri = base_uri+get_uri+state_uri+'thermostat';
   const temp_uri = base_uri+get_uri+state_uri;
   const prem_uri = base_uri+get_uri+structure_uri+'premises';
-  
+
   var match = [];
   var items = [];
 
@@ -301,7 +318,7 @@ function getThermo() {
         if (t!=null && a!=null) {
           var dict = {'thermo':t, 'ambient': a};
         match.push(dict);
-        } 
+        }
       }
     });
 
@@ -314,7 +331,7 @@ function getThermo() {
           $.each(match, function (k,v){
             if (v.thermo == val.uid) {
               temp_id = '<img src="/client/img/thermometer.png" class="img-rounded"><span id='+v.ambient+'></span>';
-            };  
+            };
           });
           items.push({prem, temp_id, range, state});
         });
@@ -339,13 +356,13 @@ function StateView() {
  var self = this;
  var items = [];
  uri = base_uri+get_uri+'statusall';
- 
+
 $.getJSON(uri, function(data) {
     for (var i = 0; i < data.response.length; i++) {
       var uid = data.response[i].uid;
       var ip = data.response[i].ip;
       var name = data.response[i].name;
-      items.push({uid, name, ip}); 
+      items.push({uid, name, ip});
     }
 })
 .done(function(){
@@ -367,7 +384,7 @@ $.getJSON(uri, function(data) {
     for (var i = 0; i < data.response.length; i++) {
       var uid = data.response[i].uid
       var ip = data.response[i].ip
-      items.push({uid, ip});     
+      items.push({uid, ip});
     };
     var target = document.getElementById('quarantine');
     var res = tablemaker(items);
@@ -390,7 +407,7 @@ $.getJSON(uri, function(data) {
     new_form.name=this.firstChild.innerHTML;
     $(new_form).addClass("form-inline");
     //new_form.method='POST';
-    
+
     //new_form.action=post_uri;
     caption = document.createElement('span');
     caption.innerHTML = this.firstChild.innerHTML+' ';
@@ -448,7 +465,7 @@ $.getJSON(uri, function(data) {
         $(new_form).show(300);
         })
     })
-    
+
   $("#new-form").on('change', 'select', function() {
     if (this.name == 'type' && this.value == 'sensor') {
         input=document.getElementById('sensor-channels');
@@ -523,9 +540,9 @@ function devManage(){
             }
           }
       })
-      
+
     })
-    
+
   });
 
 $("#button-sub-mod").on('click',  function() {
@@ -621,12 +638,12 @@ function updateStates() {
             var inp = document.getElementById(uid);
             inp.value = new_state;
             $(res).html(new_state);
-            
+
             }
           const st = '<img src="/client/img/thermostat.png" class="img-rounded"><span id=c-'+uid+' res-uid="'+uid+'"> '+state+'</span>';
         const range = '<input name="'+name+'"id="'+uid+'" type="range" opacity="0.5" min="0" max="30" value="'+state+'" step="0.5" />';
         }
-        
+
         if (type == 'sensor') {
           $.each(new_state, function(channel, st){
             var res = "p[res-uid='"+uid+"-"+channel+"']";
@@ -637,11 +654,11 @@ function updateStates() {
             }
         });
         }
-        
+
         }
     })
     for (var i = page_resources.length - 1; i >= 0; i--) {
-      
+
       res = $("[res-uid='"+page_resources[i]+"']")
     }
   }
@@ -665,7 +682,7 @@ setTimeout(function() {
             //updateStates();
             updateState(entropy);
           }
-              
+
         }
 
         },
@@ -678,6 +695,51 @@ setTimeout(function() {
 
 function update() {
   setInterval(updateStates, 15000);
+}
+
+function getScens() {
+  const uri = base_uri+get_uri+scens_uri;
+  prom1 = $.getJSON(uri+'time');
+  prom1.success(function(data){
+    $.each(data.response, function (key, val){
+      $('<a>', {text: val.name}).appendTo('#span-scenaries');
+      $('<br>').appendTo('#span-scenaries');
+      var form = $("<form/>", { id: 'form-'+val.id,
+                                action: '#',
+                                method: '#'});
+      form.hide();
+      form.appendTo('#span-conditions');
+      $.each(val.schedule, function (k, v) {
+        var weekdays = v.weekdays.split(',');
+        $('<div/>', {id: 'schedule-'+v.id}).appendTo(form);
+        for (var i = 1; i < 8; i++) {
+          checked = false
+          if ($.inArray(i.toString(), weekdays) != -1) {
+            var checked = true
+          }
+          addCheckbox('schedule-'+v.id, custom_translator[lang][i], checked);
+        }
+        if (v.start_time.split(',')[0].length == 1) {
+          var time = '0'+v.start_time.split(',')[0]+':'+v.start_time.split(',')[1]
+        }
+        else {
+          var time = v.start_time.split(',')[0]+':'+v.start_time.split(',')[1]
+        }
+        $('<input/>', {type: 'time', name: 'timetostart', value: time}).appendTo('#schedule-'+v.id);
+      })
+
+      console.log(val);
+      form.show();
+    })
+  })
+
+  prom2 = $.getJSON(uri+'cond');
+  prom2.success(function(data){
+    $.each(data.response, function (key, val){
+      $('<a>', {text: val.name}).appendTo('#span-scenaries');
+      console.log(key, val)
+    })
+  })
 }
 
 function tablemaker(array) {
@@ -706,8 +768,8 @@ function viceversa(state) {
 }
 
 function addCheckbox(div_id,name,checked){
-  $('#'+div_id).append( '<label class="checkbox inline">'); 
-  if (checked == true){   
+  $('#'+div_id).append( '<label class="checkbox inline">');
+  if (checked == true){
     $('#'+div_id).append( '<input type="checkbox" name="tag" checked="checked" value="'+name+'">'+name);
   }
   else{
@@ -723,6 +785,7 @@ function getNavbar(active) {
   items.push('<li><a href="premises">'+custom_translator[lang]['prem']+'</a></li>');
   items.push('<li><a href="groups">'+custom_translator[lang]['groups']+'</a></li>');
   items.push('<li><a href="heating">'+custom_translator[lang]['heating']+'</a></li>');
+  items.push('<li><a href="scenaries">'+custom_translator[lang]['scenaries']+'</a></li>');
   items.push('<li><a href="maintenance">'+custom_translator[lang]['maint']+'</a></li>');
   $(".nav.nav-tabs").append(items.join(''));
   $(".nav.nav-tabs").each(function(){
@@ -734,4 +797,3 @@ function getNavbar(active) {
         });
     });
 }
-
