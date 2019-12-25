@@ -92,7 +92,7 @@ class API:
         if isinstance(attr, list):
             for each in attr:
                 getattr(each, 'turn')(value.lower())
-        if isinstance(attr, facility.VirtualAppliance):
+        if isinstance(attr, facility.VirtualAppliance) and value.isdigit():
             attr.set_state(value)
 
     def request_device_state(self, uids, format):
@@ -249,7 +249,7 @@ class API:
         command = params[1]
         resources = self.get_resources(entities)
         for res in resources:
-            if isinstance(res, facility.VirtualAppliance):
+            if isinstance(res, facility.VirtualAppliance) and is_number(command):
                 try:
                     res.set_state(command.lower())
                 except AttributeError:
@@ -262,7 +262,7 @@ class API:
                         res.turn(command.lower())
                 except AttributeError:
                     pass
-            elif isinstance(res, facility.Sensor):
+            elif isinstance(res, facility.Sensor) and is_number(command):
                 try:
                     res.update_state(command.lower())
                 except AttributeError:
@@ -401,5 +401,10 @@ def is_correct_post_params(data):
     return True
 
 
-
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
 

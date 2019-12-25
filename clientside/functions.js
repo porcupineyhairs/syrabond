@@ -1,6 +1,7 @@
 
-const base_uri = 'http://192.168.88.65/api/v02/'
+const base_uri = 'http://127.0.0.1/api/v02/'
 const get_uri = 'get/'
+const set_uri = 'set/'
 const add_uri = 'add/'
 const edit_uri = 'edit/'
 const del_uri = 'delete/'
@@ -10,6 +11,7 @@ const shift_uri = 'shift/'
 const structure_uri = 'structure/'
 const entro_uri = 'entro'
 const scens_uri = 'scenarios/'
+const session_uri = 'session/'
 var groups = [], tags = [], page_resources = [];
 var entropy
 var lang = navigator.language || navigator.userLanguage;
@@ -23,8 +25,8 @@ const counter_states = {
       0: 'ON'
     }
 const colors ={
-      1: "btn btn-success",
-      0: "btn"
+      1: "btn-success",
+      0: "btn-info"
     }
 
 const channels_hrf = {
@@ -101,20 +103,21 @@ return prom;
 function getStruct(type) {
   const uri = base_uri+get_uri+structure_uri+type;
   var items = [];
-  $.getJSON(uri, function(data){
+  $.getJSON(uri)
+  .always(function(data){
     $.each(data.response, function ( key, val){
       if (type == 'scopes'){
       items.push('<label>'+key+' </label>')
       for (var i = val.length - 1; i >= 0; i--) {
         const scope_name = val[i];
-            items.push( '<label class="checkbox inline">');
-            items.push( '<input type="checkbox" value="'+scope_name+'">'+scope_name+'</label>');
+        addCheckbox('scopes', 's'+i.toString(), scope_name, scope_name, false);
       }}
       if (type == 'premises'){
       items.push('<label>'+key+' </label>')
       for (var i = val.length - 1; i >= 0; i--) {
         const prem_name = val[i].name;
         const prem_index = val[i].index
+        addCheckbox('scopes', 's'+i.toString(), prem_index, prem_name, false);
             items.push( '<label class="checkbox inline">');
             items.push( '<input type="checkbox" value="'+prem_index+'">'+prem_name+'</label>');
       }}
@@ -123,11 +126,6 @@ function getStruct(type) {
       }
     //items.push('<br>');
     })
-  })
-  .always(function(){
-    if (document.getElementById('scopes') != null){
-    document.getElementById('scopes').innerHTML = items.join("");}
-    return items
   });
 }
 
@@ -173,12 +171,19 @@ function getScope(scope) {
   var switches = []
   var sensors = []
   var thermos = []
+  $.ajax({
+    url: base_uri+session_uri+'scopes',
+    type: "POST",
+    data: JSON.stringify({scope}),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json"
+  });
   $.getJSON(uri, function(data) {
     for (var i = 0; i < data.response.length; i++) {
       const type = data.response[i].type, state = data.response[i].state, name = data.response[i].name, uid = data.response[i].uid
       if (type == 'switch'){
         const name_cell = "<span>"+name+"</span>"
-        const button_cell = '<button class="' + colors[states[state]]+ '" res-uid=' + uid + '>' + counter_states[states[state]] + '</button>'
+        const button_cell = '<button class="btn btn-block res-button ' + colors[states[state]]+ '" res-uid=' + uid + ' cmd='+ counter_states[states[state]] +'>' + counter_states[states[state]] + '</button>'
         switches.push({name_cell, button_cell})
         page_resources.push(uid);
       }
@@ -198,7 +203,7 @@ function getScope(scope) {
       if (type == 'thermo'){
         premise = data.response[i].premise
         const st = '<img src="/client/img/thermostat.png" class="img-rounded"><span id=c-'+uid+' res-uid="'+uid+'"> '+state+'</span>';
-        const range = '<input name="'+name+'"id="'+uid+'" type="range" opacity="0.5" min="0" max="30" value="'+state+'" step="0.5" />';
+        const range = '<input class="custom-range" name="'+name+'"id="'+uid+'" type="range" opacity="0.5" min="0" max="30" value="'+state+'" step="0.5" />';
       thermos.push({premise, range, st});
       page_resources.push(uid);
       }
@@ -209,7 +214,10 @@ function getScope(scope) {
     if (switches.length > 0) {
     res = tablemaker(switches);
     res.id = 'table-sw-'+scope
+    scope_buttons = buildScopeButtons(scope);
+    scope_buttons.id = 'table-scope-'+scope;
     $(res).addClass('hide');
+    $("#span-switches").append(scope_buttons);
     $("#span-switches").append(res);
     $(res).show(200);
     }
@@ -233,6 +241,13 @@ function getScope(scope) {
 
 }
 
+function buildScopeButtons(scope) {
+  const uri = base_uri+set_uri+scope+'/';
+  const button_on = '<button class="btn btn-block scope-button ' + colors[0]+ '" res-uid=' + scope + ' cmd=' + counter_states[1] + '>' + counter_states[1] + '</button>';
+  const button_off = '<button class="btn btn-block scope-button ' + colors[1]+ '" res-uid=' + scope + ' cmd=' + counter_states[0] + '>' + counter_states[0] + '</button>';
+  tab = tablemaker([{button_on, button_off}]);
+  return tab;
+}
 
 function getScopesList(){
 
@@ -244,6 +259,10 @@ function getScopesList(){
     } else {
 
       var x = document.getElementById("table-sw-"+scope);
+      if (x != null){
+        x.remove();
+      };
+      var x = document.getElementById("table-scope-"+scope);
       if (x != null){
         x.remove();
       };
@@ -264,20 +283,25 @@ function getScopesList(){
 function shiftSwitch(){
 
 $("body").on('click','button', function() {
-    const resuid = $(this).attr('res-uid')
-    const api = base_uri+get_uri+shift_uri;
-    const command = '/toggle';
+    const resuid = $(this).attr('res-uid');
+    const is_res_button = $(this).hasClass('res-button');
+    const api = base_uri+set_uri;
+    var command = '/'+$(this).attr('cmd');
     var resp = [];
-    $.post(api+resuid+command, function(data){
-      var resp = jQuery.parseJSON(data);
-      $.each(resp.response, function(k, v){
-        var newstate = viceversa(v);
-        $("button[res-uid='"+resuid+"']").text(newstate);
-        //$("button[res-uid='"+resuid+"']").button('toggle')
-        $("button[res-uid='"+resuid+"']").addClass(colors[Math.abs(states[newstate]-1)]).removeClass(colors[(states[newstate])])
+    $.get(api+resuid+command, function(data){
+      if (is_res_button) {
+          var resp = jQuery.parseJSON(data);
+          $.each(resp.response, function(k, v){
+            var newstate = viceversa(v);
+            $("button[res-uid='"+resuid+"']").text(newstate);
+            $("button[res-uid='"+resuid+"']").attr('cmd', newstate);
+            $("button[res-uid='"+resuid+"']").addClass(colors[Math.abs(states[newstate]-1)]).removeClass(colors[(states[newstate])])
+          })
+        }
+      if (is_res_button == false){
+        updateStates();
+      }
       })
-      })
-
   });
 }
 
@@ -326,7 +350,7 @@ function getThermo() {
       $.each(data.response, function( key, val ){
           var prem = val.premise
           var state = '<img src="/client/img/thermostat.png" class="img-rounded"><span id=c-'+val.uid+'> '+val.state+'</span>';
-          var range = '<input name="'+val.name+'"id="'+val.uid+'" type="range" opacity="0.5" min="0" max="30" value="'+val.state+'" step="0.5" />'
+          var range = '<input class="custom-range" name="'+val.name+'"id="'+val.uid+'" type="range" opacity="0.5" min="0" max="30" value="'+val.state+'" step="0.5" />'
           var temp_id = null
           $.each(match, function (k,v){
             if (v.thermo == val.uid) {
@@ -520,7 +544,7 @@ function devManage(){
       $('#input-hrn').val(_name);
       $("<option />").attr("value", _group).text(_group).attr("selected", "selected").appendTo("#"+select_group);
       for (var i = _tags.length - 1; i >= 0; i--) {
-        addCheckbox(div_tags, _tags[i], true);
+        addCheckbox(div_tags, 't'+i.toString(), _tags[i], _tags[i], true);
       }
       var pr = getS('groups');
       pr.always(function(data){
@@ -536,7 +560,7 @@ function devManage(){
           resp_tags = data.response;
           for (var i = resp_tags.length - 1; i >= 0; i--) {
             if (jQuery.inArray(resp_tags[i],_tags) == -1){
-              addCheckbox(div_tags, resp_tags[i], false);
+              addCheckbox(div_tags, 't'+i.toString(), resp_tags[i], resp_tags[i], false);
             }
           }
       })
@@ -578,13 +602,13 @@ $("#button-delete-mod").on('click',  function() {
 $("#input-newtag").on('focusout', function () {
   if (tag_add_locker == false && this.value != '') {
       tag_add_locker = true;
-      addCheckbox(div_tags, this.value, true);
+      addCheckbox(div_tags, 'somerand', this.value, this.value, true);
       $(this).hide();
     }});
 $("#input-newtag").on('keypress',function(e) {
     if (e.which == 13 && tag_add_locker == false && this.value != '') {
       tag_add_locker = true;
-      addCheckbox(div_tags, this.value, true);
+      addCheckbox(div_tags, this.value, this.value, true);
       $(this).hide();
     }
 });
@@ -700,7 +724,7 @@ function update() {
 function getScens() {
   const uri = base_uri+get_uri+scens_uri;
   prom1 = $.getJSON(uri+'time');
-  prom1.success(function(data){
+  prom1.always(function(data){
     $.each(data.response, function (key, val){
       $('<a>', {text: val.name}).appendTo('#span-scenaries');
       $('<br>').appendTo('#span-scenaries');
@@ -717,7 +741,7 @@ function getScens() {
           if ($.inArray(i.toString(), weekdays) != -1) {
             var checked = true
           }
-          addCheckbox('schedule-'+v.id, custom_translator[lang][i], checked);
+          addCheckbox('schedule-'+v.id, 'c'+i.toString(), custom_translator[lang][i], custom_translator[lang][i], checked);
         }
         if (v.start_time.split(',')[0].length == 1) {
           var time = '0'+v.start_time.split(',')[0]+':'+v.start_time.split(',')[1]
@@ -734,7 +758,7 @@ function getScens() {
   })
 
   prom2 = $.getJSON(uri+'cond');
-  prom2.success(function(data){
+  prom2.always(function(data){
     $.each(data.response, function (key, val){
       $('<a>', {text: val.name}).appendTo('#span-scenaries');
       console.log(key, val)
@@ -767,32 +791,33 @@ function viceversa(state) {
       return counter_states[state]
 }
 
-function addCheckbox(div_id,name,checked){
-  $('#'+div_id).append( '<label class="checkbox inline">');
+function addCheckbox(div_id,name,val,label,checked){
+  var div = $('<\div class="form-check form-check-inline">').appendTo("#"+div_id);
   if (checked == true){
-    $('#'+div_id).append( '<input type="checkbox" name="tag" checked="checked" value="'+name+'">'+name);
+    $('<input class="form-check-input" id="'+name+'" type="checkbox" name="tag" checked="checked" value="'+val+'">').appendTo(div);
+    $('<label class="form-check-label" for="'+name+'">'+label+'</label>').appendTo(div);
   }
   else{
-    $('#'+div_id).append( '<input type="checkbox" name="tag" value="'+name+'">'+name);
+    $('<input class="form-check-input" id="'+name+'" type="checkbox" name="tag" value="'+val+'">').appendTo(div);
+    $('<label class="form-check-label" for="'+name+'">'+label+'</label>').appendTo(div);
   };
-  $('#'+div_id).append('</label>');
 }
 
 function getNavbar(active) {
   var items = []
   const key = active.split('/')[active.split('/').length-1]
-  items.push('<li><a href="index">'+custom_translator[lang]['shortcut']+'</a></li>');
-  items.push('<li><a href="premises">'+custom_translator[lang]['prem']+'</a></li>');
-  items.push('<li><a href="groups">'+custom_translator[lang]['groups']+'</a></li>');
-  items.push('<li><a href="heating">'+custom_translator[lang]['heating']+'</a></li>');
-  items.push('<li><a href="scenaries">'+custom_translator[lang]['scenaries']+'</a></li>');
-  items.push('<li><a href="maintenance">'+custom_translator[lang]['maint']+'</a></li>');
-  $(".nav.nav-tabs").append(items.join(''));
-  $(".nav.nav-tabs").each(function(){
+  items.push('<a class="nav-item nav-link" href="index">'+custom_translator[lang]['shortcut']+'</a>');
+  items.push('<a class="nav-item nav-link" href="premises">'+custom_translator[lang]['prem']+'</a>');
+  items.push('<a class="nav-item nav-link" href="groups">'+custom_translator[lang]['groups']+'</a>');
+  items.push('<a class="nav-item nav-link" href="heating">'+custom_translator[lang]['heating']+'</a>');
+  items.push('<a class="nav-item nav-link" href="scenaries">'+custom_translator[lang]['scenaries']+'</a>');
+  items.push('<a class="nav-item nav-link" href="maintenance">'+custom_translator[lang]['maint']+'</a>');
+  $(".navbar-nav").append(items.join(''));
+  $(".navbar-nav").each(function(){
         $(this).find('a').each(function(){
           const ref = this.href.split('/')[this.href.split('/').length-1]
           if (ref == key){
-          $(this).parent().addClass('active')
+          $(this).addClass('active')
         }
         });
     });
