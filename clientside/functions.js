@@ -1,5 +1,5 @@
 
-const base_uri = 'http://127.0.0.1/api/v02/'
+const base_uri = 'http://192.168.88.65/api/v02/'
 const get_uri = 'get/'
 const set_uri = 'set/'
 const add_uri = 'add/'
