@@ -43,8 +43,8 @@ class TimeEngine:
 
     class Schedule:
         def __init__(self, schedule):
-            self.days = [int(x) for x in schedule[0].weekdays.split(',')]
-            self.start_time = [int(x) for x in schedule[0].start.split(',')]
+            self.days = [int(x) for x in schedule.weekdays.split(',')]
+            self.start_time = [int(x) for x in schedule.start.split(',')]
 
     class Scenario:
         def __init__(self, active, hrn, schedule, effect):

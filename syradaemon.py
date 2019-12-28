@@ -8,7 +8,7 @@ from syrabond import facility, orm, automation
 blocking = True
 
 #chdir('/home/pi/syrabond/python')
-chdir('/Users/egor/PycharmProjects/syrabond/')
+#chdir('/Users/egor/PycharmProjects/syrabond/')
 sh = facility.Facility('sh', listen=True)
 orm = orm.DBO('mysql')
 te = automation.TimeEngine(sh, orm)
