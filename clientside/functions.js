@@ -1,5 +1,6 @@
 
-const base_uri = 'http://192.168.88.12/api/v02/'
+//const base_uri = 'http://192.168.88.12/api/v02/'
+const base_uri = 'http://192.168.88.65/api/v02/'
 const get_uri = 'get/'
 const set_uri = 'set/'
 const add_uri = 'add/'
@@ -179,6 +180,9 @@ function getScope(scope) {
     dataType: "json"
   });
   $.getJSON(uri, function(data) {
+    console.log(data.response);
+    var items = data.response.sort(sortItems);
+    console.log(items);
     for (var i = 0; i < data.response.length; i++) {
       const type = data.response[i].type, state = data.response[i].state, name = data.response[i].name, uid = data.response[i].uid
       if (type == 'switch'){
@@ -347,6 +351,7 @@ function getThermo() {
     });
 
     thermo.always(function(data){
+      data.response.sort(sortItems);
       $.each(data.response, function( key, val ){
           var prem = val.premise
           var state = '<img src="/client/img/thermostat.png" class="img-rounded"><span id=c-'+val.uid+'> '+val.state+'</span>';
@@ -789,6 +794,25 @@ function viceversa(state) {
         'ON': 'OFF'
       }
       return counter_states[state]
+}
+
+function sortItems(a ,b) {
+  var index_a = a.prem_index.split(':');
+  var index_b = b.prem_index.split(':');
+  if (index_a[0] > index_b[0]) {
+    return 1;
+  }
+  if (index_a[0] < index_b[0]) {
+    return -1;
+  }
+  if (index_a[0] == index_b[0]) {
+    if (index_a[1] > index_b[1]) {
+      return 1;
+    }
+    if (index_a[0] < index_b[0]) {
+      return -1;
+    }
+  }
 }
 
 function addCheckbox(div_id,name,val,label,checked){
