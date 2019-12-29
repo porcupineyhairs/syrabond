@@ -210,9 +210,17 @@ function getScope(scope) {
       }
       if (type == 'thermo'){
         premise = data.response[i].premise
-        const st = '<img src="/client/img/thermostat.png" class="img-rounded"><span id=c-'+uid+' res-uid="'+uid+'"> '+state+'</span>';
-        const range = '<input class="custom-range" name="'+name+'"id="'+uid+'" type="range" opacity="0.5" min="0" max="30" value="'+state+'" step="0.5" />';
-      thermos.push({premise, range, st});
+        if (is_mobile) {
+          var st = '<span id=c-'+val.uid+'> '+val.state+'</span>';
+          var minus_button = '<button type="button" id="min-'+val.uid+'" class="btn btn-primary btn-sm"> < </button>';
+          var plus_button = '<button type="button" id="pls-'+val.uid+'" class="btn btn-danger btn-sm"> > </button>';
+          thermos.push({premise, minus_button, st, plus_button});
+        }
+        else {
+          const st = '<img src="/client/img/thermostat.png" class="img-rounded"><span id=c-'+uid+' res-uid="'+uid+'"> '+state+'</span>';
+          const range = '<input class="custom-range" name="'+name+'"id="'+uid+'" type="range" opacity="0.5" min="0" max="30" value="'+state+'" step="0.5" />';
+          thermos.push({premise, range, st});
+        }
       page_resources.push(uid);
       }
     }
@@ -319,14 +327,14 @@ function shiftThermo(id){
     const resuid = $(this).attr('id');
     const name = $(this).attr('name');
     const caption = 'c-'+resuid;
-    document.getElementById(caption).innerHTML = this.value;
+    document.getElementById(caption).innerHTML = ' '+this.value;
   });
 
    $("#"+id).on('change','input',function () {
     const resuid = $(this).attr('id');
     const name = $(this).attr('name');
     const caption = 'c-'+resuid;
-    document.getElementById(caption).innerHTML = this.value;
+    document.getElementById(caption).innerHTML = ' '+this.value;
     $.post(api+resuid+'/'+this.value);
   });
 
