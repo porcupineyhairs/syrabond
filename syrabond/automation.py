@@ -32,10 +32,9 @@ class TimeEngine:
         result = []
         now = {'weekday': time.localtime(time.time()).tm_wday,
                'time': [time.localtime(time.time()).tm_hour, time.localtime(time.time()).tm_min]}
-        print(now)
         for scen in self.scenarios:
             for schedule in scen.schedule:
-                if now['weekday'] in schedule.days and scen.active:
+                if now['weekday'] in schedule.weekdays and scen.active:
                     if now['time'] == schedule.start_time:
                         result.append(scen)
         if result:
@@ -44,7 +43,7 @@ class TimeEngine:
 
     class Schedule:
         def __init__(self, schedule):
-            self.days = [int(x) for x in schedule.weekdays.split(',')]
+            self.weekdays = [int(x) for x in schedule.weekdays.split(',')]
             self.start_time = [int(x) for x in schedule.start.split(',')]
 
     class Scenario:
