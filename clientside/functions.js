@@ -211,9 +211,9 @@ function getScope(scope) {
       if (type == 'thermo'){
         premise = data.response[i].premise
         if (is_mobile) {
-          var st = '<span id=c-'+val.uid+'> '+val.state+'</span>';
-          var minus_button = '<button type="button" id="min-'+val.uid+'" class="btn btn-primary btn-sm"> < </button>';
-          var plus_button = '<button type="button" id="pls-'+val.uid+'" class="btn btn-danger btn-sm"> > </button>';
+          var st = '<span id=c-'+uid+' res-uid="'+uid+'"> '+state+'</span>';
+          var minus_button = '<button type="button" id="min-'+uid+'" class="btn btn-primary btn-sm"> < </button>';
+          var plus_button = '<button type="button" id="pls-'+uid+'" class="btn btn-danger btn-sm"> > </button>';
           thermos.push({premise, minus_button, st, plus_button});
         }
         else {
