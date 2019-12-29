@@ -16,6 +16,10 @@ const session_uri = 'session/'
 var groups = [], tags = [], page_resources = [];
 var entropy
 var lang = navigator.language || navigator.userLanguage;
+var is_mobile = false;
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+ is_mobile = true;
+}
 
 const states = {
       'OFF': 0,
@@ -315,16 +319,32 @@ function shiftThermo(id){
     const resuid = $(this).attr('id');
     const name = $(this).attr('name');
     const caption = 'c-'+resuid;
-    document.getElementById(caption).innerHTML = ' '+this.value;
+    document.getElementById(caption).innerHTML = this.value;
   });
 
    $("#"+id).on('change','input',function () {
     const resuid = $(this).attr('id');
     const name = $(this).attr('name');
     const caption = 'c-'+resuid;
-    document.getElementById(caption).innerHTML = ' '+this.value;
+    document.getElementById(caption).innerHTML = this.value;
     $.post(api+resuid+'/'+this.value);
   });
+
+  $("#"+id).on('click','button',function () {
+   const resuid = $(this).attr('id').split('-')[1];
+   const sign = $(this).attr('id').split('-')[0];
+   const caption = 'c-'+resuid;
+   //var value = $('#'+caption).html().toFloat();
+   if (sign == 'pls') {
+     var value = parseFloat(document.getElementById(caption).innerHTML)+0.5
+     document.getElementById(caption).innerHTML = value;
+   }
+   else {
+     var value = parseFloat(document.getElementById(caption).innerHTML)-0.5
+     document.getElementById(caption).innerHTML = value;
+   }
+   $.post(api+resuid+'/'+value);
+ });
 
 }
 
@@ -353,16 +373,24 @@ function getThermo() {
     thermo.always(function(data){
       data.response.sort(sortItems);
       $.each(data.response, function( key, val ){
-          var prem = val.premise
+        var temp_id = null;
+        $.each(match, function (k,v){
+          if (v.thermo == val.uid) {
+            temp_id = '<img src="/client/img/thermometer.png" class="img-rounded"><span id='+v.ambient+'></span>';
+          };
+        });
+        var prem = val.premise;
+        if (is_mobile == false) {
           var state = '<img src="/client/img/thermostat.png" class="img-rounded"><span id=c-'+val.uid+'> '+val.state+'</span>';
           var range = '<input class="custom-range" name="'+val.name+'"id="'+val.uid+'" type="range" opacity="0.5" min="0" max="30" value="'+val.state+'" step="0.5" />'
-          var temp_id = null
-          $.each(match, function (k,v){
-            if (v.thermo == val.uid) {
-              temp_id = '<img src="/client/img/thermometer.png" class="img-rounded"><span id='+v.ambient+'></span>';
-            };
-          });
           items.push({prem, temp_id, range, state});
+        }
+        else {
+          var state = '<span id=c-'+val.uid+'> '+val.state+'</span>';
+          var minus_button = '<button type="button" id="min-'+val.uid+'" class="btn btn-primary btn-sm"> < </button>';
+          var plus_button = '<button type="button" id="pls-'+val.uid+'" class="btn btn-danger btn-sm"> > </button>';
+          items.push({prem, temp_id, minus_button, state, plus_button});
+        }
         });
     var target = document.getElementById('thermostat');
     res = tablemaker(items);
