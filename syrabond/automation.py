@@ -1,4 +1,6 @@
+import time
 import syrabond.facility
+from syrabond.common import log
 
 
 class StateEngine:
@@ -6,9 +8,65 @@ class StateEngine:
         self.resources = {}
 
 
+class TimeEngine:
+    def __init__(self, facility, orm):
+        self.scenarios = []
+        scens = orm.load_scenarios('time')
+        for scen in scens:
+            effect = []
+            schedule = []
+            active = scen['active']
+            for schedule_conf in scen['schedule']:
+                schedule.append(self.Schedule(schedule_conf))
+            for effect_conf in scen['effect']:
+                res = effect_conf.resource
+                eff = Map(facility.resources[res], effect_conf.state)
+                effect.append(eff)
+            self.scenarios.append(self.Scenario(active, scen['hrn'], schedule, effect))
+        log('TimeEngine engaged.')
+
+    def add_scen(self):
+        pass
+
+    def check_shedule(self):
+        result = []
+        now = {'weekday': time.localtime(time.time()).tm_wday,
+               'time': [time.localtime(time.time()).tm_hour, time.localtime(time.time()).tm_min]}
+        for scen in self.scenarios:
+            for schedule in scen.schedule:
+                if now['weekday'] in schedule.weekdays and scen.active:
+                    if now['time'] == schedule.start_time:
+                        result.append(scen)
+        if result:
+            log(f"TimeEngine: It's time for scenarios: {[x.hrn for x in result]}")
+        return result
+
+    class Schedule:
+        def __init__(self, schedule):
+            self.weekdays = [int(x) for x in schedule.weekdays.split(',')]
+            self.start_time = [int(x) for x in schedule.start.split(',')]
+
+    class Scenario:
+        def __init__(self, active, hrn, schedule, effect):
+            self.type = 'time'
+            self.active = active
+            self.hrn = hrn
+            self.schedule = schedule
+            self.effect = effect
+            self.ran = None
+
+        def workout(self):
+            now = (time.localtime(time.time()).tm_hour, time.localtime(time.time()).tm_min)
+            if not self.ran == now:
+                self.ran = now
+                for mapper in self.effect:
+                    mapper.activate()
+
 class Scenario:  # TODO Add comparison rules for conditions (and | or)
 
-    def __init__(self, hrn: str, conditions, effect):
+    def __init__(self, active: bool, hrn: str, conditions, effect):
+        self.type = 'cond'
+        self.active = active
         self.hrn = hrn
         self.conditions = conditions
         self.effect = effect
@@ -45,7 +103,8 @@ class Map:
 
 class Conditions:
 
-    def __init__(self, resource, positive, compare, state):
+    def __init__(self, id, resource, positive, compare, state):
+        self.id = id
         self.resource = resource
         self.positive = positive
         self.compare = compare

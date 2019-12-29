@@ -3,7 +3,7 @@
   "working_dir": "/Users/egor/PycharmProjects/syrabond",
   "confs_dir": "json",
   "log_file": "syralog.log",
-  "log_level": "DEBUG",
+  "log_level": "INFO",
   "topics":
   {
     "global_ping": "globalping",

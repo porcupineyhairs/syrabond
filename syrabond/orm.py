@@ -1,4 +1,5 @@
 import sqlalchemy as sql
+
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Integer, Column, String, Boolean, ForeignKey, CHAR
 from sqlalchemy.orm import sessionmaker
@@ -27,11 +28,13 @@ class DBO:
         session.close()
         return result
 
-    def load_scenarios(self):
+    def load_scenarios(self, type):
         session = self.Session()
         result = []
-        for scen in session.query(Scenario):
-            result.append({'hrn': scen.hrn, 'conditions': scen.conditions, 'effect': scen.effect})
+        for scen in session.query(Scenario).filter_by(type=type):
+            result.append({'id': scen.id, 'type': scen.type, 'active': scen.active,
+                           'hrn': scen.hrn, 'conditions': scen.conditions,
+                           'schedule': scen.schedule, 'effect': scen.effect})
         session.close()
         return result
 
@@ -98,7 +101,6 @@ class DBO:
             return [tag.tag for tag in res.tags]
         else:
             return []
-
 
     def update_resource_properties(self, entity):
         session = self.Session()
@@ -205,8 +207,11 @@ class Scenario(Base):
     """Table for scernario's conditions."""
     __tablename__ = 'scenarios'
     id = Column(Integer, primary_key=True)
+    active = Column(Boolean)
+    type = Column(String(10))
     hrn = Column(String(50))
     conditions = relationship("Conditions")
+    schedule = relationship("Schedule")
     effect = relationship("Map")
 
     def __repr__(self):
@@ -237,3 +242,16 @@ class Conditions(Base):
 
     def __repr__(self):
         return "<Conditions(id='{}')>".format(self.id)
+
+
+class Schedule(Base):
+    """Table for scernario's Schedule."""
+    __tablename__ = 'schedule'
+    id = Column(Integer, primary_key=True)
+    weekdays = Column(String(18))
+    start = Column(String(9))
+    end = Column(String(9))
+    scenario = Column(Integer, ForeignKey('scenarios.id'))
+
+    def __repr__(self):
+        return "<Schedule(id='{}')>".format(self.id)

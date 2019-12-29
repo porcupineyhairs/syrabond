@@ -9,6 +9,25 @@ directory = conf["working_dir"]
 api = API(conf["facility_name"])
 conf.clear()
 app = flask.Flask(__name__)
+app.secret_key = 'A0Zr98j/3yX R~sadxmasio217&&dux89wi!jmN]LWX/,?RT'
+
+
+def s_set_scopes(scope):
+    try:
+        flask.session['scopes'].append(scope['scope'])
+        print(flask.session['scopes'])
+    except KeyError:
+        flask.session['scopes'] = []
+        flask.session['scopes'].append(scope['scope'])
+        print(flask.session['scopes'])
+
+
+@app.route('/api/v02/session/<path:params>', methods=['GET', 'POST'])
+def session_check(params):
+    if params == 'scopes' and flask.request.is_json:
+        s_set_scopes(flask.request.json)
+
+    return json.dumps(flask.session['scopes'], ensure_ascii=False, indent=4, sort_keys=True)
 
 
 @app.route('/api/v02/get/<path:params>', methods=['GET', 'PUT', 'POST'])
@@ -23,6 +42,12 @@ def get_api_request(params):
         print(params)
         return json.dumps(api.parse_request(type, params), ensure_ascii=False, indent=4, sort_keys=True)
 
+
+@app.route('/api/v02/set/<path:params>', methods=['GET', 'PUT'])
+def set_api_request(params):
+    """Handles API requests to shift resources states, toggle switches, etc."""
+    print(params)
+    return json.dumps(api.parse_request('raw', 'shift/'+params), ensure_ascii=False, indent=4, sort_keys=True)
 
 @app.route('/api/v02/add/<path:params>', methods=['POST'])
 def post_add_request(params):
