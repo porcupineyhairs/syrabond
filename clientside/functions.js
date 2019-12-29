@@ -807,10 +807,10 @@ function sortItems(a ,b) {
   }
   if (index_a[0] == index_b[0]) {
     if (index_a[1] > index_b[1]) {
-      return 1;
+      return -1;
     }
     if (index_a[0] < index_b[0]) {
-      return -1;
+      return 1;
     }
   }
 }
