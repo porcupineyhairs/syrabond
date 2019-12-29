@@ -32,6 +32,7 @@ class TimeEngine:
         result = []
         now = {'weekday': time.localtime(time.time()).tm_wday,
                'time': [time.localtime(time.time()).tm_hour, time.localtime(time.time()).tm_min]}
+        print(now)
         for scen in self.scenarios:
             for schedule in scen.schedule:
                 if now['weekday'] in schedule.days and scen.active:
