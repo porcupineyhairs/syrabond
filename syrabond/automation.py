@@ -2,6 +2,9 @@ import time
 import syrabond.facility
 from syrabond.common import log
 
+#  TODO: 1) For each scenario should be 2 subscenarios: start and finish;les
+#  TODO  2) Daemon should reload scenarioss from DB each ~hour
+
 
 class StateEngine:
     def __init__(self):
@@ -32,13 +35,13 @@ class TimeEngine:
         result = []
         now = {'weekday': time.localtime(time.time()).tm_wday,
                'time': [time.localtime(time.time()).tm_hour, time.localtime(time.time()).tm_min]}
+        print(now)
         for scen in self.scenarios:
             for schedule in scen.schedule:
+                print(schedule.weekdays, schedule.start_time)
                 if now['weekday'] in schedule.weekdays and scen.active:
                     if now['time'] == schedule.start_time:
                         result.append(scen)
-        if result:
-            log(f"TimeEngine: It's time for scenarios: {[x.hrn for x in result]}")
         return result
 
     class Schedule:
@@ -56,11 +59,15 @@ class TimeEngine:
             self.ran = None
 
         def workout(self):
-            now = (time.localtime(time.time()).tm_hour, time.localtime(time.time()).tm_min)
+            now = (time.localtime(time.time()).tm_yday,
+                   time.localtime(time.time()).tm_hour,
+                   time.localtime(time.time()).tm_min)
             if not self.ran == now:
+                log(f"TimeEngine: Running scenario: {self.hrn}")
                 self.ran = now
                 for mapper in self.effect:
                     mapper.activate()
+
 
 class Scenario:  # TODO Add comparison rules for conditions (and | or)
 
