@@ -53,13 +53,13 @@ const custom_translator = {
     "add_tag": "Новый тэг...",
     "del": "Удалить",
     "save": "Сохранить",
-    1: "Пн",
-    2: "Вт",
-    3: "Ср",
-    4: "Чт",
-    5: "Пт",
-    6: "Сб",
-    7: "Вс"
+    0: "Пн",
+    1: "Вт",
+    2: "Ср",
+    3: "Чт",
+    4: "Пт",
+    5: "Сб",
+    6: "Вс"
   },
   "en-US":
   {
@@ -74,13 +74,13 @@ const custom_translator = {
     "add_tag": "Add tag...",
     "del": "Delete",
     "save": "Save",
-    1: "Пн",
-    2: "Вт",
-    3: "Ср",
-    4: "Чт",
-    5: "Пт",
-    6: "Сб",
-    7: "Вс"
+    0: "Mon",
+    1: "Tue",
+    2: "Wed",
+    3: "Thu",
+    4: "Fri",
+    5: "Sat",
+    6: "Sun"
   }
 
 }
@@ -777,7 +777,7 @@ function getScens() {
       $.each(val.schedule, function (k, v) {
         var weekdays = v.weekdays.split(',');
         $('<div/>', {id: 'schedule-'+v.id}).appendTo(form);
-        for (var i = 1; i < 8; i++) {
+        for (var i = 0; i < 7; i++) {
           checked = false
           if ($.inArray(i.toString(), weekdays) != -1) {
             var checked = true

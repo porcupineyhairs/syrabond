@@ -3,7 +3,6 @@ import syrabond.facility
 from syrabond.common import log
 
 #  TODO: 1) For each scenario should be 2 subscenarios: start and finish;les
-#  TODO  2) Daemon should reload scenarioss from DB each ~hour
 
 
 class StateEngine:
@@ -14,7 +13,14 @@ class StateEngine:
 class TimeEngine:
     def __init__(self, facility, orm):
         self.scenarios = []
-        scens = orm.load_scenarios('time')
+        self.facility = facility
+        self.orm = orm
+        self.load_scenarios()
+        log('TimeEngine engaged.')
+
+    def load_scenarios(self):
+        self.scenarios.clear()
+        scens = self.orm.load_scenarios('time')
         for scen in scens:
             effect = []
             schedule = []
@@ -23,22 +29,20 @@ class TimeEngine:
                 schedule.append(self.Schedule(schedule_conf))
             for effect_conf in scen['effect']:
                 res = effect_conf.resource
-                eff = Map(facility.resources[res], effect_conf.state)
+                eff = Map(self.facility.resources[res], effect_conf.state)
                 effect.append(eff)
             self.scenarios.append(self.Scenario(active, scen['hrn'], schedule, effect))
-        log('TimeEngine engaged.')
+        log('TimeEngine: scenarios loaded.')
 
-    def add_scen(self):
+    def add_scenario(self):
         pass
 
-    def check_shedule(self):
+    def check_schedule(self):
         result = []
         now = {'weekday': time.localtime(time.time()).tm_wday,
                'time': [time.localtime(time.time()).tm_hour, time.localtime(time.time()).tm_min]}
-        print(now)
         for scen in self.scenarios:
             for schedule in scen.schedule:
-                print(schedule.weekdays, schedule.start_time)
                 if now['weekday'] in schedule.weekdays and scen.active:
                     if now['time'] == schedule.start_time:
                         result.append(scen)

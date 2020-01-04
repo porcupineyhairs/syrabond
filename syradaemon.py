@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-from os import chdir
 from time import sleep
 from syrabond import facility, orm, automation
 
@@ -7,19 +6,22 @@ from syrabond import facility, orm, automation
 
 blocking = True
 
-#chdir('/home/pi/syrabond/python')
-#chdir('/Users/egor/PycharmProjects/syrabond/')
 sh = facility.Facility('sh', listen=True)
 orm = orm.DBO('mysql')
 te = automation.TimeEngine(sh, orm)
 
 
 def scheduler():
-    scens = te.check_shedule()
+    scheduler.i += 1
+    if scheduler.i > 50:
+        te.load_scenarios()
+        scheduler.i = 0
+    scens = te.check_schedule()
     if scens:
         [scen.workout() for scen in scens]
 
 
+scheduler.i = 0
 if blocking:
     i = 31
     while True:
