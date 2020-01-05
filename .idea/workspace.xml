@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4fc2e0fc-acda-4d3b-b22a-2fa2a04360b6" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/clientside/functions.js" afterPath="$PROJECT_DIR$/clientside/functions.js" />
-      <change beforePath="$PROJECT_DIR$/syrabond/automation.py" afterPath="$PROJECT_DIR$/syrabond/automation.py" />
-      <change beforePath="$PROJECT_DIR$/syradaemon.py" afterPath="$PROJECT_DIR$/syradaemon.py" />
+      <change beforePath="$PROJECT_DIR$/syrabond/orm.py" afterPath="$PROJECT_DIR$/syrabond/orm.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,10 +17,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="automation.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="automation.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/syrabond/automation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5">
+            <state relative-caret-position="60">
               <caret line="4" column="76" lean-forward="false" selection-start-line="4" selection-start-column="76" selection-end-line="4" selection-end-column="76" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
@@ -87,26 +85,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="global.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/json/global.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="54" lean-forward="false" selection-start-line="2" selection-start-column="54" selection-end-line="2" selection-end-column="54" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="global.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/global.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="20" lean-forward="false" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="common.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/syrabond/common.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -125,6 +103,16 @@
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="orm.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/syrabond/orm.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="18" column="40" lean-forward="false" selection-start-line="18" selection-start-column="40" selection-end-line="18" selection-end-column="53" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -231,7 +219,6 @@
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/syrabond/mqttsender.py" />
         <option value="$PROJECT_DIR$/syrabond/facility.py" />
-        <option value="$PROJECT_DIR$/syrabond/orm.py" />
         <option value="$PROJECT_DIR$/syrabond/api.py" />
         <option value="$PROJECT_DIR$/syrabond/restful.py" />
         <option value="$PROJECT_DIR$/json/bind.json" />
@@ -239,6 +226,7 @@
         <option value="$PROJECT_DIR$/syrabond/common.py" />
         <option value="$PROJECT_DIR$/syradaemon.py" />
         <option value="$PROJECT_DIR$/syrabond/automation.py" />
+        <option value="$PROJECT_DIR$/syrabond/orm.py" />
       </list>
     </option>
   </component>
@@ -311,7 +299,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.syradaemon">
+  <component name="RunManager" selected="Python.syrarestful">
     <configuration name="automation" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -411,8 +399,8 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.syradaemon" />
-        <item index="1" class="java.lang.String" itemvalue="Python.syrarestful" />
+        <item index="0" class="java.lang.String" itemvalue="Python.syrarestful" />
+        <item index="1" class="java.lang.String" itemvalue="Python.syradaemon" />
         <item index="2" class="java.lang.String" itemvalue="Python.main" />
         <item index="3" class="java.lang.String" itemvalue="Python.automation" />
         <item index="4" class="java.lang.String" itemvalue="Python.syrasql" />
@@ -432,13 +420,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1571988612919</updated>
-    </task>
-    <task id="LOCAL-00040" summary="BREAKING CHANGE: Ability to add resources from quarantine list and edit properties (hrn, group, tags).">
-      <created>1575978880192</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1575978880192</updated>
     </task>
     <task id="LOCAL-00041" summary="BREAKING CHANGE: Ability to add resources from quarantine list and edit properties (hrn, group, tags).">
       <created>1575979203930</created>
@@ -776,7 +757,14 @@
       <option name="project" value="LOCAL" />
       <updated>1578084625233</updated>
     </task>
-    <option name="localTasksCounter" value="89" />
+    <task id="LOCAL-00089" summary="minor: Ability to reload scenarios.">
+      <created>1578164690298</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1578164690299</updated>
+    </task>
+    <option name="localTasksCounter" value="90" />
     <servers />
   </component>
   <component name="TodoView">
@@ -790,13 +778,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1440" y="0" width="1920" height="1080" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12743549" sideWeight="0.49418604" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="1.0" sideWeight="0.5109232" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2853688" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26216486" sideWeight="0.8830162" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15590864" sideWeight="0.48907682" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31876862" sideWeight="0.48907682" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22249094" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15277778" sideWeight="0.50581396" order="2" side_tool="true" content_ui="tabs" />
@@ -870,7 +859,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix: Premises API request now give back thermostat and ambient sensor again." />
     <MESSAGE value="BREAKING CHANGE: Syrabond is a package from now." />
     <MESSAGE value="BREAKING CHANGE: Ability to add resources from quarantine list and edit properties (hrn, group, tags)." />
     <MESSAGE value="Uploaded Micropython part of the system." />
@@ -895,7 +883,8 @@
     <MESSAGE value="minor fixes." />
     <MESSAGE value="minor: Mobile optimized for heating." />
     <MESSAGE value="bug fix in TimeEngine.Scenario.Workout" />
-    <option name="LAST_COMMIT_MESSAGE" value="bug fix in TimeEngine.Scenario.Workout" />
+    <MESSAGE value="minor: Ability to reload scenarios." />
+    <option name="LAST_COMMIT_MESSAGE" value="minor: Ability to reload scenarios." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1087,27 +1076,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/syrabond/orm.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="30" column="8" lean-forward="false" selection-start-line="30" selection-start-column="8" selection-end-line="30" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/syrabond/api.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3915">
           <caret line="261" column="49" lean-forward="false" selection-start-line="261" selection-start-column="49" selection-end-line="261" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/syrabond/restful.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="67" lean-forward="false" selection-start-line="11" selection-start-column="67" selection-end-line="11" selection-end-column="67" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1183,11 +1155,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/syrabond/automation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5">
+        <state relative-caret-position="60">
           <caret line="4" column="76" lean-forward="false" selection-start-line="4" selection-start-column="76" selection-end-line="4" selection-end-column="76" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/syrabond/restful.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="67" lean-forward="false" selection-start-line="11" selection-start-column="67" selection-end-line="11" selection-end-column="67" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/syrabond/orm.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="18" column="40" lean-forward="false" selection-start-line="18" selection-start-column="40" selection-end-line="18" selection-end-column="53" />
+          <folding />
         </state>
       </provider>
     </entry>
