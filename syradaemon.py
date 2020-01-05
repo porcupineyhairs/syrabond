@@ -24,6 +24,7 @@ def scheduler():
 scheduler.i = 0
 if blocking:
     i = 31
+    print('MAIN LOOP')
     while True:
         if i > 30:
             scheduler()

@@ -315,7 +315,6 @@ class Resource:
             self.dbo.update_state(self.uid, self.state)
             common.log('The state of {} ({}) changed to {}'.format(self.uid, self.hrn, self.state))
 
-
     def get_state(self):
         return self.dbo.get_state(self.uid)
 
@@ -330,7 +329,7 @@ class VirtualAppliance(Resource):
 
     def set_state(self, state):
         self.update_state(state)
-        self.sender.mqttsend(self.topic, state)
+        self.sender.mqttsend(self.topic, state, retain=True)
 
 
 class Device(Resource):
@@ -449,7 +448,7 @@ class Switch(Device):
 
     def on(self):
         try:
-            self.sender.mqttsend(self.topic, 'on')
+            self.sender.mqttsend(self.topic, 'on', retain=True)
             self.update_state('ON')
             return True
         except Exception as e:
@@ -458,7 +457,7 @@ class Switch(Device):
 
     def off(self):
         try:
-            self.sender.mqttsend(self.topic, 'off')
+            self.sender.mqttsend(self.topic, 'off', retain=True)
             self.update_state('OFF')
             return True
         except Exception as e:

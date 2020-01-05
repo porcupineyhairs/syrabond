@@ -44,8 +44,8 @@ class Mqtt:
         """Sends msg to topic. Logs activity and errors."""
         if not self.connected:
             self.connect()
-        log('Sending {} to {}...'.format(msg, topic))
         try:
+            log(f'Sending {msg} to {topic}, retained: {retain}...')
             self.client.publish(topic, msg, retain=retain)
         except Exception as e:
             log('Error while sending: {}.'.format(e), log_type='error')
