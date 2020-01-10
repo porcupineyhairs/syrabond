@@ -22,18 +22,18 @@
       </div>
   </nav>
 
+<div class="container">
   <div class="row">
-    <div class="col-sm-3" id="span-switches"></div>
-    <div class="col-sm-3" id="span-sensors"></div>
-    <div class="col-sm-5" id="span-thermos"></div>
+    <div class="col-sm-auto" id="span-switches"></div>
+    <div class="col-sm-auto" id="span-sensors"></div>
+    <div class="col-sm-6" id="span-thermos"></div>
   </div>
-
+</div>
     <script type="text/javascript">
     getNavbar(window.location.pathname);
     getScope('shortcut');
     shiftThermo('span-thermos');
     shiftSwitch();
-    //checkEntropy();
     update();
     </script>
 </body>

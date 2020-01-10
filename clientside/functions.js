@@ -730,34 +730,6 @@ function updateStates() {
 }
 
 
-function checkEntropy() {
-setTimeout(function() {
- $.ajax({
-        url: base_uri+get_uri+entro_uri,
-        headers: {
-        'Content-Type': 'text/html'
-        },
-        type: "GET",
-        success: function(data) {
-        if (data == null) {
-              console.log('no data!');
-        } else {
-          if (data.response != null) {
-            entropy = data.response;
-            //updateStates();
-            updateState(entropy);
-          }
-
-        }
-
-        },
-        dataType: "json",
-        complete: checkEntropy,
-        timeout: 500
-        })
- }, 1000);
-}
-
 function update() {
   setInterval(updateStates, 15000);
 }
@@ -767,13 +739,26 @@ function getScens() {
   prom1 = $.getJSON(uri+'time');
   prom1.always(function(data){
     $.each(data.response, function (key, val){
-      $('<a>', {text: val.name}).appendTo('#span-scenaries');
+      $('<button>', {type: "button", id: val.id, class: "btn btn-link", text: val.name}).appendTo('#span-scenaries');
       $('<br>').appendTo('#span-scenaries');
       var form = $("<form/>", { id: 'form-'+val.id,
+                                class: 'form-hide',
                                 action: '#',
                                 method: '#'});
       form.hide();
-      form.appendTo('#span-conditions');
+      form.appendTo('#span-cond');
+      let switch_div = $('<div/>', {class: "custom-control custom-switch"});
+      $('<input/>', { type: "checkbox",
+                      class: "custom-control-input",
+                      id: 'swch-'+val.id,
+                      name: 'act-scen-'+val.id,
+                      checked: val.active}).appendTo(switch_div).change(function() {
+                        checkBox(this);
+                      });
+      $('<label/>', { class: "custom-control-label",
+                      for: 'swch-'+val.id,
+                      text: val.name}).appendTo(switch_div);
+      switch_div.appendTo(form);
       $.each(val.schedule, function (k, v) {
         var weekdays = v.weekdays.split(',');
         $('<div/>', {id: 'schedule-'+v.id}).appendTo(form);
@@ -782,7 +767,11 @@ function getScens() {
           if ($.inArray(i.toString(), weekdays) != -1) {
             var checked = true
           }
-          addCheckbox('schedule-'+v.id, 'c'+i.toString(), custom_translator[lang][i], custom_translator[lang][i], checked);
+          addCheckbox(  'schedule-'+v.id, 'c-'+val.id+'-'+i.toString(),
+                        custom_translator[lang][i], custom_translator[lang][i],
+                        checked, i.toString()).change(function() {
+                          checkBox(this.firstChild);
+                        });
         }
         if (v.start_time.split(',')[0].length == 1) {
           var time = '0'+v.start_time.split(',')[0]+':'+v.start_time.split(',')[1]
@@ -794,18 +783,33 @@ function getScens() {
       })
 
       console.log(val);
-      form.show();
     })
+    $('<button>', {type: "button", id: 'new-scen-btn', class: "btn btn-outline-secondary", text: 'Add...'}).appendTo('#span-scenaries');
   })
 
   prom2 = $.getJSON(uri+'cond');
   prom2.always(function(data){
     $.each(data.response, function (key, val){
-      $('<a>', {text: val.name}).appendTo('#span-scenaries');
+      $('<button>', {type: "button", id: val.id, class: "btn btn-link", text: val.name}).appendTo('#span-scenaries');
+      $('<br>').appendTo('#span-scenaries');
       console.log(key, val)
     })
   })
+
+  $("#span-scenaries").on('click', 'button', function(){
+    $(".form-hide").hide();
+    $("#form-"+this.id).show();
+  })
+
+  $("#span-scenaries").on('dblclick', 'button', function(){
+    alert(this.id);
+  })
+  function checkBox(box) {
+    console.log(box.checked, box.name);
+  }
 }
+
+
 
 function tablemaker(array) {
   var table = document.createElement('table');
@@ -851,16 +855,17 @@ function sortItems(a ,b) {
   }
 }
 
-function addCheckbox(div_id,name,val,label,checked){
+function addCheckbox(div_id, id, val, label, checked, name='tag'){
   var div = $('<\div class="form-check form-check-inline">').appendTo("#"+div_id);
   if (checked == true){
-    $('<input class="form-check-input" id="'+name+'" type="checkbox" name="tag" checked="checked" value="'+val+'">').appendTo(div);
-    $('<label class="form-check-label" for="'+name+'">'+label+'</label>').appendTo(div);
+    $('<input class="form-check-input" id="'+id+'" type="checkbox" name="'+name+'" checked="checked" value="'+val+'">').appendTo(div);
+    $('<label class="form-check-label" for="'+id+'">'+label+'</label>').appendTo(div);
   }
   else{
-    $('<input class="form-check-input" id="'+name+'" type="checkbox" name="tag" value="'+val+'">').appendTo(div);
-    $('<label class="form-check-label" for="'+name+'">'+label+'</label>').appendTo(div);
+    $('<input class="form-check-input" id="'+id+'" type="checkbox" name="'+name+'" value="'+val+'">').appendTo(div);
+    $('<label class="form-check-label" for="'+id+'">'+label+'</label>').appendTo(div);
   };
+  return div
 }
 
 function getNavbar(active) {
