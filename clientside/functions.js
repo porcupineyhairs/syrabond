@@ -739,38 +739,19 @@ function getScens() {
   prom1 = $.getJSON(uri+'time');
   prom1.always(function(data){
     $.each(data.response, function (key, val){
-      $('<button>', {type: "button", id: val.id, class: "btn btn-link", text: val.name}).appendTo('#span-scenaries');
-      $('<br>').appendTo('#span-scenaries');
-      var form = $("<form/>", { id: 'form-'+val.id,
-                                class: 'form-hide',
-                                action: '#',
-                                method: '#'});
-      form.hide();
-      form.appendTo('#span-cond');
-      let switch_div = $('<div/>', {class: "custom-control custom-switch"});
-      $('<input/>', { type: "checkbox",
-                      class: "custom-control-input",
-                      id: 'swch-'+val.id,
-                      name: 'act-scen-'+val.id,
-                      checked: val.active}).appendTo(switch_div).change(function() {
-                        checkBox(this);
-                      });
-      $('<label/>', { class: "custom-control-label",
-                      for: 'swch-'+val.id,
-                      text: val.name}).appendTo(switch_div);
-      switch_div.appendTo(form);
+      form = buildScen(val.id, val.active, val.name);
       $.each(val.schedule, function (k, v) {
         var weekdays = v.weekdays.split(',');
-        $('<div/>', {id: 'schedule-'+v.id}).appendTo(form);
+        $('<div/>', {id: 'schedule-'+v.id, class: 'schedule-container'}).appendTo(form);
         for (var i = 0; i < 7; i++) {
           checked = false
           if ($.inArray(i.toString(), weekdays) != -1) {
             var checked = true
           }
-          addCheckbox(  'schedule-'+v.id, 'c-'+val.id+'-'+i.toString(),
+          addCheckbox(  'schedule-'+v.id, guidGenerator(),
                         custom_translator[lang][i], custom_translator[lang][i],
                         checked, i.toString()).change(function() {
-                          checkBox(this.firstChild);
+                          checkBox('weekday', this.firstChild);
                         });
         }
         if (v.start_time.split(',')[0].length == 1) {
@@ -790,8 +771,7 @@ function getScens() {
   prom2 = $.getJSON(uri+'cond');
   prom2.always(function(data){
     $.each(data.response, function (key, val){
-      $('<button>', {type: "button", id: val.id, class: "btn btn-link", text: val.name}).appendTo('#span-scenaries');
-      $('<br>').appendTo('#span-scenaries');
+      buildScen(val.id, val.active, val.name);
       console.log(key, val)
     })
   })
@@ -804,8 +784,55 @@ function getScens() {
   $("#span-scenaries").on('dblclick', 'button', function(){
     alert(this.id);
   })
-  function checkBox(box) {
+
+  function buildScen(id, active, name) {
+    $('<button>', {type: "button", id: id, class: "btn btn-link", text: name}).appendTo('#span-scenaries');
+    $('<br>').appendTo('#span-scenaries');
+    let form = $("<form/>", { id: 'form-'+id,
+                              class: 'form-hide',
+                              scenario: id,
+                              action: '#',
+                              method: '#'});
+    form.hide();
+    form.appendTo('#span-cond');
+    let switch_div = $('<div/>', {class: "custom-control custom-switch"});
+    $('<input/>', { type: "checkbox",
+                    class: "custom-control-input",
+                    id: 'swch-'+id,
+                    name: id,
+                    checked: active}).appendTo(switch_div).change(function() {
+                      checkBox('act', this);
+                    });
+    $('<label/>', { class: "custom-control-label",
+                    for: 'swch-'+id,
+                    text: name}).appendTo(switch_div);
+    switch_div.appendTo(form);
+    return form
+  }
+
+  function checkBox(type, box) {
+    let data = {};
+    const post_uri = (base_uri+edit_uri+scens_uri).slice(0,-2);
     console.log(box.checked, box.name);
+    data.type = type;
+    data.active = box.checked;
+    if (type === 'act') {
+      data.id = box.name;
+    }
+    if (type === 'weekday') {
+      data.id = $(box).closest("form").attr('scenario');
+      data.schedule = $(box).closest(".schedule-container").attr('id').split('-')[1];
+      data.weekday = box.name;
+
+    }
+    console.log(data, post_uri);
+    $.ajax({
+          url:post_uri,
+          type:"POST",
+          data:JSON.stringify(data),
+          contentType:"application/json; charset=utf-8",
+          dataType:"json"
+        });
   }
 }
 
@@ -853,6 +880,13 @@ function sortItems(a ,b) {
       return 1;
     }
   }
+}
+
+function guidGenerator() {
+    var S4 = function() {
+       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    };
+    return (S4()+S4()+"-"+S4()+"-"+S4());
 }
 
 function addCheckbox(div_id, id, val, label, checked, name='tag'){

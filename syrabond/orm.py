@@ -95,6 +95,14 @@ class DBO:
         session.commit()
         session.close()
 
+    def update_scenario(self, id, mod):
+        session = self.Session()
+        scen = session.query(Scenario).filter_by(id=id).first()
+        if mod['type'] == 'act':
+            scen.active = mod['active']
+        session.commit()
+        session.close()
+
     def get_tags(self, uid):
         session = self.Session()
         res = session.query(Resource).filter_by(uid=uid).first()

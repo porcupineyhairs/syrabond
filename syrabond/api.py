@@ -290,8 +290,11 @@ class API:
             return self.add_device(data)
 
     def edit_entity(self, entity, data):
+        print(entity)
         if entity == 'device':
             return self.edit_device(data)
+        if entity == 'scenario':
+            self.edit_scen(data)
 
     def del_entity(self, entity, data):
         if entity == 'device':
@@ -330,6 +333,10 @@ class API:
                 self.facility.resources[uid].tags = []
         self.facility.update_device(uid)
         self.init_scopes()
+
+    def edit_scen(self, data):  # TODO Maybe refactor data with additional check and recombinations for security
+        print(data)
+        self.facility.dbo.update_scenario(data['id'], data)
 
     def delete_device(self, data):  # TODO add result
         device_params = parse_form_json(data)
@@ -396,8 +403,9 @@ def is_correct_post_params(data):
         [check.update(x.keys()) for x in data]
         if not len(check) == 2 and 'value' in check and 'name' in check:
             return False
-    else:
-        return False
+    elif isinstance(data, dict):
+        if 'type' in data and 'id' in data:
+            return True
     return True
 
 

@@ -36,7 +36,8 @@ def get_api_request(params):
     if flask.request.is_json:
         type = 'json'
         print(type, flask.request.json)
-        return json.dumps(api.parse_request(type, params, flask.request.json), ensure_ascii=False, indent=4, sort_keys=True)
+        return json.dumps(api.parse_request(type, params, flask.request.json),
+                          ensure_ascii=False, indent=4, sort_keys=True)
     else:
         type = 'raw'
         print(params)
@@ -58,14 +59,14 @@ def post_add_request(params):
 
 @app.route('/api/v02/edit/<path:params>', methods=['POST'])
 def post_edit_request(params):
-    """Handles POST API requests changing exist entities (devices, premises, tags, etc.)"""
+    """Handles POST API requests changing exist entities"""
     api.post_direct('edit', params, flask.request.json)
     return 'ok'
 
 
 @app.route('/api/v02/delete/<path:params>', methods=['POST'])
 def post_delete_request(params):
-    """Handles POST API requests deleting exist entities (devices, premises, tags, etc.)"""
+    """Handles POST API requests deleting exist entities"""
     api.post_direct('delete', params, flask.request.json)
     return 'ok'
 
