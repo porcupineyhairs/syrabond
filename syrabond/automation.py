@@ -75,7 +75,8 @@ class TimeEngine:
 
 class Scenario:  # TODO Add comparison rules for conditions (and | or)
 
-    def __init__(self, active: bool, hrn: str, conditions, effect):
+    def __init__(self, id, active: bool, hrn: str, conditions, effect):
+        self.id = id
         self.type = 'cond'
         self.active = active
         self.hrn = hrn

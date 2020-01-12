@@ -13,8 +13,9 @@ te = automation.TimeEngine(sh, orm)
 
 def scheduler():
     scheduler.i += 1
-    if scheduler.i > 50:
+    if scheduler.i > 25:
         te.load_scenarios()
+        sh.build_scenarios()
         scheduler.i = 0
     scens = te.check_schedule()
     if scens:

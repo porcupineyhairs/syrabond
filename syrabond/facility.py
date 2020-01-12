@@ -68,6 +68,7 @@ class Facility:
             if scen['type'] == 'cond':
                 conditions = {}
                 effect = []
+                id = scen['id']
                 active = scen['active']
                 hrn = scen['hrn']
                 for cond_conf in scen['conditions']:
@@ -80,9 +81,9 @@ class Facility:
                     res = effect_conf.resource
                     eff = automation.Map(self.resources[res], effect_conf.state)
                     effect.append(eff)
-                scn = automation.Scenario(active, hrn, conditions, effect)
+                scn = automation.Scenario(id, active, hrn, conditions, effect)
                 for cond in scn.conditions:
-                    scn.conditions[cond].resource.scens.add(scn)
+                    scn.conditions[cond].resource.scens.update({id: scn})
 
     def build_premises(self, config):
         for prem in config:
@@ -303,7 +304,7 @@ class Resource:
         self.listener = listener
         self.dbo = dbo
         self.state = None
-        self.scens = set()
+        self.scens = dict()
         self.check_state()
 
     def check_state(self):
