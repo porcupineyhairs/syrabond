@@ -414,7 +414,7 @@ class Switch(Device):
             self.state = state
             self.dbo.update_state(self.uid, self.state)
             common.log('The state of {} ({}) changed to {}'.format(self.uid, self.hrn, self.state))
-            for scen in self.scens:
+            for scen in self.scens.values():
                 if scen.check_conditions(self) and scen.active:
                     scen.workout()
 
