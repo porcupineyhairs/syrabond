@@ -410,7 +410,7 @@ function getThermo() {
         temp = resp.temp;
         cell_id = data.response[0].uid;
         cell = document.getElementById(cell_id);
-        cell.innerHTML = temp;
+        cell.innerHTML = ' '+temp;
       });
     });
   })
@@ -702,7 +702,7 @@ function updateStates() {
           if ($(res).html() !== new_state.toString()){
             var inp = document.getElementById(uid);
             inp.value = new_state;
-            $(res).html(new_state);
+            $(res).html(' '+new_state);
 
             }
           const st = '<img src="/client/img/thermostat.png" class="img-rounded"><span id=c-'+uid+' res-uid="'+uid+'"> '+state+'</span>';

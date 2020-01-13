@@ -12,10 +12,12 @@ def log(line, log_type='info'):
     print(time_string, line)
     if log_type == 'info':
         logging.info(' {} {}'.format(time_string, line))
-    if log_type == 'error':
+    elif log_type == 'error':
         logging.error(' {} {}'.format(time_string, line))
-    if log_type == 'debug':
+    elif log_type == 'debug':
         logging.debug(' {} {}'.format(time_string, line))
+    elif log_type == 'warning':
+        logging.warning(' {} {}'.format(time_string, line))
 
 
 def extract_config(file_name):
