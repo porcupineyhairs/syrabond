@@ -25,13 +25,14 @@ class TimeEngine:
             effect = []
             schedule = []
             active = scen['active']
+            id = scen['id']
             for schedule_conf in scen['schedule']:
                 schedule.append(self.Schedule(schedule_conf))
             for effect_conf in scen['effect']:
                 res = effect_conf.resource
                 eff = Map(self.facility.resources[res], effect_conf.state)
                 effect.append(eff)
-            self.scenarios.append(self.Scenario(active, scen['hrn'], schedule, effect))
+            self.scenarios.append(self.Scenario(id, active, scen['hrn'], schedule, effect))
         log('TimeEngine: scenarios loaded.')
 
     def add_scenario(self):
@@ -54,20 +55,25 @@ class TimeEngine:
             self.start_time = [int(x) for x in schedule.start.split(',')]
 
     class Scenario:
-        def __init__(self, active, hrn, schedule, effect):
+
+        def __init__(self, id, active, hrn, schedule, effect):
             self.type = 'time'
+            self.id = id
             self.active = active
             self.hrn = hrn
             self.schedule = schedule
             self.effect = effect
             self.ran = None
 
+        def __repr__(self):
+            return f'{"Active" if self.active else "Inactive"} scenario id={self.id} \"{self.hrn}\"'
+
         def workout(self):
             now = (time.localtime(time.time()).tm_yday,
                    time.localtime(time.time()).tm_hour,
                    time.localtime(time.time()).tm_min)
             if not self.ran == now:
-                log(f"TimeEngine: Running scenario: {self.hrn}")
+                log(f"TimeEngine: Run {self}")
                 self.ran = now
                 for mapper in self.effect:
                     mapper.activate()
@@ -82,6 +88,9 @@ class Scenario:  # TODO Add comparison rules for conditions (and | or)
         self.hrn = hrn
         self.conditions = conditions
         self.effect = effect
+
+    def __repr__(self):
+        return f'{"Active" if self.active else "Inactive"} scenario id {self.id} \"{self.hrn}\"'
 
     def check_conditions(self, resource):
         result = set()

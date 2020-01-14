@@ -25,8 +25,8 @@ class DBO:
     def _session_maker(f):
         """
         Wrapper for every DB function. Build session and pass it into the function, securely commit and close sessions.
-        To check if function needs commit, it must return tuple with True or False on zero position.
-        On first position expecting result of query etc.
+        To check if function needs commit, it must return tuple with True or False on position zero.
+        On the first position expected result of query etc.
         """
         def wrap(self, *args):
                 s = self.Session()
