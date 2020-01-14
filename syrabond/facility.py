@@ -42,6 +42,9 @@ class Facility:
         self.build_bindings(config['bind'])
         config.clear()
 
+    def __repr__(self):
+        return f'Syrabond facility \"{self.name}\" containing {self.resources.__len__()} resources'
+
     def build_resources(self):
         resources_loaded = self.dbo.load_resources()  # Loading resources params from DB and creating instances
         for res in resources_loaded:
@@ -307,6 +310,9 @@ class Resource:
         self.scens = dict()
         self.check_state()
 
+    def __repr__(self):
+        return f'{self.type} uid = {self.uid} \"{self.hrn}\"'
+
     def check_state(self):
         self.state = self.get_state()
 
@@ -314,7 +320,7 @@ class Resource:
         if not self.state == state:
             self.state = state
             self.dbo.update_state(self.uid, self.state)
-            common.log('The state of {} ({}) changed to {}'.format(self.uid, self.hrn, self.state))
+            common.log(f'The state of {self} changed to {state}')
 
     def get_state(self):
         return self.dbo.get_state(self.uid)
@@ -413,7 +419,7 @@ class Switch(Device):
         if not self.state == state:
             self.state = state
             self.dbo.update_state(self.uid, self.state)
-            common.log('The state of {} ({}) changed to {}'.format(self.uid, self.hrn, self.state))
+            common.log(f'The state of {self} changed to {state}')
             for scen in self.scens.values():
                 if scen.check_conditions(self) and scen.active:
                     scen.workout()
@@ -496,7 +502,7 @@ class Sensor(Device):
         state_string = ', '
         state_string = state_string.join([channel+': '+state[channel] for channel in state.keys()])
         self.dbo.update_state(self.uid, state_string)
-        common.log('The state of {} ({}) changed to {}'.format(self.uid, self.hrn, state_string))
+        common.log(f'The state of {self} changed to {state_string}')
 
     def get_state(self):
         result = {}

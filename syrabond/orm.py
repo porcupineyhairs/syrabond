@@ -19,29 +19,49 @@ class DBO:
                                         pool_pre_ping=True)
         self.Session = sessionmaker(bind=self.engine)
         self.engine.connect()
+        self.log = common.log
         Base.metadata.create_all(self.engine)
 
-    def load_resources(self):
-        session = self.Session()
+    def _session_maker(f):
+        """
+        Wrapper for every DB function. Build session and pass it into the function, securely commit and close sessions.
+        To check if function needs commit, it must return tuple with True or False on position zero.
+        On the first position expected result of query etc.
+        """
+        def wrap(self, *args):
+                s = self.Session()
+                res = f(self, s, *args)
+                if res[0]:
+                    try:
+                        s.commit()
+                    except Exception as e:
+                        s.rollback()
+                        self.log(f'DB error: {e}')
+                    finally:
+                        s.close()
+                else:
+                    s.close()
+                return res[1]
+        return wrap
+
+    @_session_maker
+    def load_resources(self, session):
         result = []
         for res in session.query(Resource):
             result.append(res)
-        session.close()
-        return result
+        return False, result
 
-    def load_scenarios(self, type):
-        session = self.Session()
+    @_session_maker
+    def load_scenarios(self, session, type):
         result = []
         for scen in session.query(Scenario).filter_by(type=type):
             result.append({'id': scen.id, 'type': scen.type, 'active': scen.active,
                            'hrn': scen.hrn, 'conditions': scen.conditions,
                            'schedule': scen.schedule, 'effect': scen.effect})
-        session.close()
-        return result
+        return False, result
 
-    def rewrite_resources(self, resources: dict):  # TODO Check is it needed to truncate table first
-        session = self.Session()
-        session.begin()
+    @_session_maker
+    def rewrite_resources(self, session, resources: dict):  # TODO Check is it needed to truncate table first
         res_list = []
         resources_copy = resources.copy()
         for res in resources_copy.values():
@@ -53,66 +73,71 @@ class DBO:
                     pir = res.pir
             res_list.append(Resource(uid=res.uid, type=res.type, group=res.group, hrn=res.hrn, channels=channels, pir=pir))
         session.add_all(res_list)
-        session.commit()
-        session.close()
+        return True, None
 
-    def update_state(self, uid, state):
-        session = self.Session()
+    @_session_maker
+    def update_state(self, session, uid, state):
         if session.query(State).filter_by(resource=uid).first():
             session.query(State).filter_by(resource=uid).update({'state': state})
         else:
             res = session.query(Resource).filter_by(uid=uid).first()
             res.state = [State(state=state)]
         session.query(State).filter_by(resource=None).delete(synchronize_session='fetch')
-        #res.state = [State(state=state)]
-        session.commit()
-        session.close()
+        return True, None
 
-    def get_state(self, uid):
-        session = self.Session()
+    @_session_maker
+    def get_state(self, session, uid):
         res = session.query(Resource).filter_by(uid=uid).first()
         if res.state:
             result = res.state[0].state
-            session.close()
-            return result
+            return False, result
         else:
-            session.close()
-            return []
+            return False, []
 
-    def update_status(self, uid, status):
-        session = self.Session()
+    @_session_maker
+    def get_status(self, session, uid):
         res = session.query(Resource).filter_by(uid=uid).first()
-        res.status = [Status(status=status)]
-        session.query(Status).filter_by(resource=None).delete(synchronize_session='fetch')
-        session.commit()
-        session.close()
+        if res.status:
+            result = res.status[0].status
+            return False, result
+        else:
+            return False, []
 
-    def update_tags(self, uid, tags):
-        session = self.Session()
+    @_session_maker
+    def update_status(self, session, uid, status):
+        res = session.query(Resource).filter_by(uid=uid).first()
+        if res:
+            res.status = [Status(status=status)]
+            session.query(Status).filter_by(resource=None).delete(synchronize_session='fetch')
+            return True, None
+        else:
+            self.log(f'DBO: Object {uid} doesn\'t exist', 'warning')
+            return False, None
+
+    @_session_maker
+    def update_tags(self, session, uid, tags):
         res = session.query(Resource).filter_by(uid=uid).first()
         res.tags = [Tags(tag=tag) for tag in tags]
         session.query(Tags).filter_by(resource=None).delete(synchronize_session='fetch')
-        session.commit()
-        session.close()
+        return True, None
 
-    def update_scenario(self, id, mod):
-        session = self.Session()
+    @_session_maker
+    def update_scenario(self, session, id, mod):
         scen = session.query(Scenario).filter_by(id=id).first()
         if mod['type'] == 'act':
             scen.active = mod['active']
-        session.commit()
-        session.close()
+        return True, None
 
-    def get_tags(self, uid):
-        session = self.Session()
+    @_session_maker
+    def get_tags(self, session, uid):
         res = session.query(Resource).filter_by(uid=uid).first()
         if res.tags:
-            return [tag.tag for tag in res.tags]
+            return False, [tag.tag for tag in res.tags]
         else:
-            return []
+            return False, []
 
-    def update_resource_properties(self, entity):
-        session = self.Session()
+    @_session_maker
+    def update_resource_properties(self, session, entity):
         res = session.query(Resource).filter_by(uid=entity.uid).first()
         res.type = entity.type
         res.hrn = entity.hrn
@@ -120,34 +145,9 @@ class DBO:
         res.channels = ''
         if entity.channels:
             res.channels = ', '.join(entity.channels)
-        session.commit()
-        session.close()
         self.update_tags(entity.uid, entity.tags)
+        return True, None
 
-    def get_entropy(self):
-        session = self.Session()
-        entity = session.query(Entropy).filter_by(id=1).first()
-        if entity:
-            return entity.entropy
-        else:
-            return 0
-
-    def truncate_entropy(self):
-        session = self.Session()
-        session.query(Entropy).delete()
-        session.commit()
-        session.close()
-
-    def increase_entropy(self):
-        session = self.Session()
-        entity = session.query(Entropy).filter_by(id=1).first()
-        if entity:
-            entity.entropy += 1
-        else:
-            session.add(Entropy(id=1,
-                                entropy=0))
-        session.commit()
-        session.close()
 
 class Resource(Base):
     """
