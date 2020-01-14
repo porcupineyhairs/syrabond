@@ -42,6 +42,9 @@ class Facility:
         self.build_bindings(config['bind'])
         config.clear()
 
+    def __repr__(self):
+        return f'Syrabond facility \"{self.name}\" containing {self.resources.__len__()} resources'
+
     def build_resources(self):
         resources_loaded = self.dbo.load_resources()  # Loading resources params from DB and creating instances
         for res in resources_loaded:
