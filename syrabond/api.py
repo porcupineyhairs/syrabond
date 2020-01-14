@@ -104,7 +104,7 @@ class API:
         for r in facility_resources:
             res = facility_resources[r]
             if isinstance(res, facility.Device):
-                status_all.append({'uid': res.uid, 'name': res.hrn, 'ip': self.facility.DB.read_status(res.uid)[0][0]})
+                status_all.append({'uid': res.uid, 'name': res.hrn, 'ip': self.facility.dbo.get_status(res.uid)})
         return status_all
 
     def get_scenarios(self, params):

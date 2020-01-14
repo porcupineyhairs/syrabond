@@ -95,6 +95,15 @@ class DBO:
             return False, []
 
     @_session_maker
+    def get_status(self, session, uid):
+        res = session.query(Resource).filter_by(uid=uid).first()
+        if res.status:
+            result = res.status[0].status
+            return False, result
+        else:
+            return False, []
+
+    @_session_maker
     def update_status(self, session, uid, status):
         res = session.query(Resource).filter_by(uid=uid).first()
         if res:
