@@ -195,9 +195,7 @@ class API:
             facility_premises.clear()
 
         elif struct_type == 'quarantine':
-            result = []
-            response = self.facility.DB.get_quarantine()
-            [result.append({'uid': s[0], 'ip': s[1]}) for s in response]
+            result = self.facility.dbo.load_quarantine()
 
         elif struct_type in self.facility.resources:
             res = self.facility.resources[struct_type]

@@ -61,6 +61,24 @@ class DBO:
         return False, result
 
     @_session_maker
+    def load_quarantine(self, session):
+        result = []
+        for res in session.query(Quarantine):
+            result.append({'uid': res.resource, 'ip': res.status})
+        return False, result
+
+    @_session_maker
+    def put_quarantine(self, session, uid, ip):
+        res = session.query(Quarantine).filter_by(resource=uid).first()
+        if res:
+            res.status = ip
+            #session.query(Status).filter_by(resource=None).delete(synchronize_session='fetch')
+            return True, None
+        else:
+            session.add(Quarantine(resource=uid, status=ip))
+            return True, None
+
+    @_session_maker
     def rewrite_resources(self, session, resources: dict):  # TODO Check is it needed to truncate table first
         res_list = []
         resources_copy = resources.copy()
@@ -191,6 +209,17 @@ class Status(Base):
         return "<Status(status='{}'>".format(self.status)
 
 
+class Quarantine(Base):
+    """Table for newbies or quarantined resources"""
+    __tablename__ = 'quarantine'
+    id = Column(Integer, primary_key=True)
+    resource = Column(String(40))
+    status = Column(String(40))
+
+    def __repr__(self):
+        return "<Quarantine(resource='{}'>".format(self.resource)
+
+
 class Tags(Base):
     """Table containing tags."""
     __tablename__ = 'tags'
@@ -202,7 +231,7 @@ class Tags(Base):
         return "<Tags(tag='{}'>".format(self.tag)
 
 
-class Entropy(Base):
+class Entropy(Base):  # TODO Delete
     """Table to hold entropy."""
     __tablename__ = 'entropy'
     id = Column(Integer, primary_key=True)
