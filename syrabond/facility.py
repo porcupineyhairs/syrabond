@@ -185,7 +185,7 @@ class Facility:
                     if id in self.resources:
                         self.resources[id].update_status(msg)
                 elif type == 'welcome':
-                        self.DB.rewrite_quarantine(id, msg)
+                        self.dbo.put_quarantine(id, msg)
         self.listener.message_buffer.clear()
         self.listener.message_buffer_lock = False
 
