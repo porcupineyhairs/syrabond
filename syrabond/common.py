@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 import logging
-from os import chdir
+from os import chdir, path
 
 """Common functions to be used in modules and classes of Syrabond."""
 
@@ -28,8 +28,7 @@ def extract_config(file_name):
     :param file_name: path to config file
     """
     try:
-        print(confs_dir+file_name)
-        f = open(confs_dir+file_name, 'r')
+        f = open(path.join(confs_dir, file_name), 'r')
         items = json.loads(f.read())
         f.close()
     except Exception as e:
@@ -56,12 +55,11 @@ logging_levels = {
     'DEBUG': 10
 }
 
-#confs_dir = '/home/pi/syrabond/python'
-#confs_dir = '/Users/egor/PycharmProjects/syrabond'
-confs_dir = ''
+working_dir = path.split(path.dirname(path.abspath(__file__)))[0]
+chdir(working_dir)
+confs_dir = working_dir
 conf = extract_config('global.json')
-chdir(conf['working_dir'])
-log_file = '{}/{}'.format(conf['working_dir'], conf['log_file'])
-confs_dir = conf['confs_dir']+'/'
+log_file = path.join(working_dir, conf['log_file'])
+confs_dir = path.join(working_dir, conf['confs_dir'])
 logging.basicConfig(filename=log_file, level=logging_levels[conf['log_level']])
 conf.clear()
