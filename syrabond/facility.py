@@ -9,6 +9,8 @@ class Facility:
     All of resources are stored in dicts.
     """
 
+    fa = None
+
     def __init__(self, name: str, listen=False):
         self.premises = {}
         self.resources = {}
@@ -27,6 +29,12 @@ class Facility:
         else:
             self.listener = mqttsender.Dumb()
         self.sender = mqttsender.Mqtt('syrabond_sender_' + uniqid, config='mqtt.json', clean_session=True)
+
+        Resource.basename = name
+        Resource.dbo = self.dbo
+        Resource.listener = self.listener
+        Resource.sender = self.sender
+
         confs = common.extract_config('confs.json')
         self.equip_conf_file = confs['equipment']
         config = {}
@@ -54,14 +62,11 @@ class Facility:
             if res.channels:
                 channels = res.channels.split(',')
             if res.type == 'switch':
-                resource = Switch(self.listener, self.sender, self.name, self.dbo,
-                                  res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
+                resource = Switch(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
             elif res.type == 'sensor':
-                resource = Sensor(self.listener, self.sender, self.name, self.dbo,
-                                  res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
+                resource = Sensor(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
             elif res.type == 'thermo':
-                resource = VirtualAppliance(self.listener, self.sender, self.name, self.dbo,
-                                            res.uid, res.type, res.group, res.hrn, tags)
+                resource = VirtualAppliance(res.uid, res.type, res.group, res.hrn, tags)
             if resource:
                 self.resources[res.uid] = resource
 
@@ -279,8 +284,6 @@ class Control:
         self.state = None
 
 
-
-
 class Resource:
     """
     The class to represent appliances.
@@ -295,17 +298,19 @@ class Resource:
     hrn: human readable name;
     tags: list of associated tags.
     """
-    
-    def __init__(self, listener, sender, basename, dbo, uid, type, group, hrn, tags):
+
+    listener, sender, dbo, basename = None, None, None, None
+
+    def __init__(self, uid, type, group, hrn, tags):
         self.uid = uid
         self.type = type
         self.group = group
         self.tags = tags
         self.hrn = hrn
-        self.topic = basename+'/'+self.type+'/'+self.uid
-        self.sender = sender
-        self.listener = listener
-        self.dbo = dbo
+        self.topic = Resource.basename+'/'+self.type+'/'+self.uid
+        self.sender = Resource.sender
+        self.listener = Resource.listener
+        self.dbo = Resource.dbo
         self.state = None
         self.scens = dict()
         self.check_state()
@@ -346,10 +351,10 @@ class Device(Resource):
     pir: is it movement detector onboard?
     channels: list of channels to receive commands (for switches) of to send measurements.
     """
-    def __init__(self, listener, sender, basename, db, uid, type, group, hrn, tags, pir, channels):
-        super().__init__(listener, sender, basename, db, uid, type, group, hrn, tags)
-        self.maintenance_topic = '{}/{}/{}'.format(basename, 'management', self.uid)
-        self.status_topic = '{}/{}/{}'.format(basename, 'status', self.uid)
+    def __init__(self, uid, type, group, hrn, tags, pir, channels):
+        super().__init__(uid, type, group, hrn, tags)
+        self.maintenance_topic = '{}/{}/{}'.format(self.basename, 'management', self.uid)
+        self.status_topic = '{}/{}/{}'.format(self.basename, 'status', self.uid)
         self.status = None
         self.pir = pir
         self.channels = channels
@@ -480,8 +485,8 @@ class Switch(Device):
 
 class Sensor(Device):
     """Class to represent sensors"""
-    def __init__(self, listener, sender, basename, dbo, uid, type, group, hrn, tags, pir, channels):
-        super().__init__(listener, sender, basename, dbo, uid, type, group, hrn, tags, pir, channels)
+    def __init__(self, uid, type, group, hrn, tags, pir, channels):
+        super().__init__(uid, type, group, hrn, tags, pir, channels)
         self.state = {}
         if isinstance(channels, str):
             self.channels = channels.split(', ')
