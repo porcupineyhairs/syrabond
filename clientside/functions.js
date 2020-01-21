@@ -760,7 +760,11 @@ function getScens() {
         else {
           var time = v.start_time.split(',')[0]+':'+v.start_time.split(',')[1]
         }
-        $('<input/>', {type: 'time', name: 'timetostart', value: time}).appendTo('#schedule-'+v.id);
+        $('<input/>', { type: 'time',
+                        name: 'timetostart',
+                        value: time}).appendTo('#schedule-'+v.id).focusout(function() {
+                          timeInput(this);
+                        });
       })
 
       console.log(val);
@@ -808,6 +812,10 @@ function getScens() {
                     text: name}).appendTo(switch_div);
     switch_div.appendTo(form);
     return form
+  }
+
+  function timeInput(inp) {
+    console.log(inp);
   }
 
   function checkBox(type, box) {

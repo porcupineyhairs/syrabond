@@ -5,6 +5,30 @@ from syrabond.common import extract_config
 from syrabond.common import log
 
 
+class Queue:
+
+    def __init__(self, l=()):
+        self.queue = list(l)
+        self.size = self.queue.__len__()
+
+    def __repr__(self):
+        return f'Queue {self.queue}'
+
+    def enqueue(self, n):
+        self.queue.insert(0, n)
+        self.size += 1
+
+    def dequeue(self):
+        if self.size > 0:
+            self.size -= 1
+            return self.queue.pop()
+        else:
+            return None
+
+    def clear(self):
+        self.queue.clear()
+        self.size = 0
+
 class Mqtt:
     """
     Wrapper class for paho.mqtt.client.
@@ -25,8 +49,7 @@ class Mqtt:
         self.client.username_pw_set(username=mqtt_config['user'], password=mqtt_config['password'])
         self.client.on_message = self.message_to_buffer
         self.client.on_disconnect = self.on_disconnect
-        self.message_buffer = {}
-        self.message_buffer_lock = False
+        self.message_buffer = Queue()
 
     def connect(self):
         try:
@@ -72,16 +95,15 @@ class Mqtt:
             return False
 
     def check_for_messages(self):
-        if not self.message_buffer_lock:
-            self.client.loop()
+        self.client.loop()
 
     def wait_for_messages(self):
         self.client.loop_forever()
 
     def message_to_buffer(self, client, userdata, message):
         if message:
-            log(' Got {} in {}'.format(message.payload.decode(), message.topic), log_type='debug')
-            self.message_buffer.update({message.topic: message.payload.decode()})
+            log(f' Got {message.payload.decode()} in {message.topic}', log_type='debug')
+            self.message_buffer.enqueue((message.topic, message.payload.decode()))
 
     def disconnect(self):
         self.client.disconnect()
@@ -96,7 +118,7 @@ class Mqtt:
 class Dumb:
 
     def __init__(self):
-        pass
+        self.message_buffer = None
 
     def connect(self):
         pass

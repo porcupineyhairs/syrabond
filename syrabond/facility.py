@@ -171,41 +171,40 @@ class Facility:
         The main goal is to update states in DB.
         After every state msg increase entropy.
         """
-        self.listener.message_buffer_lock = True
-        if self.listener.message_buffer:
-            for n in self.listener.message_buffer:
-                print(n)
-                type, id, channel = parse_topic(n)
-                msg = self.listener.message_buffer[n]
-                if channel == 'pir':
-                    if self.resources[id].pir_direct:
-                        self.resources[id].pir_direct_react(msg)
-                elif channel == 'temp' or channel == 'hum':
-                    self.resources[id].set_channel_state(channel, msg)
-                elif type == 'switch':
-                    self.resources[id].update_state(msg.upper())
-                elif type == 'thermo':
-                    self.premises[id].thermostat.update_state(msg)
-                elif type == 'status':
-                    if id in self.resources:
-                        self.resources[id].update_status(msg)
-                elif type == 'welcome':
-                        self.dbo.put_quarantine(id, msg)
-        self.listener.message_buffer.clear()
-        self.listener.message_buffer_lock = False
+        if isinstance(self.listener, mqttsender.Dumb):
+            return None
+        while self.listener.message_buffer.size:
+            print(self.listener.message_buffer.size)
+            print(self.listener.message_buffer)
+            payload = self.listener.message_buffer.dequeue()
+            type, id, channel = parse_topic(payload[0])
+            msg = payload[1]
+            if channel == 'pir':
+                if self.resources[id].pir_direct:
+                    self.resources[id].pir_direct_react(msg)
+            elif channel == 'temp' or channel == 'hum':
+                self.resources[id].set_channel_state(channel, msg)
+            elif type == 'switch':
+                self.resources[id].update_state(msg.upper())
+            elif type == 'thermo':
+                self.premises[id].thermostat.update_state(msg)
+            elif type == 'status':
+                if id in self.resources:
+                    self.resources[id].update_status(msg)
+            elif type == 'welcome':
+                self.dbo.put_quarantine(id, msg)
 
     def add_new_resourse(self, type: str, uid: str, group: str, hrn: str, **kwargs: list) -> bool:
         """Create new resource instance and update config. To be used with API."""
+        channels = kwargs['channels']
+        print(uid, type, group, hrn, [], False, channels)
         if type == 'switch':
-            resource = Switch(self.listener, self.sender, self.name, self.DB, uid, type, group, hrn, [], False)
+            resource = Switch(uid, type, group, hrn, [], False, channels)
             self.resources[uid] = resource
             print(resource.state)
             resource.update_state('OFF')  # TODO Retrieve real device state
         elif type == 'sensor':
-            channels = kwargs['channels']
-            print(uid, type, group, hrn, [], False, channels)
-            resource = Sensor(self.listener, self.sender, self.name, self.DB, uid, type, group, hrn, [],
-                              False, channels)
+            resource = Sensor(uid, type, group, hrn, [], False, channels)
             self.resources[uid] = resource
 
         self.update_equip_conf()
@@ -299,7 +298,7 @@ class Resource:
     tags: list of associated tags.
     """
 
-    listener, sender, dbo, basename = None, None, None, None
+    listener, sender, dbo, basename = None, None, None, 'default'
 
     def __init__(self, uid, type, group, hrn, tags):
         self.uid = uid
