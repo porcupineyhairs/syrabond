@@ -13,6 +13,7 @@ const structure_uri = 'structure/'
 const entro_uri = 'entro'
 const scens_uri = 'scenarios/'
 const session_uri = 'session/'
+const resources_uri = 'resources'
 var groups = [], tags = [], page_resources = [];
 var entropy
 var lang = navigator.language || navigator.userLanguage;
@@ -738,34 +739,25 @@ function getScens() {
   const uri = base_uri+get_uri+scens_uri;
   prom1 = $.getJSON(uri+'time');
   prom1.always(function(data){
+    console.log(data.response);
     $.each(data.response, function (key, val){
       form = buildScen(val.id, val.active, val.name);
+      $(form).dblclick(function() {
+        newSchedule(this);
+      });
       $.each(val.schedule, function (k, v) {
-        var weekdays = v.weekdays.split(',');
-        $('<div/>', {id: 'schedule-'+v.id, class: 'schedule-container'}).appendTo(form);
-        for (var i = 0; i < 7; i++) {
-          checked = false
-          if ($.inArray(i.toString(), weekdays) != -1) {
-            var checked = true
-          }
-          addCheckbox(  'schedule-'+v.id, guidGenerator(),
-                        custom_translator[lang][i], custom_translator[lang][i],
-                        checked, i.toString()).change(function() {
-                          checkBox('weekday', this.firstChild);
-                        });
-        }
-        if (v.start_time.split(',')[0].length == 1) {
-          var time = '0'+v.start_time.split(',')[0]+':'+v.start_time.split(',')[1]
-        }
-        else {
-          var time = v.start_time.split(',')[0]+':'+v.start_time.split(',')[1]
-        }
-        $('<input/>', { type: 'time',
-                        name: 'timetostart',
-                        value: time}).appendTo('#schedule-'+v.id).focusout(function() {
-                          timeInput(this);
-                        });
+        let schedule_id = v.id;
+        let weekdays = v.weekdays;
+        let time = v.start_time;
+        buildSchedule(form, schedule_id, weekdays, time);
       })
+
+      $.each(val.map, function (k, v) {
+        let map_id = v.id;
+        let resource = v.resource;
+        let state = v.state;
+        buildMaps(form, map_id, resource, state);
+    })
 
       console.log(val);
     })
@@ -778,6 +770,14 @@ function getScens() {
       buildScen(val.id, val.active, val.name);
       console.log(key, val)
     })
+  })
+
+  $.getJSON(base_uri+get_uri+structure_uri+resources_uri).always(function(data) {
+    resources = []
+    $.each(data.response, function (key, val){
+      resources.push(val);
+    })
+    console.log(resources);
   })
 
   $("#span-scenaries").on('click', 'button', function(){
@@ -814,8 +814,91 @@ function getScens() {
     return form
   }
 
+  function buildResSelector(res) {
+    console.log(this);
+    $(this).replaceWith($('<input/', { class: "form-control",}))
+  }
+
+  function buildMaps(form, map_id, resource, state) {
+    p = $('<p/>', { text: resource,
+
+    }).appendTo(form);
+    p.click(function() {
+      alert(p.text);
+      buildResSelector(p);
+    });
+  }
+
+  function buildSchedule(form, schedule_id, weekdays, time) {
+      weekdays = weekdays.split(',');
+      $('<div/>', { id: 'schedule-'+schedule_id,
+                    class: 'schedule-container',
+                    schedule: schedule_id}).appendTo(form);
+      for (var i = 0; i < 7; i++) {
+        checked = false
+        if ($.inArray(i.toString(), weekdays) != -1) {
+          var checked = true
+        }
+        addCheckbox(  'schedule-'+schedule_id, guidGenerator(),
+                      custom_translator[lang][i], custom_translator[lang][i],
+                      checked, i.toString()).change(function() {
+                        checkBox('weekday', this.firstChild);
+                      });
+      }
+      if (time.split(',')[0].length == 1) {
+        time = '0'+time.split(',')[0]+':'+time.split(',')[1]
+      }
+      else {
+        time = time.split(',')[0]+':'+time.split(',')[1]
+      }
+      $('<input/>', { type: 'time',
+                      name: 'timetostart',
+                      value: time}).appendTo('#schedule-'+schedule_id).focusout(function() {
+                        timeInput(this);
+                      });
+      $('<input/>', { type: 'button',
+                      name: schedule_id,
+                      value: custom_translator[lang].del}).appendTo('#schedule-'+schedule_id).click(function() {
+                      delSchedule(this);
+                      });
+  }
+
   function timeInput(inp) {
-    console.log(inp);
+    let data = {};
+    const post_uri = (base_uri+edit_uri+scens_uri).slice(0,-2);
+    console.log($(inp).closest(".schedule-container").attr('schedule'), inp.value);
+    data.type = 'time';
+    data.id = $(inp).closest("form").attr('scenario');
+    data.schedule = $(inp).closest(".schedule-container").attr('schedule');
+    data.time = inp.value;
+    $.ajax({
+          url:post_uri,
+          type:"POST",
+          data:JSON.stringify(data),
+          contentType:"application/json; charset=utf-8",
+          dataType:"json"
+        });
+  }
+
+  function delSchedule(button) {
+    let data = {};
+    const post_uri = (base_uri+edit_uri+scens_uri).slice(0,-2);
+    data.type = 'schedule';
+    data.id = $(button).closest("form").attr('scenario');
+    data.schedule = button.name;
+    postJson(post_uri, data);
+    $(button).closest(".schedule-container").remove();
+  }
+  function newSchedule(form) {
+    let data = {};
+    const post_uri = (base_uri+edit_uri+scens_uri).slice(0,-2);
+    data.type = 'schedule';
+    data.id = $(form).attr('scenario');
+    data.schedule = 'new';
+    prom = postJson(post_uri, data);
+    prom.always(function(response) {
+      buildSchedule(form, response, '', '');
+    })
   }
 
   function checkBox(type, box) {
@@ -829,7 +912,7 @@ function getScens() {
     }
     if (type === 'weekday') {
       data.id = $(box).closest("form").attr('scenario');
-      data.schedule = $(box).closest(".schedule-container").attr('id').split('-')[1];
+      data.schedule = $(box).closest(".schedule-container").attr('schedule');
       data.weekday = box.name;
 
     }
@@ -844,7 +927,17 @@ function getScens() {
   }
 }
 
-
+function postJson(uri, data) {
+  console.log(data, uri);
+  prom = $.ajax({
+        url:uri,
+        type:"POST",
+        data:JSON.stringify(data),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json"
+      });
+  return prom;
+}
 
 function tablemaker(array) {
   var table = document.createElement('table');
@@ -913,12 +1006,12 @@ function addCheckbox(div_id, id, val, label, checked, name='tag'){
 function getNavbar(active) {
   var items = []
   const key = active.split('/')[active.split('/').length-1]
-  items.push('<a class="nav-item nav-link" href="index">'+custom_translator[lang]['shortcut']+'</a>');
-  items.push('<a class="nav-item nav-link" href="premises">'+custom_translator[lang]['prem']+'</a>');
-  items.push('<a class="nav-item nav-link" href="groups">'+custom_translator[lang]['groups']+'</a>');
-  items.push('<a class="nav-item nav-link" href="heating">'+custom_translator[lang]['heating']+'</a>');
-  items.push('<a class="nav-item nav-link" href="scenaries">'+custom_translator[lang]['scenaries']+'</a>');
-  items.push('<a class="nav-item nav-link" href="maintenance">'+custom_translator[lang]['maint']+'</a>');
+  items.push('<a class="nav-item nav-link" href="index">'+custom_translator[lang].shortcut+'</a>');
+  items.push('<a class="nav-item nav-link" href="premises">'+custom_translator[lang].prem+'</a>');
+  items.push('<a class="nav-item nav-link" href="groups">'+custom_translator[lang].groups+'</a>');
+  items.push('<a class="nav-item nav-link" href="heating">'+custom_translator[lang].heating+'</a>');
+  items.push('<a class="nav-item nav-link" href="scenaries">'+custom_translator[lang].scenaries+'</a>');
+  items.push('<a class="nav-item nav-link" href="maintenance">'+custom_translator[lang].maint+'</a>');
   $(".navbar-nav").append(items.join(''));
   $(".navbar-nav").each(function(){
         $(this).find('a').each(function(){

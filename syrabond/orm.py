@@ -141,10 +141,39 @@ class DBO:
 
     @_session_maker
     def update_scenario(self, session, id, mod):
+        result = None
         scen = session.query(Scenario).filter_by(id=id).first()
         if mod['type'] == 'act':
             scen.active = mod['active']
-        return True, None
+        if mod['type'] == 'time':
+            for schedule in scen.schedule:
+                if schedule.id == int(mod['schedule']):
+                    schedule.start = mod['time'].replace(':', ',')
+        if mod['type'] == 'weekday':
+            schedule = None
+            for sch in scen.schedule:
+                if sch.id == int(mod['schedule']):
+                    schedule = sch
+            if schedule:
+                weekdays = schedule.weekdays.split(',')
+                if weekdays and mod['weekday']:
+                    if mod['active']:
+                        weekdays.append(mod['weekday'])
+                    else:
+                        weekdays.remove(mod['weekday'])
+                    schedule.weekdays = ','.join(weekdays)
+        if mod['type'] == 'schedule':
+            if mod['schedule'].isdigit():
+                for sch in scen.schedule:
+                    if sch.id == int(mod['schedule']):
+                        session.delete(sch)
+            elif mod['schedule'] == 'new':
+                new_schedule = Schedule(weekdays='', start='')
+                scen.schedule.append(new_schedule)
+                session.commit()
+                result = new_schedule.id
+
+        return True, result
 
     @_session_maker
     def get_tags(self, session, uid):

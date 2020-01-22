@@ -63,7 +63,14 @@ class API:
         """Call the function by action keyword using POST_ACTIONS dict"""
         if action in self.POST_ACTIONS and is_correct_post_params(data):
             method = self.POST_ACTIONS[action]
-            getattr(self, method)(keyword, data)
+            result = getattr(self, method)(keyword, data)
+            if result:
+                if isinstance(result, str) or isinstance(result, dict) or isinstance(result, tuple):
+                    return result
+                else:
+                    return str(result)
+            else:
+                return 'empty response'
 
     def parse_request(self, type, request, data=None):
         entities = param = None
@@ -128,9 +135,13 @@ class API:
                 active = scen['active']
                 hrn = scen['hrn']
                 schedule = []
+                map = []
                 for sched in scen['schedule']:
                     schedule.append({'id': sched.id, 'weekdays': sched.weekdays, 'start_time': sched.start})
-                result.append({'id': id, 'type': type, 'active': active, 'name': hrn, 'schedule': schedule
+                for m in scen['effect']:
+                    map.append({'id': m.id, 'resource': m.resource, 'state': m.state})
+                result.append({'id': id, 'type': type, 'active': active, 'name': hrn, 'schedule': schedule,
+                               'map': map
                                })
 
         return result
@@ -197,6 +208,10 @@ class API:
         elif struct_type == 'quarantine':
             result = self.facility.dbo.load_quarantine()
 
+        elif struct_type == 'resources':
+            resources = self.facility.resources.copy()
+            return [{'id': res.uid, 'type': res.type, 'hrn': res.hrn} for res in resources.values()]
+
         elif struct_type in self.facility.resources:
             res = self.facility.resources[struct_type]
             try:
@@ -212,7 +227,7 @@ class API:
                                'group': res.group, 'tags': res.tags}
             else:
                 result = {'uid': res.uid, 'premise': prem.name, 'floor': prem.terra, 'code': prem.code,
-                               'type': res.type, 'name': res.hrn, 'group': res.group, 'tags': res.tags}
+                          'type': res.type, 'name': res.hrn, 'group': res.group, 'tags': res.tags}
 
         return result
 
@@ -292,7 +307,7 @@ class API:
         if entity == 'device':
             return self.edit_device(data)
         if entity == 'scenario':
-            self.edit_scen(data)
+            return self.edit_scen(data)
 
     def del_entity(self, entity, data):
         if entity == 'device':
@@ -334,7 +349,9 @@ class API:
 
     def edit_scen(self, data):  # TODO Maybe refactor data with additional check and recombinations for security
         print(data)
-        self.facility.dbo.update_scenario(data['id'], data)
+        result = self.facility.dbo.update_scenario(data['id'], data)
+        print(result)
+        return result
 
     def delete_device(self, data):  # TODO add result
         device_params = parse_form_json(data)

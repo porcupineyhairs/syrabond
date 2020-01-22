@@ -16,7 +16,9 @@ class TimeEngine:
         self.facility = facility
         self.orm = orm
         self.load_scenarios()
-        log('TimeEngine engaged.')
+
+    def __repr__(self):
+        return f'TimeEngine containing {self.scenarios.__len__()} scenarios'
 
     def load_scenarios(self):
         self.scenarios.clear()
@@ -33,7 +35,7 @@ class TimeEngine:
                 eff = Map(self.facility.resources[res], effect_conf.state)
                 effect.append(eff)
             self.scenarios.append(self.Scenario(id, active, scen['hrn'], schedule, effect))
-        log('TimeEngine: scenarios loaded.')
+        log(f'TimeEngine: scenarios loaded. {self}.')
 
     def add_scenario(self):
         pass

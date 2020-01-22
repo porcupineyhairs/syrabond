@@ -60,8 +60,7 @@ def post_add_request(params):
 @app.route('/api/v02/edit/<path:params>', methods=['POST'])
 def post_edit_request(params):
     """Handles POST API requests changing exist entities"""
-    api.post_direct('edit', params, flask.request.json)
-    return 'ok'
+    return api.post_direct('edit', params, flask.request.json)
 
 
 @app.route('/api/v02/delete/<path:params>', methods=['POST'])
