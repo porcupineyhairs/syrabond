@@ -157,6 +157,8 @@ class DBO:
             if schedule:
                 weekdays = schedule.weekdays.split(',')
                 if weekdays and mod['weekday']:
+                    if weekdays.count(''):
+                        weekdays.remove('')
                     if mod['active']:
                         weekdays.append(mod['weekday'])
                     else:
@@ -168,7 +170,7 @@ class DBO:
                     if sch.id == int(mod['schedule']):
                         session.delete(sch)
             elif mod['schedule'] == 'new':
-                new_schedule = Schedule(weekdays='', start='')
+                new_schedule = Schedule(weekdays='', start='00,00')
                 scen.schedule.append(new_schedule)
                 session.commit()
                 result = new_schedule.id

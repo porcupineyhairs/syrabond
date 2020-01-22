@@ -29,6 +29,7 @@ class TimeEngine:
             active = scen['active']
             id = scen['id']
             for schedule_conf in scen['schedule']:
+                print(schedule_conf)
                 schedule.append(self.Schedule(schedule_conf))
             for effect_conf in scen['effect']:
                 res = effect_conf.resource

@@ -897,7 +897,7 @@ function getScens() {
     data.schedule = 'new';
     prom = postJson(post_uri, data);
     prom.always(function(response) {
-      buildSchedule(form, response, '', '');
+      buildSchedule(form, response, '', '00,00');
     })
   }
 
