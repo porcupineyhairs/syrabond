@@ -1,11 +1,12 @@
 import flask
 import json
+from os import path
 from syrabond import common
 from syrabond.api import API
 
 
 conf = common.extract_config('global.json')
-directory = conf["working_dir"]
+directory = path.split(path.dirname(path.abspath(__file__)))[0]
 api = API(conf["facility_name"])
 conf.clear()
 app = flask.Flask(__name__)
