@@ -84,8 +84,8 @@ class Mqttsender:
             print ('Subscribed: '+topic.decode())
             is_error = False
         except Exception as e:
-            print ("Could not subscribe")
-            print (e)
+            print("Could not subscribe")
+            print(e)
             is_error = True
         finally:
             return(is_error)
