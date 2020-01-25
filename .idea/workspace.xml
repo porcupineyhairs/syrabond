@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4fc2e0fc-acda-4d3b-b22a-2fa2a04360b6" name="Default" comment="">
+    <list default="true" id="4fc2e0fc-acda-4d3b-b22a-2fa2a04360b6" name="Default" comment="minor: new procedure for get_status_all, get_status">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/syrabond/automation.py" afterPath="$PROJECT_DIR$/syrabond/automation.py" />
+      <change beforePath="$PROJECT_DIR$/clientside/functions.js" afterPath="$PROJECT_DIR$/clientside/functions.js" />
+      <change beforePath="$PROJECT_DIR$/micropython/switch/pauchok.py" afterPath="$PROJECT_DIR$/micropython/switch/pauchok.py" />
       <change beforePath="$PROJECT_DIR$/syrabond/facility.py" afterPath="$PROJECT_DIR$/syrabond/facility.py" />
-      <change beforePath="$PROJECT_DIR$/syrabond/orm.py" afterPath="$PROJECT_DIR$/syrabond/orm.py" />
+      <change beforePath="$PROJECT_DIR$/syrabond/restful.py" afterPath="$PROJECT_DIR$/syrabond/restful.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,57 +23,9 @@
       <file leaf-file-name="automation.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/syrabond/automation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="34" column="52" lean-forward="false" selection-start-line="34" selection-start-column="52" selection-end-line="34" selection-end-column="52" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="bind.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/json/bind.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="27" lean-forward="false" selection-start-line="7" selection-start-column="27" selection-end-line="7" selection-end-column="27" />
+            <state relative-caret-position="0">
+              <caret line="31" column="35" lean-forward="false" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="facility.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/syrabond/facility.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="508" column="16" lean-forward="true" selection-start-line="508" selection-start-column="16" selection-end-line="508" selection-end-column="16" />
-              <folding>
-                <element signature="e#0#66#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="syradaemon.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/syradaemon.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="20" lean-forward="false" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="20" />
-              <folding>
-                <element signature="e#19#41#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="mqttsender.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/syrabond/mqttsender.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="660">
-              <caret line="44" column="30" lean-forward="false" selection-start-line="44" selection-start-column="30" selection-end-line="44" selection-end-column="30" />
-              <folding>
-                <element signature="e#0#31#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -80,18 +33,52 @@
       <file leaf-file-name="common.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/syrabond/common.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
-              <caret line="36" column="17" lean-forward="false" selection-start-line="36" selection-start-column="17" selection-end-line="36" selection-end-column="17" />
+            <state relative-caret-position="810">
+              <caret line="57" column="14" lean-forward="false" selection-start-line="57" selection-start-column="14" selection-end-line="57" selection-end-column="65" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="facility.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/syrabond/facility.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15">
+              <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="restful.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="relay.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/micropython/multiswitch/relay.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="254">
+              <caret line="20" column="42" lean-forward="false" selection-start-line="20" selection-start-column="42" selection-end-line="20" selection-end-column="42" />
+              <folding>
+                <element signature="e#0#23#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pauchok.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/micropython/switch/pauchok.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="954">
+              <caret line="87" column="17" lean-forward="false" selection-start-line="87" selection-start-column="17" selection-end-line="87" selection-end-column="17" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="restful.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/syrabond/restful.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="915">
-              <caret line="61" column="56" lean-forward="false" selection-start-line="61" selection-start-column="56" selection-end-line="61" selection-end-column="56" />
+            <state relative-caret-position="735">
+              <caret line="99" column="0" lean-forward="false" selection-start-line="99" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -99,12 +86,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="api.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/syrabond/api.py">
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/micropython/multiswitch/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5070">
-              <caret line="338" column="59" lean-forward="false" selection-start-line="338" selection-start-column="59" selection-end-line="338" selection-end-column="59" />
-              <folding />
+            <state relative-caret-position="316">
+              <caret line="44" column="9" lean-forward="false" selection-start-line="44" selection-start-column="9" selection-end-line="44" selection-end-column="9" />
+              <folding>
+                <element signature="e#0#14#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -112,8 +101,8 @@
       <file leaf-file-name="orm.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/syrabond/orm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="28" column="10" lean-forward="false" selection-start-line="28" selection-start-column="10" selection-end-line="28" selection-end-column="10" />
+            <state relative-caret-position="300">
+              <caret line="20" column="29" lean-forward="false" selection-start-line="20" selection-start-column="29" selection-end-line="20" selection-end-column="29" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
               </folding>
@@ -203,7 +192,6 @@
         <option value="$PROJECT_DIR$/json/global.json" />
         <option value="$PROJECT_DIR$/json/equip.json" />
         <option value="$PROJECT_DIR$/sendsms.py" />
-        <option value="$PROJECT_DIR$/micropython/switch/conf.json" />
         <option value="$PROJECT_DIR$/micropython/switch/network.json" />
         <option value="$PROJECT_DIR$/micropython/sensor/webcreds.py" />
         <option value="$PROJECT_DIR$/micropython/sensor/sensors/dhtsensor.py" />
@@ -220,17 +208,22 @@
         <option value="$PROJECT_DIR$/syrasql.py" />
         <option value="$PROJECT_DIR$/syrabond/database.py" />
         <option value="$PROJECT_DIR$/json/mysql.json" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/global.json" />
-        <option value="$PROJECT_DIR$/syrabond/mqttsender.py" />
         <option value="$PROJECT_DIR$/json/bind.json" />
-        <option value="$PROJECT_DIR$/syrabond/restful.py" />
-        <option value="$PROJECT_DIR$/syrabond/api.py" />
         <option value="$PROJECT_DIR$/syradaemon.py" />
         <option value="$PROJECT_DIR$/syrabond/common.py" />
-        <option value="$PROJECT_DIR$/syrabond/orm.py" />
+        <option value="$PROJECT_DIR$/syrabond/mqttsender.py" />
+        <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/syrabond/api.py" />
         <option value="$PROJECT_DIR$/syrabond/automation.py" />
+        <option value="$PROJECT_DIR$/micropython/switch/conf.json" />
+        <option value="$PROJECT_DIR$/micropython/switch/pauchok.py" />
+        <option value="$PROJECT_DIR$/micropython/multiswitch/conf.json" />
+        <option value="$PROJECT_DIR$/syrabond/orm.py" />
         <option value="$PROJECT_DIR$/syrabond/facility.py" />
+        <option value="$PROJECT_DIR$/micropython/multiswitch/main.py" />
+        <option value="$PROJECT_DIR$/micropython/multiswitch/relay.py" />
+        <option value="$PROJECT_DIR$/syrabond/restful.py" />
       </list>
     </option>
   </component>
@@ -257,6 +250,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -267,13 +261,29 @@
             <path>
               <item name="syrabond" type="b2602c69:ProjectViewProjectNode" />
               <item name="syrabond" type="462c0819:PsiDirectoryNode" />
+              <item name="micropython" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="syrabond" type="b2602c69:ProjectViewProjectNode" />
+              <item name="syrabond" type="462c0819:PsiDirectoryNode" />
+              <item name="micropython" type="462c0819:PsiDirectoryNode" />
+              <item name="multiswitch" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="syrabond" type="b2602c69:ProjectViewProjectNode" />
+              <item name="syrabond" type="462c0819:PsiDirectoryNode" />
+              <item name="micropython" type="462c0819:PsiDirectoryNode" />
+              <item name="switch" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="syrabond" type="b2602c69:ProjectViewProjectNode" />
+              <item name="syrabond" type="462c0819:PsiDirectoryNode" />
               <item name="syrabond" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -303,7 +313,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.syrarestful">
     <configuration name="automation" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -403,9 +413,9 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.main" />
-        <item index="1" class="java.lang.String" itemvalue="Python.syrarestful" />
-        <item index="2" class="java.lang.String" itemvalue="Python.syradaemon" />
+        <item index="0" class="java.lang.String" itemvalue="Python.syrarestful" />
+        <item index="1" class="java.lang.String" itemvalue="Python.syradaemon" />
+        <item index="2" class="java.lang.String" itemvalue="Python.main" />
         <item index="3" class="java.lang.String" itemvalue="Python.automation" />
         <item index="4" class="java.lang.String" itemvalue="Python.syrasql" />
       </list>
@@ -424,76 +434,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1571988612919</updated>
-    </task>
-    <task id="LOCAL-00049" summary="minor: Some docstrings added.">
-      <created>1576055520467</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1576055520467</updated>
-    </task>
-    <task id="LOCAL-00050" summary="minor: Some docstrings added.">
-      <created>1576055831545</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1576055831563</updated>
-    </task>
-    <task id="LOCAL-00051" summary="minor: Some docstrings added.">
-      <created>1576056123525</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1576056123526</updated>
-    </task>
-    <task id="LOCAL-00052" summary="minor: Some docstrings added.">
-      <created>1576056397884</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1576056397884</updated>
-    </task>
-    <task id="LOCAL-00053" summary="minor: Some docstrings added.">
-      <created>1576056780381</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1576056780381</updated>
-    </task>
-    <task id="LOCAL-00054" summary="minor: Some docstrings added.">
-      <created>1576060438984</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1576060438985</updated>
-    </task>
-    <task id="LOCAL-00055" summary="minor: Some docstrings added.">
-      <created>1576159474772</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1576159474772</updated>
-    </task>
-    <task id="LOCAL-00056" summary="minor: Some docstrings added.">
-      <created>1576159961546</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1576159961546</updated>
-    </task>
-    <task id="LOCAL-00057" summary="minor: Some docstrings added.">
-      <created>1576160145892</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1576160145893</updated>
-    </task>
-    <task id="LOCAL-00058" summary="minor: Some docstrings added.">
-      <created>1576160311666</created>
-      <option name="number" value="00058" />
-      <option name="presentableId" value="LOCAL-00058" />
-      <option name="project" value="LOCAL" />
-      <updated>1576160311667</updated>
     </task>
     <task id="LOCAL-00059" summary="minor: Tags now lives in DB.">
       <created>1576248144265</created>
@@ -768,7 +708,77 @@
       <option name="project" value="LOCAL" />
       <updated>1578932524957</updated>
     </task>
-    <option name="localTasksCounter" value="98" />
+    <task id="LOCAL-00098" summary="minor: some __repr__ added.">
+      <created>1579006487639</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1579006487640</updated>
+    </task>
+    <task id="LOCAL-00099" summary="minor: some __repr__ added.">
+      <created>1579006674645</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1579006674645</updated>
+    </task>
+    <task id="LOCAL-00100" summary="minor: new procedure for get_status_all, get_status">
+      <created>1579007568042</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1579007568042</updated>
+    </task>
+    <task id="LOCAL-00101" summary="minor: Now using ORM for quarantine instead of the old-style DBO.">
+      <created>1579081601960</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1579081601961</updated>
+    </task>
+    <task id="LOCAL-00102" summary="minor: os.path now handles path deeds.">
+      <created>1579193022316</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1579193022316</updated>
+    </task>
+    <task id="LOCAL-00103" summary="minor: listener, sender, basename, dbo are Resource Class attributes now">
+      <created>1579199868475</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1579199868475</updated>
+    </task>
+    <task id="LOCAL-00104" summary="minor: Listenet's message_buffer is Queue now, not dict.">
+      <created>1579609827252</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1579609827254</updated>
+    </task>
+    <task id="LOCAL-00105" summary="feature: Edit, add and delete of scenario's schedules.">
+      <created>1579699919134</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1579699919134</updated>
+    </task>
+    <task id="LOCAL-00106" summary="bug fixed: in the last new feature">
+      <created>1579707127762</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1579707127762</updated>
+    </task>
+    <task id="LOCAL-00107" summary="minor: using os.path.abspath now">
+      <created>1579707698676</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1579707698676</updated>
+    </task>
+    <option name="localTasksCounter" value="108" />
     <servers />
   </component>
   <component name="TodoView">
@@ -784,16 +794,16 @@
     <frame x="1440" y="0" width="1920" height="1080" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12743549" sideWeight="0.49418604" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.09478673" sideWeight="0.49418604" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="1.0" sideWeight="0.5109232" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4796425" sideWeight="0.48907682" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28500497" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36444885" sideWeight="0.8830162" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.42701092" sideWeight="0.48907682" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38927507" sideWeight="0.8830162" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22249094" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15277778" sideWeight="0.50581396" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2224429" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39920557" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15277778" sideWeight="0.50581396" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -863,15 +873,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="minor: Tags now lives in DB." />
-    <MESSAGE value="feature: availability to add tags (API+clientside)" />
-    <MESSAGE value="feature: scopes sets re-init after every edit operation to get rid of empty tags." />
-    <MESSAGE value="feature: update switch state if it shifted by button, etc." />
-    <MESSAGE value="feature: Entropy introduced to count state messages. To be used in API to finde out is it some changes in states." />
-    <MESSAGE value="feature: Client update view every 15 sec." />
-    <MESSAGE value="feature: automation engine introduced." />
-    <MESSAGE value="bug fix: deleting empty raws in db every update." />
-    <MESSAGE value="bug fix: utf-8 coding explicitly stated in db connection string." />
     <MESSAGE value="minor: dedicated functions to build instances of resources, premises, etc." />
     <MESSAGE value="feature: TimeEngine released." />
     <MESSAGE value="minor: Smartphone layout adaptivity." />
@@ -888,29 +889,24 @@
     <MESSAGE value="feature: Reloading scenarios into daemon instance." />
     <MESSAGE value="bug fixed: scens is dict now." />
     <MESSAGE value="minor: functions wrapped" />
-    <option name="LAST_COMMIT_MESSAGE" value="minor: functions wrapped" />
+    <MESSAGE value="minor: some __repr__ added." />
+    <MESSAGE value="minor: new procedure for get_status_all, get_status" />
+    <MESSAGE value="minor: Now using ORM for quarantine instead of the old-style DBO." />
+    <MESSAGE value="minor: os.path now handles path deeds." />
+    <MESSAGE value="minor: listener, sender, basename, dbo are Resource Class attributes now" />
+    <MESSAGE value="minor: Listenet's message_buffer is Queue now, not dict." />
+    <MESSAGE value="feature: Edit, add and delete of scenario's schedules." />
+    <MESSAGE value="bug fixed: in the last new feature" />
+    <MESSAGE value="minor: using os.path.abspath now" />
+    <option name="LAST_COMMIT_MESSAGE" value="minor: using os.path.abspath now" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="3" />
+      <option name="time" value="4" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/premises.json" />
-    <entry file="file://$PROJECT_DIR$/mysql.json" />
-    <entry file="file://$PROJECT_DIR$/morning.json" />
-    <entry file="file://$PROJECT_DIR$/equip.json" />
-    <entry file="file://$PROJECT_DIR$/baseRefactoring.xml" />
-    <entry file="file://$PROJECT_DIR$/find.xml" />
-    <entry file="file://$PROJECT_DIR$/json/secscen2.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vcs.xml" />
     <entry file="file://$PROJECT_DIR$/filetypes.xml" />
     <entry file="file://$PROJECT_DIR$/debugger.xml" />
     <entry file="file://$PROJECT_DIR$/colors.scheme.xml" />
@@ -954,13 +950,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/micropython/switch/conf.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="14" lean-forward="true" selection-start-line="20" selection-start-column="14" selection-end-line="20" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/micropython/sensor/boot.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="526">
@@ -972,20 +961,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/micropython/sensor/conf.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="22" lean-forward="false" selection-start-line="16" selection-start-column="22" selection-end-line="16" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/micropython/switch/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="35" column="0" lean-forward="false" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -1052,13 +1027,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/syrabond/database.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-363">
-          <caret line="8" column="23" lean-forward="false" selection-start-line="8" selection-start-column="23" selection-end-line="8" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/json/tags.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
@@ -1070,22 +1038,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="2" column="54" lean-forward="false" selection-start-line="2" selection-start-column="54" selection-end-line="2" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/global.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="20" lean-forward="false" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="29" column="46" lean-forward="false" selection-start-line="29" selection-start-column="46" selection-end-line="29" selection-end-column="46" />
         </state>
       </provider>
     </entry>
@@ -1093,17 +1045,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
           <caret line="28" column="30" lean-forward="false" selection-start-line="28" selection-start-column="30" selection-end-line="28" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/syrabond/mqttsender.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="44" column="30" lean-forward="false" selection-start-line="44" selection-start-column="30" selection-end-line="44" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1111,25 +1052,42 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="27" lean-forward="false" selection-start-line="7" selection-start-column="27" selection-end-line="7" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/global.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="11" lean-forward="false" selection-start-line="6" selection-start-column="11" selection-end-line="6" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/syralog.log">
+      <provider selected="true" editor-type-id="LogFileEditorProvider">
+        <state relative-caret-position="-3271">
+          <caret line="29051" column="49" lean-forward="false" selection-start-line="29051" selection-start-column="49" selection-end-line="29051" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../algorithms_lab/data_sets.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/syrabond/mqttsender.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1710">
+          <caret line="118" column="0" lean-forward="false" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/syrabond/restful.py">
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="915">
-          <caret line="61" column="56" lean-forward="false" selection-start-line="61" selection-start-column="56" selection-end-line="61" selection-end-column="56" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/syrabond/api.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5070">
-          <caret line="338" column="59" lean-forward="false" selection-start-line="338" selection-start-column="59" selection-end-line="338" selection-end-column="59" />
-          <folding />
+        <state relative-caret-position="150">
+          <caret line="11" column="10" lean-forward="false" selection-start-line="11" selection-start-column="10" selection-end-line="11" selection-end-column="10" />
         </state>
       </provider>
     </entry>
@@ -1137,53 +1095,144 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="14" column="20" lean-forward="false" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="20" />
-          <folding>
-            <element signature="e#19#41#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/syrabond/common.py">
+    <entry file="file://$PROJECT_DIR$/syrabond/api.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="36" column="17" lean-forward="false" selection-start-line="36" selection-start-column="17" selection-end-line="36" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/syralog.log">
-      <provider selected="true" editor-type-id="LogFileEditorProvider">
-        <state relative-caret-position="-2172">
-          <caret line="29051" column="49" lean-forward="false" selection-start-line="29051" selection-start-column="49" selection-end-line="29051" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/syrabond/orm.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="28" column="10" lean-forward="false" selection-start-line="28" selection-start-column="10" selection-end-line="28" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="3285">
+          <caret line="219" column="32" lean-forward="false" selection-start-line="219" selection-start-column="32" selection-end-line="219" selection-end-column="32" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/syrabond/automation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="34" column="52" lean-forward="false" selection-start-line="34" selection-start-column="52" selection-end-line="34" selection-end-column="52" />
+        <state relative-caret-position="0">
+          <caret line="31" column="35" lean-forward="false" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/syrabond/common.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="810">
+          <caret line="57" column="14" lean-forward="false" selection-start-line="57" selection-start-column="14" selection-end-line="57" selection-end-column="65" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/micropython/sensor/conf.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="22" lean-forward="false" selection-start-line="16" selection-start-column="22" selection-end-line="16" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/micropython/switch/conf.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="18" lean-forward="false" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/micropython/switch/boot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-434">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/micropython/multiswitch/conf.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="456">
+          <caret line="44" column="14" lean-forward="false" selection-start-line="44" selection-start-column="14" selection-end-line="44" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/micropython/switch/switch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="38" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/syrabond/database.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="8" column="23" lean-forward="false" selection-start-line="8" selection-start-column="23" selection-end-line="8" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/syrabond/orm.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="29" lean-forward="false" selection-start-line="20" selection-start-column="29" selection-end-line="20" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/micropython/switch/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="690">
+          <caret line="50" column="35" lean-forward="false" selection-start-line="50" selection-start-column="24" selection-end-line="50" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/micropython/multiswitch/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="316">
+          <caret line="44" column="9" lean-forward="false" selection-start-line="44" selection-start-column="9" selection-end-line="44" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/syrabond/facility.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="508" column="16" lean-forward="true" selection-start-line="508" selection-start-column="16" selection-end-line="508" selection-end-column="16" />
+        <state relative-caret-position="15">
+          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/micropython/multiswitch/pauchok.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="24" column="16" lean-forward="true" selection-start-line="24" selection-start-column="16" selection-end-line="24" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/micropython/multiswitch/relay.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="254">
+          <caret line="20" column="42" lean-forward="false" selection-start-line="20" selection-start-column="42" selection-end-line="20" selection-end-column="42" />
           <folding>
-            <element signature="e#0#66#0" expanded="true" />
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/micropython/switch/pauchok.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="954">
+          <caret line="87" column="17" lean-forward="false" selection-start-line="87" selection-start-column="17" selection-end-line="87" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/syrabond/restful.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="735">
+          <caret line="99" column="0" lean-forward="false" selection-start-line="99" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
           </folding>
         </state>
       </provider>

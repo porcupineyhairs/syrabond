@@ -305,6 +305,7 @@ $("body").on('click','button', function() {
     const api = base_uri+set_uri;
     var command = '/'+$(this).attr('cmd');
     var resp = [];
+    soundClick();
     $.get(api+resuid+command, function(data){
       if (is_res_button) {
           var resp = jQuery.parseJSON(data);
@@ -805,7 +806,7 @@ function getScens() {
                     id: 'swch-'+id,
                     name: id,
                     checked: active}).appendTo(switch_div).change(function() {
-                      checkBox('act', this);
+                      checkBox('act', this)
                     });
     $('<label/>', { class: "custom-control-label",
                     for: 'swch-'+id,
@@ -981,6 +982,12 @@ function sortItems(a ,b) {
       return 1;
     }
   }
+}
+
+function soundClick() {
+  var audio = new Audio();
+  audio.src = '/client/sound/click.mp3';
+  audio.autoplay = true;
 }
 
 function guidGenerator() {

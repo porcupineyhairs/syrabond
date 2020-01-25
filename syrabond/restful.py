@@ -99,5 +99,10 @@ def give_image(filename):
     return flask.send_file('{}/clientside/{}'.format(directory, filename), mimetype='image/gif')
 
 
+@app.route('/client/sound/<filename>', methods=['GET'])
+def give_sound(filename):
+    return flask.send_file('{}/clientside/{}'.format(directory, filename), mimetype='audio/mpeg')
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)

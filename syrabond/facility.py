@@ -17,7 +17,7 @@ class Facility:
         self.virtual_apls = {}
         self.tags = {}
         self.name = name
-        self.DB = database.Mysql()  # TODO Gonna be deprecated
+        #self.DB = database.Mysql()  # TODO Gonna be deprecated
         self.dbo = orm.DBO('mysql')  # TODO Choose DB interface with config
         uniqid = str(uuid1())
         common.log('Creating Syrabond instance with uuid ' + uniqid)
