@@ -155,9 +155,9 @@ class API:
             if one in facility_resources:
                 resources.update({facility_resources[one]})
             elif one in self.GROUPS:
-                resources.update(self.facility.get_resource(group=one))
+                resources = set(filter(lambda x: x.group == one, facility_resources.values()))
             elif one in self.TAGS:
-                resources.update(self.facility.get_resource(tag=one))
+                resources = set(filter(lambda x: one in x.tags, facility_resources.values()))
             elif one in self.PREMS:
                 resources.update(facility_premises[one].resources)
         facility_resources.clear()

@@ -142,22 +142,6 @@ class Facility:
             print(r.terra, r.code, r.name)
         return result
 
-    def get_resource(self, uid=None, group=None, tag=None):
-        """Returns the list of resources within specified scope"""
-        result = set()
-        print()
-        if group:
-            for res in self.resources:
-                if self.resources[res].group == group:
-                    result.update({self.resources[res]})
-        if uid:
-            return self.resources.get(uid, False)
-        if tag:
-            for res in self.resources:
-                if tag in self.resources[res].tags:
-                    result.update({self.resources[res]})
-        return result
-
     def state_updated(self, client, userdata, message):
         common.log('New message in topic {}: {}'.format(message.topic, message.payload.decode("utf-8")))
         for res in self.resources:
