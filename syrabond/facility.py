@@ -15,17 +15,17 @@ class Facility:
         self.virtual_apls = {}
         self.tags = {}
         self.name = name
+        uid = str(uuid1())
         self.dbo = orm.DBO('mysql')  # TODO Choose DB interface with config
-        common.log('Creating Syrabond instance with uuid ' + mqttsender.uid)
+        common.log('Creating Syrabond instance with uuid ' + uid)
         self.welcome_topic = '{}/{}/'.format('common', 'welcome')
         if listen:
-            # self.listener = mqttsender.Mqtt('syrabond_listener_' + uniqid, config='mqtt.json', clean_session=True)
-            self.listener = mqttsender.listener
+            self.listener = mqttsender.Mqtt('syrabond_listener_' + __name__, config='mqtt.json', clean_session=False)
             self.listener.subscribe('{}/{}/#'.format(self.name, 'status'))  # TODO Dehardcode status topic
             self.listener.subscribe(self.welcome_topic+'#')  # TODO Dehardcode welcome topic
         else:
             self.listener = mqttsender.Dumb()
-        self.sender = mqttsender.sender
+        self.sender = mqttsender.Mqtt('syrabond_sender_' + uid, config='mqtt.json', clean_session=True)
 
         Resource.basename = name
         Resource.dbo = self.dbo
@@ -93,35 +93,34 @@ class Facility:
     def build_premises(self, config):
         for prem in config:
             for terr in config[prem]:
-                thermo = ambient_sensor = lights = lights_lvl = pres = None
+                thermo, ambient_sensor, lights, lights_lvl, presence, vent = None, None, None, None, None, None
                 if 'thermo' in config[prem][terr]:
                     thermo = self.resources[config[prem][terr]['thermo']]
+                    thermo.connect()
                 if 'ambient_sensor' in config[prem][terr]:
                     ambient_sensor = self.resources[config[prem][terr]['ambient_sensor']]
                 if 'lights' in config[prem][terr]:
                     lights = [self.resources[res] for res in config[prem][terr]['lights']]
                 if 'lights_lvl' in config[prem][terr]:
                     lights_lvl = self.resources[config[prem][terr]['lights_lvl']]
-                if 'pres' in config[prem][terr]:
-                    pres = self.resources[config[prem][terr]['pres']]
+                if 'presence' in config[prem][terr]:
+                    presence = self.resources[config[prem][terr]['presence']]
+                if 'vent' in config[prem][terr]:
+                    vent = self.resources[config[prem][terr]['vent']]
 
-                premise = Premises(prem, terr, config[prem][terr]['hrn'],
-                                   ambient_sensor, lights, thermo, lights_lvl, pres)
+                premise = Premise(prem, terr, config[prem][terr]['hrn'],
+                                  ambient_sensor=ambient_sensor, lights=lights, thermo=thermo,
+                                  lights_lvl=lights_lvl, presence=presence, vent=vent)
                 self.premises[f'{prem}.{terr}'] = premise  # todo prohibit "." in the name of terra (frontend)
 
     def build_bindings(self, config):
         for binding in config:
             prem = config[binding]
             self.premises[prem].resources.append(self.resources[binding])
-            # connecting thermostates
-            if self.resources[binding].type == 'thermo':
-                self.premises[prem].thermostat = self.resources[binding]
-                self.premises[prem].thermostat.topic = (
-                        self.name
-                        + '/' + self.premises[prem].thermostat.type
-                        + '/' + prem
-                )
-                self.premises[prem].thermostat.connect()
+        unplaced = Premise('niente', 'no', 'nowhere')  # Null Object for unplaced resources
+        self.premises[f'{unplaced.code}.{unplaced.terra}'] = unplaced
+        placed_resources = {x for y in self.premises.values() for x in y.resources}
+        [unplaced.resources.append(res) for res in self.resources.values() if res not in placed_resources]
 
     def get_premises(self, terra=None, code=None, tag=None):
         result = []
@@ -204,7 +203,7 @@ class Facility:
         common.rewrite_config(self.equip_conf_file, conf)
 
 
-class Premises:
+class Premise:
     """
     The class to represent facility's premises.
     The properties are:
@@ -214,21 +213,18 @@ class Premises:
     ambient_sensor, lights, thermo, lights_lvl, pres: premise's dedicated sensors for specified params
     """
 
-    def __init__(self, terra, code, name, ambient_sensor, lights, thermo, lights_lvl, pres):
+    def __init__(self, terra, code, name,
+                 ambient_sensor=None, lights=None, thermo=None, lights_lvl=None, presence=None, vent=None):
         self.resources = []
         self.terra = terra
         self.code = code
         self.name = name
-        self.ambient = self.thermostat = self.lights = None
-        if ambient_sensor:
-            self.ambient = ambient_sensor
-        if thermo:
-            self.thermostat = thermo
-        if lights:
-            self.lights = lights
-        self.light_lvl = None
-        self.presence = None
-        self.ventilation = None
+        self.ambient = ambient_sensor
+        self.thermostat = thermo
+        self.lights = lights
+        self.light_lvl = lights_lvl
+        self.presence = presence
+        self.ventilation = vent
 
 
 class Control:

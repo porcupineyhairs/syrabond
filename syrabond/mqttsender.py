@@ -142,10 +142,6 @@ class Dumb:
         #print('Dumb would not subscribe')
 
 
-uid = str(uuid1())
-listener = Mqtt('syrabond_listener_' + uid, clean_session=False)
-sender = Mqtt('syrabond_sender_' + uid, clean_session=True)
-
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         print("Wrong arguments")

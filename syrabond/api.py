@@ -235,16 +235,12 @@ class API:
         """
         result = []
         entities = params[0]
+        print(entities)
         resources = self.get_resources(entities)
+        print(resources)
         for res in resources:
             res.check_state()
-            try:
-                prem = [x for x in self.facility.premises.values() if res in x.resources][0]
-            except IndexError:
-                prem = dumb_prem
-                prem.name = 'nowhere'
-                prem.terra = 'niente'
-                prem.code = 'no'
+            prem = [x for x in self.facility.premises.values() if res in x.resources][0]
             prem_index = '{}:{}'.format(prem.terra, prem.code)
             if isinstance(res, facility.Sensor):
                 result.append({'uid': res.uid, 'premise': prem.name, 'prem_index': prem_index, 'type': res.type,
