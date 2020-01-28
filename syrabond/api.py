@@ -25,23 +25,20 @@ class API:
             'edit': 'edit_entity',
             'delete': 'del_entity'
         }
-        self.TAGS = self.GROUPS = self.PREMS = self.TYPES = self.SENSOR_CHANNELS = None
+        self.TAGS, self.GROUPS, self.PREMS, self.TYPES, self.SENSOR_CHANNELS = None, None, None, None, None
         self.init_scopes()
 
     def init_scopes(self):
-        self.GROUPS = set()
-        for res in self.facility.resources:
-            self.GROUPS.update({self.facility.resources[res].group})
-        self.TAGS = set()
-        for res in self.facility.resources:
-            [self.TAGS.update({x}) for x in self.facility.resources[res].tags]
-        self.PREMS = set()
-        [self.PREMS.update({x}) for x in self.facility.premises]
-        self.TYPES = set()
-        [self.TYPES.update({self.facility.resources[res].type}) for res in self.facility.resources]
-        self.SENSOR_CHANNELS = set()
-        [self.SENSOR_CHANNELS.update(self.facility.resources[x].channels)
-         for x in self.facility.resources if self.facility.resources[x].type == 'sensor']
+        facility_resources = self.facility.resources.copy()
+        self.GROUPS = {x.group for x in facility_resources.values()}
+        self.TYPES = {res.type for res in facility_resources.values()}
+        self.TAGS, self.SENSOR_CHANNELS = set(), set()
+        for res in facility_resources.values():
+            self.TAGS.update({t for t in res.tags})
+            if res.type == 'sensor':
+                self.SENSOR_CHANNELS.update(c for c in res.channels)
+
+        self.PREMS = {x for x in self.facility.premises}
 
     def is_consistent_api_request(self, agr):
         """Checking if the argument is tuple and keyword is in special dict"""
@@ -155,9 +152,9 @@ class API:
             if one in facility_resources:
                 resources.update({facility_resources[one]})
             elif one in self.GROUPS:
-                resources = set(filter(lambda x: x.group == one, facility_resources.values()))
+                resources = set(x for x in facility_resources.values() if x.group == one)
             elif one in self.TAGS:
-                resources = set(filter(lambda x: one in x.tags, facility_resources.values()))
+                resources = set(x for x in facility_resources.values() if one in x.tags)
             elif one in self.PREMS:
                 resources.update(facility_premises[one].resources)
         facility_resources.clear()
@@ -314,18 +311,29 @@ class API:
             return self.delete_device(data)
 
     def add_device(self, data):
-        device_params = parse_form_json(data)
+        resource = None
         result = False
-        print(device_params)
+        device_params = parse_form_json(data)
+        print(f'Adding device: {device_params}')
         if self.is_correct_new_device_params(device_params):
-            if 'channels' in device_params:
-                result = self.facility.add_new_resourse(
-                    device_params['type'], device_params['uid'], device_params['group'],
-                    device_params['hrn'], channels=device_params['channels'])
-            else:
-                result = self.facility.add_new_resourse(
-                    device_params['type'], device_params['uid'], device_params['group'],
-                    device_params['hrn'])
+            type = device_params['type']
+            uid = device_params['uid']
+            group = device_params['group']
+            hrn = device_params['hrn']
+            channels = device_params['channels']
+            if type == 'switch':
+                resource = facility.Switch(uid, type, group, hrn, [], False, channels)
+            elif type == 'sensor':
+                print('sensor')
+                resource = facility.Sensor(uid, type, group, hrn, [], False, channels)
+                print(f'RES: {resource}]')
+            if resource:
+                self.facility.resources[uid] = resource
+                result = True
+                resource.save_config()
+                resource.device_init()
+                self.facility.dbo.un_quarantine(resource.uid)
+                print(resource)
         return result
 
     def edit_device(self, data):  # TODO add result

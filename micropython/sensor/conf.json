@@ -10,10 +10,10 @@
       "module": {
           "type": "dhtsensor",
           "dht_type": 11,
-          "dht_pin": 2,
+          "dht_pin": 4,
           "mismatch_temp": -1,
           "mismatch_hum": 0,
-          "led": 2,
+          "led": 1,
           "ver": "0.1"
                 },
 

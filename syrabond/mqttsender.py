@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 import sys
 from time import sleep
+from uuid import uuid1
 from syrabond.common import extract_config
 from syrabond.common import log
 
@@ -41,7 +42,6 @@ class SingletonDecorator:
         return self.instance
 
 
-@SingletonDecorator
 class Mqtt:
     """
     Wrapper class for paho.mqtt.client.
@@ -141,6 +141,10 @@ class Dumb:
         pass
         #print('Dumb would not subscribe')
 
+
+uid = str(uuid1())
+listener = Mqtt('syrabond_listener_' + uid, clean_session=False)
+sender = Mqtt('syrabond_sender_' + uid, clean_session=True)
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:

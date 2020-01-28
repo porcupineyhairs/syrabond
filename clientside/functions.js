@@ -733,7 +733,7 @@ function updateStates() {
 
 
 function update() {
-  setInterval(updateStates, 15000);
+  setInterval(updateStates, 5000);
 }
 
 function getScens() {

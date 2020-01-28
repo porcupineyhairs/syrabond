@@ -72,11 +72,16 @@ class DBO:
         res = session.query(Quarantine).filter_by(resource=uid).first()
         if res:
             res.status = ip
-            #session.query(Status).filter_by(resource=None).delete(synchronize_session='fetch')
             return True, None
         else:
             session.add(Quarantine(resource=uid, status=ip))
             return True, None
+
+    @_session_maker
+    def un_quarantine(self, session, uid):
+        res = session.query(Quarantine).filter_by(resource=uid).first()
+        session.delete(res)
+        return True, None
 
     @_session_maker
     def rewrite_resources(self, session, resources: dict):  # TODO Check is it needed to truncate table first
@@ -188,13 +193,23 @@ class DBO:
     @_session_maker
     def update_resource_properties(self, session, entity):
         res = session.query(Resource).filter_by(uid=entity.uid).first()
-        res.type = entity.type
-        res.hrn = entity.hrn
-        res.group = entity.group
-        res.channels = ''
-        if entity.channels:
-            res.channels = ', '.join(entity.channels)
-        self.update_tags(entity.uid, entity.tags)
+        if res:
+            res.type = entity.type
+            res.hrn = entity.hrn
+            res.group = entity.group
+            res.channels = ''
+            if entity.channels:
+                res.channels = ', '.join(entity.channels)
+            self.update_tags(entity.uid, entity.tags)
+        else:
+            self.build_new_resource(entity)
+        return True, None
+
+    @_session_maker
+    def build_new_resource(self, session, entity):
+        res = Resource(uid=entity.uid, type=entity.type, group=entity.group, hrn=entity.hrn,
+                       channels=entity.channels, pir=entity.pir)
+        session.add(res)
         return True, None
 
 

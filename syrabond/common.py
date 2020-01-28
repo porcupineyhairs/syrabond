@@ -32,7 +32,7 @@ def extract_config(file_name):
         items = json.loads(f.read())
         f.close()
     except Exception as e:
-        print(e)
+        log(f'Unable to open config file {file_name}: {e}', 'error')
         return {}
     return items
 

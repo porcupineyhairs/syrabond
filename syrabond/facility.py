@@ -9,26 +9,23 @@ class Facility:
     All of resources are stored in dicts.
     """
 
-    fa = None
-
     def __init__(self, name: str, listen=False):
         self.premises = {}
         self.resources = {}
         self.virtual_apls = {}
         self.tags = {}
         self.name = name
-        #self.DB = database.Mysql()  # TODO Gonna be deprecated
         self.dbo = orm.DBO('mysql')  # TODO Choose DB interface with config
-        uniqid = str(uuid1())
-        common.log('Creating Syrabond instance with uuid ' + uniqid)
+        common.log('Creating Syrabond instance with uuid ' + mqttsender.uid)
         self.welcome_topic = '{}/{}/'.format('common', 'welcome')
         if listen:
-            self.listener = mqttsender.Mqtt('syrabond_listener_' + uniqid, config='mqtt.json', clean_session=True)
+            # self.listener = mqttsender.Mqtt('syrabond_listener_' + uniqid, config='mqtt.json', clean_session=True)
+            self.listener = mqttsender.listener
             self.listener.subscribe('{}/{}/#'.format(self.name, 'status'))  # TODO Dehardcode status topic
             self.listener.subscribe(self.welcome_topic+'#')  # TODO Dehardcode welcome topic
         else:
             self.listener = mqttsender.Dumb()
-        self.sender = mqttsender.Mqtt('syrabond_sender_' + uniqid, config='mqtt.json', clean_session=True)
+        self.sender = mqttsender.sender
 
         Resource.basename = name
         Resource.dbo = self.dbo
@@ -178,22 +175,6 @@ class Facility:
             elif type == 'welcome':
                 self.dbo.put_quarantine(id, msg)
 
-    def add_new_resourse(self, type: str, uid: str, group: str, hrn: str, **kwargs: list) -> bool:
-        """Create new resource instance and update config. To be used with API."""
-        channels = kwargs['channels']
-        print(uid, type, group, hrn, [], False, channels)
-        if type == 'switch':
-            resource = Switch(uid, type, group, hrn, [], False, channels)
-            self.resources[uid] = resource
-            print(resource.state)
-            resource.update_state('OFF')  # TODO Retrieve real device state
-        elif type == 'sensor':
-            resource = Sensor(uid, type, group, hrn, [], False, channels)
-            self.resources[uid] = resource
-
-        self.update_equip_conf()
-        self.welcome_new_device(uid)
-        return True
 
     def welcome_new_device(self, uid: str):
         """Initialize new device"""
@@ -201,10 +182,6 @@ class Facility:
         self.sender.mqttsend(self.welcome_topic+uid, '')  # Empty message to cancel retained
         self.DB.del_from_quarantine(uid)
 
-    def update_device(self, uid):
-        """Update device properties via ORM"""
-        res = self.resources[uid]
-        self.dbo.update_resource_properties(res)
 
     def update_equip_conf(self):  # TODO Change and use only for backup purposes
         conf = {}
@@ -312,6 +289,10 @@ class Resource:
 
     def get_state(self):
         return self.dbo.get_state(self.uid)
+
+    def save_config(self):
+        """ Rewrite all the properties via ORM"""
+        self.dbo.update_resource_properties(self)
 
 
 class VirtualAppliance(Resource):
