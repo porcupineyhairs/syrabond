@@ -80,6 +80,7 @@ class DBO:
     @_session_maker
     def un_quarantine(self, session, uid):
         res = session.query(Quarantine).filter_by(resource=uid).first()
+        print(f'Uncar {res}')
         session.delete(res)
         return True, None
 
@@ -111,7 +112,7 @@ class DBO:
     @_session_maker
     def get_state(self, session, uid):
         res = session.query(Resource).filter_by(uid=uid).first()
-        if res.state:
+        if res and res.state:
             result = res.state[0].state
             return False, result
         else:
@@ -210,6 +211,13 @@ class DBO:
         res = Resource(uid=entity.uid, type=entity.type, group=entity.group, hrn=entity.hrn,
                        channels=entity.channels, pir=entity.pir)
         session.add(res)
+        return True, None
+
+    @_session_maker
+    def delete_resource(self, session, uid):
+        # TODO It's necessary to iterate through the linked tables and delete all.
+        res = session.query(Resource).filter_by(uid=uid).first()
+        session.delete(res)
         return True, None
 
 

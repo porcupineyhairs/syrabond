@@ -1,4 +1,5 @@
 from syrabond import facility
+from syrabond.common import log
 
 
 class API:
@@ -53,6 +54,7 @@ class API:
 
     def get_direct(self, keyword, entities, param):
         """Call the function by keyword using GET_ACTIONS dict"""
+        print(f'New API request: {keyword}, {entities}, {param}')
         method = self.GET_ACTIONS[keyword]
         return getattr(self, method)((entities, param))
 
@@ -148,11 +150,15 @@ class API:
         resources = set()
         facility_resources = self.facility.resources.copy()
         facility_premises = self.facility.premises.copy()
+        if isinstance(entities, str):
+            entities = entities.split(',')
         for one in entities:
             if one in facility_resources:
                 resources.update({facility_resources[one]})
             elif one in self.GROUPS:
                 resources = set(x for x in facility_resources.values() if x.group == one)
+            elif one in self.TYPES:
+                resources = set(x for x in facility_resources.values() if x.type == one)
             elif one in self.TAGS:
                 resources = set(x for x in facility_resources.values() if one in x.tags)
             elif one in self.PREMS:
@@ -234,8 +240,10 @@ class API:
         Accepts various entities as arg&
         """
         result = []
-        entities = params[0]
-        print(entities)
+        if isinstance(params, tuple):
+            entities = params[0]
+        else:
+            entities = params
         resources = self.get_resources(entities)
         print(resources)
         for res in resources:
@@ -250,7 +258,11 @@ class API:
                                'name': res.hrn, 'state': res.get_state()})
         return result
 
-    def shift_resources(self, params):
+    def shift_resources(self, params: tuple):
+        """ Receive tuple of (entities, command)
+        and apply command on every entity, that could be single resources,
+        list of resources and/or any type of scope.
+        """
         entities = params[0]
         command = params[1]
         resources = self.get_resources(entities)
@@ -329,7 +341,7 @@ class API:
                 resource.save_config()
                 resource.device_init()
                 self.facility.dbo.un_quarantine(resource.uid)
-                print(resource)
+                log(f'New device: {resource}')
         return result
 
     def edit_device(self, data):  # TODO add result
@@ -348,7 +360,8 @@ class API:
                         self.TAGS.update(tag)
             else:
                 self.facility.resources[uid].tags = []
-        self.facility.update_device(uid)
+        log(f'Device config changed: {device_params}')
+        self.facility.resources[uid].save_config()
         self.init_scopes()
 
     def edit_scen(self, data):  # TODO Maybe refactor data with additional check and recombinations for security
@@ -361,7 +374,7 @@ class API:
         device_params = parse_form_json(data)
         uid = device_params['uid']
         self.facility.resources.pop(uid)
-        self.facility.DB.del_resource_rows(uid)
+        self.facility.dbo.delete_resource(uid)
         self.facility.update_equip_conf()
 
     def is_correct_new_device_params(self, data):
