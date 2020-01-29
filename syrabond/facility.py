@@ -403,7 +403,7 @@ class Switch(Device):
                 return False
             return True
         except Exception as e:
-            print(e)
+            common.log(f'Error while toggling {self.uid}: {e}')
             return False
 
     def turn(self, command):
@@ -412,10 +412,13 @@ class Switch(Device):
                 self.on()
             elif command.lower() == 'off':
                 self.off()
+            elif command.lower() == 'toggle':
+                self.toggle()
             else:
                 return False
+            return True
         except Exception as e:
-            print(e)
+            common.log(f'Error while turning {self.uid} {command}: {e}')
             return False
 
     def on(self):
@@ -424,7 +427,7 @@ class Switch(Device):
             self.update_state('ON')
             return True
         except Exception as e:
-            print(e)
+            common.log(f'Error while turning {self.uid} on: {e}')
             return False
 
     def off(self):
@@ -433,7 +436,7 @@ class Switch(Device):
             self.update_state('OFF')
             return True
         except Exception as e:
-            print(e)
+            common.log(f'Error while turning {self.uid} off: {e}')
             return False
 
     def pir_direct_react(self, cmd):
