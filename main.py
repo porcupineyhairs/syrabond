@@ -8,7 +8,7 @@ sh = restful.API('sh', listen=True)  # Creating API instance
 i = 50
 while i > 0:  # Checking for new messages
     sh.facility.listener.check_for_messages()
-    sleep(0.1)
+    #sleep(0.1)
     i -= 1
 sh.facility.message_handler()  # Handling messages received
 sh.facility.listener.disconnect()

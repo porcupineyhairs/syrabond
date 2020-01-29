@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 import sys
 from time import sleep
+from uuid import uuid1
 from syrabond.common import extract_config
 from syrabond.common import log
 
@@ -28,6 +29,18 @@ class Queue:
     def clear(self):
         self.queue.clear()
         self.size = 0
+
+
+class SingletonDecorator:
+    def __init__(self, klass):
+        self.klass = klass
+        self.instance = None
+
+    def __call__(self, *args, **kwargs):
+        if not self.instance:
+            self.instance = self.klass(*args, **kwargs)
+        return self.instance
+
 
 class Mqtt:
     """
