@@ -4,6 +4,7 @@
     <extensionMap>
       <mapping ext="conf" type="PLAIN_TEXT" />
       <mapping ext="urls" type="Python" />
+      <removed_mapping ext="j2" approved="true" type="YAML_EX" />
     </extensionMap>
   </component>
 </application>
