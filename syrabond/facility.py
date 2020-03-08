@@ -1,12 +1,14 @@
-from syrabond import mqttsender, common, database, orm, automation
 from uuid import uuid1
 from sys import exit
+from threading import Thread
+
+from syrabond import mqttsender, common, orm, automation, homekit
 
 
 class Facility:
     """
     The main common class. While initialization it creates instances of all the resources and premises, connects DBO.
-    All of resources are stored in dicts.
+    All of resources are being stored in dict.
     """
 
     def __init__(self, name: str, listen=False):
@@ -45,6 +47,8 @@ class Facility:
         self.build_scenarios()
         self.build_premises(config['premises'])
         self.build_bindings(config['bind'])
+        hkit = Thread(target=self.run_homekit)
+        hkit.start()
         config.clear()
 
     def __repr__(self):
@@ -138,6 +142,9 @@ class Facility:
             print(r.terra, r.code, r.name)
         return result
 
+    def run_homekit(self):
+        homekit.run_bridge(self)
+
     def state_updated(self, client, userdata, message):
         common.log('New message in topic {}: {}'.format(message.topic, message.payload.decode("utf-8")))
         for res in self.resources:
@@ -167,7 +174,7 @@ class Facility:
             elif type == 'switch':
                 self.resources[id].update_state(msg.upper())
             elif type == 'thermo':
-                self.premises[id].thermostat.update_state(msg)
+                self.resources[id].update_state(msg)
             elif type == 'status':
                 if id in self.resources:
                     self.resources[id].update_status(msg)
