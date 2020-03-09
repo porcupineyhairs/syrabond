@@ -59,6 +59,15 @@ class Facility:
     def __repr__(self):
         return f'Syrabond facility \"{self.name}\" containing {self.resources.__len__()} resources'
 
+
+    def shutdown(self):
+        if self.listener:
+            self.listener.disconnect()
+        self.dbo.connection.close()
+        if 'homekit' in self.addons:
+            self.addons['homekit'].driver.stop()
+            self.addons['homekit'].driver_thread.join()
+
     def build_resources(self):
         resources_loaded = self.dbo.load_resources()  # Loading resources params from DB and creating instances
         for res in resources_loaded:
@@ -146,9 +155,6 @@ class Facility:
         for r in result:
             print(r.terra, r.code, r.name)
         return result
-
-    def run_homekit(self):
-        homekit.run_bridge(self)
 
     def state_updated(self, client, userdata, message):
         common.log('New message in topic {}: {}'.format(message.topic, message.payload.decode("utf-8")))

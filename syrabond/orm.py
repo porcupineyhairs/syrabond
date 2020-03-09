@@ -18,7 +18,7 @@ class DBO:
                                         config['user'], config['password'], config['host'], config['database']),
                                         pool_pre_ping=True)
         self.Session = sessionmaker(bind=self.engine)
-        self.engine.connect()
+        self.connection = self.engine.connect()
         self.log = common.log
         Base.metadata.create_all(self.engine)
 

@@ -1,14 +1,21 @@
 #!/usr/bin/python3
+import signal
 from time import sleep
 from syrabond import facility, orm, automation
 
 """Demo daemon that receive and handle messages, check schedules in loop"""
 
-blocking = True
 
-sh = facility.Facility('sh', listen=True, addons=['homekit'])
-orm = orm.DBO('mysql')
-te = automation.TimeEngine(sh, orm)
+class GracefulKiller:
+
+    def __init__(self):
+        self.kill_now = False
+        signal.signal(signal.SIGINT, self.exit_gracefully)
+        signal.signal(signal.SIGTERM, self.exit_gracefully)
+
+    def exit_gracefully(self, signum, frame):
+        print(f'Shutdown signal has arrived: {signum}')
+        self.kill_now = True
 
 
 def scheduler():
@@ -22,11 +29,18 @@ def scheduler():
         [scen.workout() for scen in scens]
 
 
+blocking = True
+
+sh = facility.Facility('sh', listen=True, addons=['homekit'])
+orm = orm.DBO('mysql')
+te = automation.TimeEngine(sh, orm)
+
+killer = GracefulKiller()
+
 scheduler.i = 0
 if blocking:
     i = 31
-    print('MAIN LOOP')
-    while True:
+    while not killer.kill_now:
         if i > 30:
             scheduler()
             i = 0
@@ -34,6 +48,9 @@ if blocking:
         sh.message_handler()
         i += 1
         sleep(0.1)
+
+    sh.shutdown()
+
 else:
     sh.listener.wait_for_messages()
 
