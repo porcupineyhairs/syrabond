@@ -3,7 +3,7 @@ from threading import Thread
 
 from pyhap.accessory import Accessory, Bridge
 from pyhap.accessory_driver import AccessoryDriver
-from pyhap.const import CATEGORY_SWITCH, CATEGORY_SENSOR
+from pyhap.const import CATEGORY_SWITCH, CATEGORY_SENSOR, CATEGORY_THERMOSTAT
 
 from .common import log
 
@@ -66,18 +66,18 @@ class Switch(Accessory):
 class HomeKit:
 
     def __init__(self, facility):
-        self.driver = None
+        self.driver, self.driver_thread = None, None
         self.facility = facility
         self.make_bridge()
 
     def make_bridge(self):
         self.driver = AccessoryDriver(port=51826, persist_file='sh.state')
         self.driver.add_accessory(accessory=get_bridge(self.driver, self.facility))
-        signal.signal(signal.SIGTERM, self.driver.signal_handler)
 
     def run(self):
         log(f'Running HomeKit bridge. Pin: {self.driver.state.pincode.decode()}')
-        Thread(target=self.driver.start).start()
+        self.driver_thread = Thread(target=self.driver.start)
+        self.driver_thread.start()
 
 
 def get_bridge(driver, facility):
