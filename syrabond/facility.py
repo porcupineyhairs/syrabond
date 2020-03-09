@@ -1,6 +1,5 @@
 from uuid import uuid1
 from sys import exit
-from threading import Thread
 
 from syrabond import mqttsender, common, orm, automation, homekit
 
@@ -16,6 +15,7 @@ class Facility:
         self.resources = {}
         self.virtual_apls = {}
         self.tags = {}
+        self.addons={}
         self.name = name
         uid = str(uuid1())
         self.dbo = orm.DBO('mysql')  # TODO Choose DB interface with config
@@ -50,8 +50,9 @@ class Facility:
 
         if 'addons' in kwargs:
             if 'homekit' in kwargs['addons']:
-                hkit = Thread(target=self.run_homekit)
-                hkit.start()
+                home_kit = homekit.HomeKit(self)
+                self.addons.update({'homekit': home_kit})
+                home_kit.run()
 
         config.clear()
 
@@ -165,8 +166,6 @@ class Facility:
         if isinstance(self.listener, mqttsender.Dumb):
             return None
         while self.listener.message_buffer.size:
-            print(self.listener.message_buffer.size)
-            print(self.listener.message_buffer)
             payload = self.listener.message_buffer.dequeue()
             type, id, channel = parse_topic(payload[0])
             msg = payload[1]
