@@ -6,7 +6,7 @@ from syrabond import facility, orm, automation
 
 blocking = True
 
-sh = facility.Facility('sh', listen=True)
+sh = facility.Facility('sh', listen=True, addons=['homekit'])
 orm = orm.DBO('mysql')
 te = automation.TimeEngine(sh, orm)
 
