@@ -11,7 +11,7 @@ class Facility:
     All of resources are being stored in dict.
     """
 
-    def __init__(self, name: str, listen=False):
+    def __init__(self, name: str, listen=False, **kwargs):
         self.premises = {}
         self.resources = {}
         self.virtual_apls = {}
@@ -47,8 +47,12 @@ class Facility:
         self.build_scenarios()
         self.build_premises(config['premises'])
         self.build_bindings(config['bind'])
-        hkit = Thread(target=self.run_homekit)
-        hkit.start()
+
+        if 'addons' in kwargs:
+            if 'homekit' in kwargs['addons']:
+                hkit = Thread(target=self.run_homekit)
+                hkit.start()
+
         config.clear()
 
     def __repr__(self):
