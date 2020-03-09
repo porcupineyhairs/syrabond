@@ -1,4 +1,3 @@
-import signal
 from threading import Thread
 
 from pyhap.accessory import Accessory, Bridge
@@ -8,7 +7,7 @@ from pyhap.const import CATEGORY_SWITCH, CATEGORY_SENSOR, CATEGORY_THERMOSTAT
 from .common import log
 
 
-class Sensor(Accessory):
+class iSensor(Accessory):
 
     category = CATEGORY_SENSOR
 
@@ -36,17 +35,22 @@ class Sensor(Accessory):
             self.char_humidity = serv_humidity.configure_char('CurrentRelativeHumidity')
         print(self.resource)
 
-    @Accessory.run_at_interval(10)
+    @Accessory.run_at_interval(30)
     def run(self):
-        if self.temp:
-            self.char_temp.set_value(float(self.resource.state.get('temp')))
-        if self.hum:
-            self.char_humidity.set_value(float(self.resource.state.get('hum')))
+        if self.temp and self.resource.state.get('temp'):
+            self.char_temp.set_value(float(self.resource.state['temp']))
+        if self.hum and self.resource.state.get('hum'):
+            self.char_temp.set_value(float(self.resource.state['hum']))
 
 
-class Switch(Accessory):
+class iSwitch(Accessory):
 
     category = CATEGORY_SWITCH
+
+    state_map = {
+        'OFF': 0,
+        'ON': 1
+    }
 
     def __init__(self, *args, **kwargs):
 
@@ -55,12 +59,17 @@ class Switch(Accessory):
         super().__init__(*args, **kwargs)
 
         serv_switch = self.add_preload_service('Switch')
-        self.char_on = serv_switch.configure_char('On', setter_callback=self.toggle)
+        self.switch = serv_switch.configure_char('On', setter_callback=self.toggle)
         self.resource = api_settings['resource']
-        print(self.resource)
 
     def toggle(self, value):
-        self.resource.off() if value == 0 else self.resource.on()
+        self.resource.off() if value == self.state_map.get(self.resource.command_map['off']) else self.resource.on()
+
+
+    @Accessory.run_at_interval(3)
+    def run(self):
+        if self.switch.value != self.state_map.get(self.resource.state):
+            self.switch.notify()
 
 
 class HomeKit:
@@ -79,14 +88,18 @@ class HomeKit:
         self.driver_thread = Thread(target=self.driver.start)
         self.driver_thread.start()
 
+    def stop(self):
+        self.driver.stop()
+        self.driver_thread.join()
+
 
 def get_bridge(driver, facility):
     bridge = Bridge(driver, 'Syrabond Bridge')
     for resource in facility.resources.values():
         bridge.add_accessory(
-            Switch(driver, resource.hrn, api_settings={'resource': resource})
+            iSwitch(driver, resource.hrn, api_settings={'resource': resource})
         ) if resource.type == 'switch' else None
         bridge.add_accessory(
-            Sensor(driver, resource.hrn, api_settings={'resource': resource})
+            iSensor(driver, resource.hrn, api_settings={'resource': resource})
         ) if resource.type == 'sensor' else None
     return bridge

@@ -59,9 +59,8 @@ class Facility:
     def __repr__(self):
         return f'Syrabond facility \"{self.name}\" containing {self.resources.__len__()} resources'
 
-
     def shutdown(self):
-        if self.listener:
+        if isinstance(self.listener, mqttsender.Mqtt):
             self.listener.disconnect()
         self.dbo.connection.close()
         if 'homekit' in self.addons:
@@ -394,6 +393,13 @@ class Device(Resource):
 
 
 class Switch(Device):
+
+    # Mapping 'what-to-send': 'what-to-store'
+    command_map = {
+        'off': 'OFF',
+        'on': 'ON'
+    }
+
     """Class to represent switches"""
 
     def update_state(self, state):
@@ -411,9 +417,9 @@ class Switch(Device):
     def toggle(self):
         self.get_state()
         try:
-            if self.state == 'ON':
+            if self.state == Switch.command_map['on']:
                 self.off()
-            elif self.state == 'OFF':
+            elif self.state == Switch.command_map['off']:
                 self.on()
             else:
                 return False
@@ -440,7 +446,7 @@ class Switch(Device):
     def on(self):
         try:
             self.sender.mqttsend(self.topic, 'on', retain=True)
-            self.update_state('ON')
+            self.update_state(Switch.command_map['on'])
             return True
         except Exception as e:
             common.log(f'Error while turning {self.uid} on: {e}')
@@ -449,7 +455,7 @@ class Switch(Device):
     def off(self):
         try:
             self.sender.mqttsend(self.topic, 'off', retain=True)
-            self.update_state('OFF')
+            self.update_state(Switch.command_map['off'])
             return True
         except Exception as e:
             common.log(f'Error while turning {self.uid} off: {e}')
