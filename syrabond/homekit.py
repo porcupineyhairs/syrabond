@@ -1,8 +1,11 @@
 import signal
+from threading import Thread
 
 from pyhap.accessory import Accessory, Bridge
 from pyhap.accessory_driver import AccessoryDriver
 from pyhap.const import CATEGORY_SWITCH
+
+from .common import log
 
 
 class Switch(Accessory):
@@ -24,17 +27,27 @@ class Switch(Accessory):
         self.resource.off() if value == 0 else self.resource.on()
 
 
+class HomeKit:
+
+    def __init__(self, facility):
+        self.driver = None
+        self.facility = facility
+        self.make_bridge()
+
+    def make_bridge(self):
+        self.driver = AccessoryDriver(port=51826, persist_file='sh.state')
+        self.driver.add_accessory(accessory=get_bridge(self.driver, self.facility))
+        signal.signal(signal.SIGTERM, self.driver.signal_handler)
+
+    def run(self):
+        log(f'Running HomeKit bridge. Pin: {self.driver.state.pincode.decode()}')
+        Thread(target=self.driver.start).start()
+
+
 def get_bridge(driver, facility):
-    """Call this method to get a Bridge instead of a standalone accessory."""
     bridge = Bridge(driver, 'Syrabond Bridge')
     for resource in facility.resources.values():
-        bridge.add_accessory(Switch(driver, resource.hrn, api_settings={'resource': resource})) if resource.type == 'switch' else None
+        bridge.add_accessory(
+            Switch(driver, resource.hrn, api_settings={'resource': resource})
+        ) if resource.type == 'switch' else None
     return bridge
-
-
-def run_bridge(facility):
-    print('RUN HOMEKIT')
-    driver = AccessoryDriver(port=51826, persist_file='sh.state')
-    driver.add_accessory(accessory=get_bridge(driver, facility))
-    #signal.signal(signal.SIGTERM, driver.signal_handler)
-    driver.start()
