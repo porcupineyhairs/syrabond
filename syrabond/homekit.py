@@ -65,10 +65,10 @@ class iSwitch(Accessory):
     def toggle(self, value):
         self.resource.off() if value == self.state_map.get(self.resource.command_map['off']) else self.resource.on()
 
-
-    @Accessory.run_at_interval(3)
+    @Accessory.run_at_interval(5)
     def run(self):
         if self.switch.value != self.state_map.get(self.resource.state):
+            self.switch.value = self.state_map.get(self.resource.state)
             self.switch.notify()
 
 
