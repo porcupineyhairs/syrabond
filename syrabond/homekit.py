@@ -3,9 +3,45 @@ from threading import Thread
 
 from pyhap.accessory import Accessory, Bridge
 from pyhap.accessory_driver import AccessoryDriver
-from pyhap.const import CATEGORY_SWITCH
+from pyhap.const import CATEGORY_SWITCH, CATEGORY_SENSOR
 
 from .common import log
+
+
+class Sensor(Accessory):
+
+    category = CATEGORY_SENSOR
+
+    def __init__(self, *args, **kwargs):
+
+        api_settings = kwargs.pop('api_settings')
+
+        super().__init__(*args, **kwargs)
+        self.resource = api_settings['resource']
+
+        if 'temp' in self.resource.channels:
+            self.temp = True
+        else:
+            self.temp = False
+        if 'hum' in self.resource.channels:
+            self.hum = True
+        else:
+            self.hum = False
+
+        if self.temp:
+            serv_temp = self.add_preload_service('TemperatureSensor')
+            self.char_temp = serv_temp.configure_char('CurrentTemperature')
+        if self.hum:
+            serv_humidity = self.add_preload_service('HumiditySensor')
+            self.char_humidity = serv_humidity.configure_char('CurrentRelativeHumidity')
+        print(self.resource)
+
+    @Accessory.run_at_interval(10)
+    def run(self):
+        if self.temp:
+            self.char_temp.set_value(self.resource.state.get('temp'))
+        if self.hum:
+            self.char_humidity.set_value(self.resource.state.get('hum'))
 
 
 class Switch(Accessory):
@@ -50,4 +86,7 @@ def get_bridge(driver, facility):
         bridge.add_accessory(
             Switch(driver, resource.hrn, api_settings={'resource': resource})
         ) if resource.type == 'switch' else None
+        bridge.add_accessory(
+            Sensor(driver, resource.hrn, api_settings={'resource': resource})
+        ) if resource.type == 'sensor' else None
     return bridge
