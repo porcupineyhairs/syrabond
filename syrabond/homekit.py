@@ -39,9 +39,9 @@ class Sensor(Accessory):
     @Accessory.run_at_interval(10)
     def run(self):
         if self.temp:
-            self.char_temp.set_value(self.resource.state.get('temp'))
+            self.char_temp.set_value(float(self.resource.state.get('temp')))
         if self.hum:
-            self.char_humidity.set_value(self.resource.state.get('hum'))
+            self.char_humidity.set_value(float(self.resource.state.get('hum')))
 
 
 class Switch(Accessory):
