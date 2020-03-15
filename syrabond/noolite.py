@@ -85,7 +85,7 @@ class NooliteTX(NooliteBase):
             self.sendCommand(device, "unbind", channel)
 
     def turn_on(self, channel):
-        with self.deviceContext() as device:
+        with self._deviceContext() as device:
             self.sendCommand(device, "turn_on", channel)
 
     def turn_off(self, channel):
