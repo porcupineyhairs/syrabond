@@ -192,13 +192,6 @@
       <option name="presentableId" value="Default" />
       <updated>1571988612919</updated>
     </task>
-    <task id="LOCAL-00087" summary="minor: Mobile optimized for heating.">
-      <created>1577636789007</created>
-      <option name="number" value="00087" />
-      <option name="presentableId" value="LOCAL-00087" />
-      <option name="project" value="LOCAL" />
-      <updated>1577636789007</updated>
-    </task>
     <task id="LOCAL-00088" summary="bug fix in TimeEngine.Scenario.Workout">
       <created>1578084625228</created>
       <option name="number" value="00088" />
@@ -535,7 +528,14 @@
       <option name="project" value="LOCAL" />
       <updated>1584282864298</updated>
     </task>
-    <option name="localTasksCounter" value="136" />
+    <task id="LOCAL-00136" summary="feature: Noolite switch introduced">
+      <created>1584282999452</created>
+      <option name="number" value="00136" />
+      <option name="presentableId" value="LOCAL-00136" />
+      <option name="project" value="LOCAL" />
+      <updated>1584282999452</updated>
+    </task>
+    <option name="localTasksCounter" value="137" />
     <servers />
   </component>
   <component name="TodoView">
@@ -595,11 +595,11 @@
     <state x="318" y="168" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1583677294452" />
     <state x="1864" y="202" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1583774225077" />
     <state x="1864" y="202" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1583070533409" />
-    <state x="1932" y="62" width="1210" height="957" key="CommitChangelistDialog2" timestamp="1584282864129">
+    <state x="1932" y="62" width="1210" height="957" key="CommitChangelistDialog2" timestamp="1584282999289">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="369" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1583747185442" />
-    <state x="1932" y="62" width="1210" height="957" key="CommitChangelistDialog2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584282864129" />
+    <state x="1932" y="62" width="1210" height="957" key="CommitChangelistDialog2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584282999289" />
     <state x="1932" y="62" key="CommitChangelistDialog2/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1584202397730" />
     <state x="1540" y="100" width="1720" height="880" key="DiffContextDialog" timestamp="1584282830339">
       <screen x="1440" y="0" width="1920" height="1080" />
@@ -650,11 +650,11 @@
     </state>
     <state x="1909" y="179" key="SettingsEditor/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1583069962333" />
     <state x="1909" y="179" key="SettingsEditor/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1584202649295" />
-    <state x="1867" y="228" key="Vcs.Push.Dialog.v2" timestamp="1584282865635">
+    <state x="1867" y="228" key="Vcs.Push.Dialog.v2" timestamp="1584283000925">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1583747187026" />
-    <state x="1867" y="228" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584282865635" />
+    <state x="1867" y="228" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584283000925" />
     <state x="1867" y="228" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1584202399773" />
     <state x="75" y="62" width="1290" height="754" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1583746966021">
       <screen x="0" y="0" width="1440" height="900" />

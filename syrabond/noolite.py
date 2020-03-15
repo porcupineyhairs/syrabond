@@ -1,5 +1,4 @@
 import usb1
-
 from contextlib import contextmanager
 
 from .facility import Switch
@@ -75,7 +74,7 @@ class NooliteTX(NooliteBase):
     PRODUCT_ID = 1503
 
     def __init__(self):
-        super(NooliteBase, self).__init__()
+        super().__init__()
         self._ctrl_mode = (2 << 3) + (4 << 5)
 
     def bind(self, channel):
@@ -133,10 +132,11 @@ class NooliteTX(NooliteBase):
 
 class NooliteSwitch(NooliteTX, Switch):
 
-    def __init__(self, uid, type, group, hrn, tags, pir, channels):
+    def __init__(self, *args):
+        print('args: ', *args)
+        Switch.__init__(self, *args)
         NooliteTX.__init__(self)
-        Switch.__init__(self, uid, type, group, hrn, tags, pir, channels)
-        self.channel = channels - 1
+        self.channel = args[-1] - 1
 
     def on(self):
         self.turn_on(self.channel)
