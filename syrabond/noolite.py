@@ -2,6 +2,8 @@ import usb1
 
 from contextlib import contextmanager
 
+from .facility import Switch
+
 
 
 
@@ -129,12 +131,12 @@ class NooliteTX(NooliteBase):
         device.controlWrite(usb1.REQUEST_TYPE_CLASS | usb1.RECIPIENT_INTERFACE | usb1.ENDPOINT_OUT, 0x9, 0x300, 0, bytes(cmd), 1000)
 
 
-class NooliteSwitch(NooliteTX):
+class NooliteSwitch(NooliteTX, Switch):
 
-    def __init__(self, channel):
-        print(f'Arg in noolite {channel}')
-        super(NooliteSwitch, self).__init__()
-        self.channel = channel
+    def __init__(self, uid, type, group, hrn, tags, pir, channels):
+        NooliteTX.__init__()
+        Switch.__init__(uid, type, group, hrn, tags, pir, channels)
+        self.channel = channels - 1
 
     def on(self):
         self.turn_on(self.channel)
