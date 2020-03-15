@@ -394,8 +394,8 @@ class Device(Resource):
 
 class Switch(Device):
 
-    def __init__(self, uid, type, group, hrn, tags, pir, channels):
-        super(Switch, self).__init__(uid, type, group, hrn, tags, pir, channels)
+    def __init__(self, *args):
+        super().__init__(*args)
 
     # Mapping 'what-to-send': 'what-to-store'
     command_map = {
