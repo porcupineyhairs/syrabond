@@ -75,14 +75,17 @@ class Facility:
             tags = self.dbo.get_tags(res.uid)
             if res.channels:
                 channels = res.channels.split(',')
-            if res.type == 'switch':
-                resource = Switch(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
-            elif res.type == 'sensor':
-                resource = Sensor(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
-            elif res.type == 'thermo':
-                resource = VirtualAppliance(res.uid, res.type, res.group, res.hrn, tags)
-            elif res.plugin == 'noolite':
-                resource = NooliteSwitch(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
+            if res.plugin:
+                if res.plugin == 'noolite':
+                    resource = NooliteSwitch(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
+            else:
+                if res.type == 'switch':
+                    resource = Switch(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
+                elif res.type == 'sensor':
+                    resource = Sensor(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
+                elif res.type == 'thermo':
+                    resource = VirtualAppliance(res.uid, res.type, res.group, res.hrn, tags)
+
             if resource:
                 self.resources[res.uid] = resource
 
