@@ -81,7 +81,7 @@ class Facility:
                 resource = Sensor(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
             elif res.type == 'thermo':
                 resource = VirtualAppliance(res.uid, res.type, res.group, res.hrn, tags)
-            elif res.type == 'noolite-sw':
+            elif res.plugin == 'noolite':
                 resource = NooliteSwitch(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
             if resource:
                 self.resources[res.uid] = resource

@@ -233,6 +233,7 @@ class Resource(Base):
     hrn = Column(String(40))
     channels = Column(String(20))
     pir = Column(Boolean)
+    plugin = Column(String(20))
     state = relationship("State")
     status = relationship("Status")
     tags = relationship("Tags")
