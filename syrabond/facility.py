@@ -482,7 +482,7 @@ class NooliteSwitch(noolite.NooliteTX, Switch):
         print('args: ', *args)
         Switch.__init__(self, *args)
         noolite.NooliteTX.__init__(self)
-        self.channel = args[-1][0] - 1
+        self.channel = int(args[-1][0]) - 1
 
     def on(self):
         self.turn_on(self.channel)

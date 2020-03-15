@@ -4,7 +4,6 @@
     <list default="true" id="4fc2e0fc-acda-4d3b-b22a-2fa2a04360b6" name="Default" comment="feature: Noolite switch introduced">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/syrabond/facility.py" beforeDir="false" afterPath="$PROJECT_DIR$/syrabond/facility.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/syrabond/noolite.py" beforeDir="false" afterPath="$PROJECT_DIR$/syrabond/noolite.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,34 +191,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1571988612919</updated>
-    </task>
-    <task id="LOCAL-00090" summary="minor: pool_pre_ping in Sqlalchemy engine">
-      <created>1578219375876</created>
-      <option name="number" value="00090" />
-      <option name="presentableId" value="LOCAL-00090" />
-      <option name="project" value="LOCAL" />
-      <updated>1578219375876</updated>
-    </task>
-    <task id="LOCAL-00091" summary="breaking change: Messages for switches and VAs now are publishing retained.">
-      <created>1578231920355</created>
-      <option name="number" value="00091" />
-      <option name="presentableId" value="LOCAL-00091" />
-      <option name="project" value="LOCAL" />
-      <updated>1578231920356</updated>
-    </task>
-    <task id="LOCAL-00092" summary="breaking change: Messages for switches and VAs now are publishing retained.">
-      <created>1578684088315</created>
-      <option name="number" value="00092" />
-      <option name="presentableId" value="LOCAL-00092" />
-      <option name="project" value="LOCAL" />
-      <updated>1578684088316</updated>
-    </task>
-    <task id="LOCAL-00093" summary="feature: API for scenarios introduced. Availability to turn scenarios on and off.">
-      <created>1578762698835</created>
-      <option name="number" value="00093" />
-      <option name="presentableId" value="LOCAL-00093" />
-      <option name="project" value="LOCAL" />
-      <updated>1578762698835</updated>
     </task>
     <task id="LOCAL-00094" summary="feature: Reloading scenarios into daemon instance.">
       <created>1578843994860</created>
@@ -536,7 +507,35 @@
       <option name="project" value="LOCAL" />
       <updated>1584284633481</updated>
     </task>
-    <option name="localTasksCounter" value="139" />
+    <task id="LOCAL-00139" summary="feature: Noolite switch introduced">
+      <created>1584284818506</created>
+      <option name="number" value="00139" />
+      <option name="presentableId" value="LOCAL-00139" />
+      <option name="project" value="LOCAL" />
+      <updated>1584284818506</updated>
+    </task>
+    <task id="LOCAL-00140" summary="feature: Noolite switch db support">
+      <created>1584285943352</created>
+      <option name="number" value="00140" />
+      <option name="presentableId" value="LOCAL-00140" />
+      <option name="project" value="LOCAL" />
+      <updated>1584285943352</updated>
+    </task>
+    <task id="LOCAL-00141" summary="feature: Noolite switch introduced">
+      <created>1584286129699</created>
+      <option name="number" value="00141" />
+      <option name="presentableId" value="LOCAL-00141" />
+      <option name="project" value="LOCAL" />
+      <updated>1584286129699</updated>
+    </task>
+    <task id="LOCAL-00142" summary="feature: Noolite switch introduced">
+      <created>1584286280991</created>
+      <option name="number" value="00142" />
+      <option name="presentableId" value="LOCAL-00142" />
+      <option name="project" value="LOCAL" />
+      <updated>1584286280991</updated>
+    </task>
+    <option name="localTasksCounter" value="143" />
     <servers />
   </component>
   <component name="TodoView">
@@ -562,7 +561,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="minor: some __repr__ added." />
     <MESSAGE value="minor: new procedure for get_status_all, get_status" />
     <MESSAGE value="minor: Now using ORM for quarantine instead of the old-style DBO." />
     <MESSAGE value="minor: os.path now handles path deeds." />
@@ -586,6 +584,7 @@
     <MESSAGE value="refactor: Command and state mapping" />
     <MESSAGE value="feat: Update HomeKit switch states" />
     <MESSAGE value="feature: Noolite addons introduced" />
+    <MESSAGE value="feature: Noolite switch db support" />
     <MESSAGE value="feature: Noolite switch introduced" />
     <option name="LAST_COMMIT_MESSAGE" value="feature: Noolite switch introduced" />
   </component>
@@ -596,11 +595,11 @@
     <state x="318" y="168" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1583677294452" />
     <state x="1864" y="202" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1583774225077" />
     <state x="1864" y="202" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1583070533409" />
-    <state x="1932" y="62" width="1210" height="957" key="CommitChangelistDialog2" timestamp="1584284633340">
+    <state x="1932" y="62" width="1210" height="957" key="CommitChangelistDialog2" timestamp="1584286280824">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="369" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1583747185442" />
-    <state x="1932" y="62" width="1210" height="957" key="CommitChangelistDialog2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584284633340" />
+    <state x="1932" y="62" width="1210" height="957" key="CommitChangelistDialog2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584286280824" />
     <state x="1932" y="62" key="CommitChangelistDialog2/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1584202397730" />
     <state x="1540" y="100" width="1720" height="880" key="DiffContextDialog" timestamp="1584282830339">
       <screen x="1440" y="0" width="1920" height="1080" />
@@ -651,11 +650,11 @@
     </state>
     <state x="1909" y="179" key="SettingsEditor/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1583069962333" />
     <state x="1909" y="179" key="SettingsEditor/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1584202649295" />
-    <state x="1867" y="228" key="Vcs.Push.Dialog.v2" timestamp="1584284634842">
+    <state x="1867" y="228" key="Vcs.Push.Dialog.v2" timestamp="1584286291314">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1583747187026" />
-    <state x="1867" y="228" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584284634842" />
+    <state x="1867" y="228" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584286291314" />
     <state x="1867" y="228" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1584202399773" />
     <state x="75" y="62" width="1290" height="754" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1583746966021">
       <screen x="0" y="0" width="1440" height="900" />
@@ -667,5 +666,9 @@
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="2079" y="372" key="com.intellij.ide.util.TipDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1583070659836" />
+    <state x="2189" y="464" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1584284957658">
+      <screen x="1440" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2189" y="464" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584284957658" />
   </component>
 </project>
