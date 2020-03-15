@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4fc2e0fc-acda-4d3b-b22a-2fa2a04360b6" name="Default" comment="feat: Update HomeKit switch states">
+    <list default="true" id="4fc2e0fc-acda-4d3b-b22a-2fa2a04360b6" name="Default" comment="feature: Noolite switch introduced">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/syrabond/noolite.py" beforeDir="false" afterPath="$PROJECT_DIR$/syrabond/noolite.py" afterDir="false" />
     </list>
@@ -58,7 +58,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.syradaemon">
+  <component name="RunManager" selected="Python.restful">
     <configuration name="automation" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="python" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -173,9 +173,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.restful" />
         <item itemvalue="Python.syradaemon" />
         <item itemvalue="Python.homekit" />
-        <item itemvalue="Python.restful" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.automation" />
       </list>
@@ -191,13 +191,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1571988612919</updated>
-    </task>
-    <task id="LOCAL-00077" summary="minor: Smartphone layout adaptivity.">
-      <created>1577377511757</created>
-      <option name="number" value="00077" />
-      <option name="presentableId" value="LOCAL-00077" />
-      <option name="project" value="LOCAL" />
-      <updated>1577377511758</updated>
     </task>
     <task id="LOCAL-00078" summary="bug fix.">
       <created>1577537079513</created>
@@ -535,7 +528,14 @@
       <option name="project" value="LOCAL" />
       <updated>1584202397863</updated>
     </task>
-    <option name="localTasksCounter" value="126" />
+    <task id="LOCAL-00126" summary="feature: Noolite switch introduced">
+      <created>1584268635155</created>
+      <option name="number" value="00126" />
+      <option name="presentableId" value="LOCAL-00126" />
+      <option name="project" value="LOCAL" />
+      <updated>1584268635157</updated>
+    </task>
+    <option name="localTasksCounter" value="127" />
     <servers />
   </component>
   <component name="TodoView">
@@ -572,7 +572,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="minor: functions wrapped" />
     <MESSAGE value="minor: some __repr__ added." />
     <MESSAGE value="minor: new procedure for get_status_all, get_status" />
     <MESSAGE value="minor: Now using ORM for quarantine instead of the old-style DBO." />
@@ -597,7 +596,8 @@
     <MESSAGE value="refactor: Command and state mapping" />
     <MESSAGE value="feat: Update HomeKit switch states" />
     <MESSAGE value="feature: Noolite addons introduced" />
-    <option name="LAST_COMMIT_MESSAGE" value="feature: Noolite addons introduced" />
+    <MESSAGE value="feature: Noolite switch introduced" />
+    <option name="LAST_COMMIT_MESSAGE" value="feature: Noolite switch introduced" />
   </component>
   <component name="WindowStateProjectService">
     <state x="1864" y="202" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583774225077">
@@ -606,35 +606,35 @@
     <state x="318" y="168" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1583677294452" />
     <state x="1864" y="202" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1583774225077" />
     <state x="1864" y="202" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1583070533409" />
-    <state x="1932" y="62" width="1210" height="957" key="CommitChangelistDialog2" timestamp="1584202397730">
+    <state x="1932" y="62" width="1210" height="957" key="CommitChangelistDialog2" timestamp="1584268634984">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="369" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1583747185442" />
-    <state x="1932" y="62" width="1210" height="957" key="CommitChangelistDialog2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584201428915" />
+    <state x="1932" y="62" width="1210" height="957" key="CommitChangelistDialog2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584268634984" />
     <state x="1932" y="62" key="CommitChangelistDialog2/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1584202397730" />
-    <state width="1899" height="304" key="GridCell.Tab.0.bottom" timestamp="1584201967726">
+    <state width="1899" height="304" key="GridCell.Tab.0.bottom" timestamp="1584268736294">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state width="1419" height="732" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1583747121546" />
-    <state width="1899" height="304" key="GridCell.Tab.0.bottom/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584201967726" />
+    <state width="1899" height="304" key="GridCell.Tab.0.bottom/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584268736294" />
     <state width="1899" height="158" key="GridCell.Tab.0.bottom/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1583769832975" />
-    <state width="1899" height="304" key="GridCell.Tab.0.center" timestamp="1584201967724">
+    <state width="1899" height="304" key="GridCell.Tab.0.center" timestamp="1584268736292">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state width="1419" height="732" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1583747121544" />
-    <state width="1899" height="304" key="GridCell.Tab.0.center/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584201967724" />
+    <state width="1899" height="304" key="GridCell.Tab.0.center/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584268736292" />
     <state width="1899" height="158" key="GridCell.Tab.0.center/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1583769832973" />
-    <state width="1899" height="304" key="GridCell.Tab.0.left" timestamp="1584201967721">
+    <state width="1899" height="304" key="GridCell.Tab.0.left" timestamp="1584268736291">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state width="1419" height="732" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1583747121543" />
-    <state width="1899" height="304" key="GridCell.Tab.0.left/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584201967721" />
+    <state width="1899" height="304" key="GridCell.Tab.0.left/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584268736291" />
     <state width="1899" height="158" key="GridCell.Tab.0.left/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1583769832972" />
-    <state width="1899" height="304" key="GridCell.Tab.0.right" timestamp="1584201967725">
+    <state width="1899" height="304" key="GridCell.Tab.0.right" timestamp="1584268736293">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state width="1419" height="732" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1583747121545" />
-    <state width="1899" height="304" key="GridCell.Tab.0.right/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584201967725" />
+    <state width="1899" height="304" key="GridCell.Tab.0.right/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584268736293" />
     <state width="1899" height="158" key="GridCell.Tab.0.right/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1583769832974" />
     <state width="1899" height="374" key="GridCell.Tab.1.bottom" timestamp="1583088815290">
       <screen x="1440" y="0" width="1920" height="1080" />
@@ -657,11 +657,11 @@
     </state>
     <state x="1909" y="179" key="SettingsEditor/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1583069962333" />
     <state x="1909" y="179" key="SettingsEditor/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1584202649295" />
-    <state x="1867" y="228" key="Vcs.Push.Dialog.v2" timestamp="1584202399773">
+    <state x="1867" y="228" key="Vcs.Push.Dialog.v2" timestamp="1584268637987">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1583747187026" />
-    <state x="1867" y="228" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1583774909856" />
+    <state x="1867" y="228" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584268637987" />
     <state x="1867" y="228" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1584202399773" />
     <state x="75" y="62" width="1290" height="754" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1583746966021">
       <screen x="0" y="0" width="1440" height="900" />

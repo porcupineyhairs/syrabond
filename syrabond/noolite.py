@@ -132,7 +132,7 @@ class NooliteTX(NooliteBase):
 class NooliteSwitch(NooliteTX):
 
     def __init__(self, channel):
-        super(NooliteTX, self).__init__()
+        super().__init__()
         self.channel = channel
 
     def on(self):
