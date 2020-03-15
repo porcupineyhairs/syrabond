@@ -1,7 +1,7 @@
 from uuid import uuid1
 from sys import exit
 
-from syrabond import mqttsender, common, orm, automation, homekit
+from syrabond import mqttsender, common, orm, automation, homekit, noolite
 
 
 class Facility:
@@ -81,6 +81,8 @@ class Facility:
                 resource = Sensor(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
             elif res.type == 'thermo':
                 resource = VirtualAppliance(res.uid, res.type, res.group, res.hrn, tags)
+            elif res.type == 'noolite-sw':
+                resource = noolite.NooliteSwitch(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
             if resource:
                 self.resources[res.uid] = resource
 
@@ -395,7 +397,6 @@ class Device(Resource):
 class Switch(Device):
 
     def __init__(self, *args):
-        print(f'Args in device {args}')
         super().__init__(*args)
 
     # Mapping 'what-to-send': 'what-to-store'
