@@ -143,3 +143,4 @@ class NooliteSwitch(NooliteTX, Switch):
 
     def off(self):
         self.turn_off(self.channel)
+
