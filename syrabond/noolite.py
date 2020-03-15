@@ -134,8 +134,8 @@ class NooliteTX(NooliteBase):
 class NooliteSwitch(NooliteTX, Switch):
 
     def __init__(self, uid, type, group, hrn, tags, pir, channels):
-        NooliteTX.__init__()
-        Switch.__init__(uid, type, group, hrn, tags, pir, channels)
+        NooliteTX.__init__(self)
+        Switch.__init__(self, uid, type, group, hrn, tags, pir, channels)
         self.channel = channels - 1
 
     def on(self):
