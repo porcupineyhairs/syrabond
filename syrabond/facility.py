@@ -82,7 +82,7 @@ class Facility:
             elif res.type == 'thermo':
                 resource = VirtualAppliance(res.uid, res.type, res.group, res.hrn, tags)
             elif res.type == 'noolite-sw':
-                resource = noolite.NooliteSwitch(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
+                resource = NooliteSwitch(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
             if resource:
                 self.resources[res.uid] = resource
 
@@ -471,6 +471,21 @@ class Switch(Device):
             self.on()
         elif cmd == '0':
             self.off()
+
+
+class NooliteSwitch(noolite.NooliteTX, Switch):
+
+    def __init__(self, *args):
+        print('args: ', *args)
+        Switch.__init__(self, *args)
+        noolite.NooliteTX.__init__(self)
+        self.channel = args[-1] - 1
+
+    def on(self):
+        self.turn_on(self.channel)
+
+    def off(self):
+        self.turn_off(self.channel)
 
 
 class Sensor(Device):

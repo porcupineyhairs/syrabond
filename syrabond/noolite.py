@@ -130,17 +130,3 @@ class NooliteTX(NooliteBase):
         device.controlWrite(usb1.REQUEST_TYPE_CLASS | usb1.RECIPIENT_INTERFACE | usb1.ENDPOINT_OUT, 0x9, 0x300, 0, bytes(cmd), 1000)
 
 
-class NooliteSwitch(NooliteTX, Switch):
-
-    def __init__(self, *args):
-        print('args: ', *args)
-        Switch.__init__(self, *args)
-        NooliteTX.__init__(self)
-        self.channel = args[-1] - 1
-
-    def on(self):
-        self.turn_on(self.channel)
-
-    def off(self):
-        self.turn_off(self.channel)
-
