@@ -1,11 +1,6 @@
 import usb1
 from contextlib import contextmanager
 
-from .facility import Switch
-
-
-
-
 
 class NooliteBase(object):
 
