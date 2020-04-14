@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4fc2e0fc-acda-4d3b-b22a-2fa2a04360b6" name="Default" comment="feature: Noolite switch introduced">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/syrabond/facility.py" beforeDir="false" afterPath="$PROJECT_DIR$/syrabond/facility.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/syrabond/homekit.py" beforeDir="false" afterPath="$PROJECT_DIR$/syrabond/homekit.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +36,7 @@
     <option name="showMembers" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="fileTemplates" />
@@ -71,6 +73,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/syrabond/automation.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -92,6 +95,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/syrabond/homekit.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -113,6 +117,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -134,6 +139,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/syrabond/restful.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -155,6 +161,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/syradaemon.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -191,13 +198,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1571988612919</updated>
-    </task>
-    <task id="LOCAL-00094" summary="feature: Reloading scenarios into daemon instance.">
-      <created>1578843994860</created>
-      <option name="number" value="00094" />
-      <option name="presentableId" value="LOCAL-00094" />
-      <option name="project" value="LOCAL" />
-      <updated>1578843994860</updated>
+      <workItem from="1586889042829" duration="76000" />
     </task>
     <task id="LOCAL-00095" summary="bug fixed: scens is dict now.">
       <created>1578845149454</created>
@@ -535,7 +536,14 @@
       <option name="project" value="LOCAL" />
       <updated>1584286280991</updated>
     </task>
-    <option name="localTasksCounter" value="143" />
+    <task id="LOCAL-00143" summary="feature: Noolite switch introduced">
+      <created>1584286344034</created>
+      <option name="number" value="00143" />
+      <option name="presentableId" value="LOCAL-00143" />
+      <option name="project" value="LOCAL" />
+      <updated>1584286344034</updated>
+    </task>
+    <option name="localTasksCounter" value="144" />
     <servers />
   </component>
   <component name="TodoView">
@@ -546,6 +554,9 @@
       <are-packages-shown value="true" />
       <is-autoscroll-to-source value="true" />
     </todo-panel>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -595,38 +606,38 @@
     <state x="318" y="168" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1583677294452" />
     <state x="1864" y="202" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1583774225077" />
     <state x="1864" y="202" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1583070533409" />
-    <state x="1932" y="62" width="1210" height="957" key="CommitChangelistDialog2" timestamp="1584286280824">
+    <state x="1932" y="62" width="1210" height="957" key="CommitChangelistDialog2" timestamp="1586889143053">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="369" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1583747185442" />
-    <state x="1932" y="62" width="1210" height="957" key="CommitChangelistDialog2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584286280824" />
+    <state x="1932" y="62" width="1210" height="957" key="CommitChangelistDialog2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1586889143053" />
     <state x="1932" y="62" key="CommitChangelistDialog2/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1584202397730" />
     <state x="1540" y="100" width="1720" height="880" key="DiffContextDialog" timestamp="1584282830339">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="1540" y="100" width="1720" height="880" key="DiffContextDialog/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1584282830339" />
-    <state width="1899" height="208" key="GridCell.Tab.0.bottom" timestamp="1584282044404">
-      <screen x="1440" y="0" width="1920" height="1080" />
+    <state width="1899" height="208" key="GridCell.Tab.0.bottom" timestamp="1584468162923">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="732" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1583747121546" />
+    <state width="1899" height="208" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1584468162923" />
     <state width="1899" height="208" key="GridCell.Tab.0.bottom/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584282044404" />
     <state width="1899" height="158" key="GridCell.Tab.0.bottom/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1583769832975" />
-    <state width="1899" height="208" key="GridCell.Tab.0.center" timestamp="1584282044400">
-      <screen x="1440" y="0" width="1920" height="1080" />
+    <state width="1899" height="208" key="GridCell.Tab.0.center" timestamp="1584468162922">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="732" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1583747121544" />
+    <state width="1899" height="208" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1584468162922" />
     <state width="1899" height="208" key="GridCell.Tab.0.center/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584282044400" />
     <state width="1899" height="158" key="GridCell.Tab.0.center/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1583769832973" />
-    <state width="1899" height="208" key="GridCell.Tab.0.left" timestamp="1584282044393">
-      <screen x="1440" y="0" width="1920" height="1080" />
+    <state width="1899" height="208" key="GridCell.Tab.0.left" timestamp="1584468162919">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="732" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1583747121543" />
+    <state width="1899" height="208" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1584468162919" />
     <state width="1899" height="208" key="GridCell.Tab.0.left/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584282044393" />
     <state width="1899" height="158" key="GridCell.Tab.0.left/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1583769832972" />
-    <state width="1899" height="208" key="GridCell.Tab.0.right" timestamp="1584282044402">
-      <screen x="1440" y="0" width="1920" height="1080" />
+    <state width="1899" height="208" key="GridCell.Tab.0.right" timestamp="1584468162922">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="732" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1583747121545" />
+    <state width="1899" height="208" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1584468162922" />
     <state width="1899" height="208" key="GridCell.Tab.0.right/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584282044402" />
     <state width="1899" height="158" key="GridCell.Tab.0.right/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1583769832974" />
     <state width="1899" height="374" key="GridCell.Tab.1.bottom" timestamp="1583088815290">
@@ -650,11 +661,11 @@
     </state>
     <state x="1909" y="179" key="SettingsEditor/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1583069962333" />
     <state x="1909" y="179" key="SettingsEditor/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1584202649295" />
-    <state x="1867" y="228" key="Vcs.Push.Dialog.v2" timestamp="1584286291314">
+    <state x="1867" y="228" key="Vcs.Push.Dialog.v2" timestamp="1586889160501">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1583747187026" />
-    <state x="1867" y="228" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1584286291314" />
+    <state x="1867" y="228" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1586889160501" />
     <state x="1867" y="228" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.23.1440.877@1440.0.1920.1080" timestamp="1584202399773" />
     <state x="75" y="62" width="1290" height="754" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1583746966021">
       <screen x="0" y="0" width="1440" height="900" />
