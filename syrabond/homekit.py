@@ -35,7 +35,7 @@ class iSensor(Accessory):
             self.char_humidity = serv_humidity.configure_char('CurrentRelativeHumidity')
         print(self.resource)
 
-    @Accessory.run_at_interval(30)
+    @Accessory.run_at_interval(300)
     def run(self):
         if self.temp and self.resource.state.get('temp'):
             self.char_temp.set_value(float(self.resource.state['temp']))
