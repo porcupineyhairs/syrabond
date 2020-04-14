@@ -1,7 +1,9 @@
+import os
+import sys
 from uuid import uuid1
 from sys import exit
 
-from syrabond import mqttsender, common, orm, automation, homekit, noolite
+from syrabond import mqttsender, common, orm, automation, homekit, behaviors
 
 
 class Facility:
@@ -16,6 +18,7 @@ class Facility:
         self.virtual_apls = {}
         self.tags = {}
         self.addons={}
+        self.behaviors = {}
         self.name = name
         uid = str(uuid1())
         self.dbo = orm.DBO('mysql')  # TODO Choose DB interface with config
@@ -33,6 +36,7 @@ class Facility:
         Resource.dbo = self.dbo
         Resource.listener = self.listener
         Resource.sender = self.sender
+        Resource.behaviors = self.behaviors
 
         confs = common.extract_config('confs.json')
         self.equip_conf_file = confs['equipment']
@@ -76,7 +80,8 @@ class Facility:
             if res.channels:
                 channels = res.channels.split(',')
             if res.plugin:
-                if res.plugin == 'noolite':
+                if res.plugin == 'noolite' and not sys.platform == 'darwin':
+                    from .noolite import NooliteSwitch
                     resource = NooliteSwitch(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
             else:
                 if res.type == 'switch':
@@ -275,9 +280,9 @@ class Resource:
     tags: list of associated tags.
     """
 
-    listener, sender, dbo, basename = None, None, None, 'default'
+    behaviors, listener, sender, dbo, basename = None, None, None, None, 'default'
 
-    def __init__(self, uid, type, group, hrn, tags):
+    def __init__(self, uid, type, group, hrn, tags, *args, **kwargs):
         self.uid = uid
         self.type = type
         self.group = group
@@ -289,6 +294,16 @@ class Resource:
         self.dbo = Resource.dbo
         self.state = None
         self.scens = dict()
+
+        if 'behavior' in kwargs:
+            try:
+                self.behavior = getattr(behaviors, kwargs.get('behavior'))
+                self.behaviors.update({self.behavior: {self, }})
+            except AttributeError:
+                self.behavior = None
+        else:
+            self.behavior = None
+
         self.check_state()
 
     def __repr__(self):
@@ -302,6 +317,8 @@ class Resource:
             self.state = state
             self.dbo.update_state(self.uid, self.state)
             common.log(f'The state of {self} changed to {state}')
+            if self.behavior:
+                self.behavior(self)
 
     def get_state(self):
         return self.dbo.get_state(self.uid)
@@ -474,21 +491,6 @@ class Switch(Device):
             self.on()
         elif cmd == '0':
             self.off()
-
-
-class NooliteSwitch(noolite.NooliteTX, Switch):
-
-    def __init__(self, *args):
-        print('args: ', *args)
-        Switch.__init__(self, *args)
-        noolite.NooliteTX.__init__(self)
-        self.channel = int(args[-1][0]) - 1
-
-    def on(self):
-        self.turn_on(self.channel)
-
-    def off(self):
-        self.turn_off(self.channel)
 
 
 class Sensor(Device):

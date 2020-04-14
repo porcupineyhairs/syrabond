@@ -237,6 +237,7 @@ class Resource(Base):
     state = relationship("State")
     status = relationship("Status")
     tags = relationship("Tags")
+    behavior = Column(String(40))
 
     def __repr__(self):
         return "<Resource(uid='{}'>".format(self.uid)

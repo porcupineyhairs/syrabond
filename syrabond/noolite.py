@@ -1,6 +1,8 @@
 import usb1
 from contextlib import contextmanager
 
+from syrabond import facility
+
 
 class NooliteBase(object):
 
@@ -124,4 +126,18 @@ class NooliteTX(NooliteBase):
 
         device.controlWrite(usb1.REQUEST_TYPE_CLASS | usb1.RECIPIENT_INTERFACE | usb1.ENDPOINT_OUT, 0x9, 0x300, 0, bytes(cmd), 1000)
 
+
+class NooliteSwitch(NooliteTX, facility.Switch):
+
+    def __init__(self, *args):
+        print('args: ', *args)
+        facility.Switch.__init__(self, *args)
+        NooliteTX.__init__(self)
+        self.channel = int(args[-1][0]) - 1
+
+    def on(self):
+        self.turn_on(self.channel)
+
+    def off(self):
+        self.turn_off(self.channel)
 
