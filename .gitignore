@@ -1,0 +1,5 @@
+.idea
+*.xml
+global.json
+_mac
+codestyles

@@ -1,19 +1,24 @@
-from syrabond import mqttsender, common, database, orm, automation
+import os
+import sys
 from uuid import uuid1
 from sys import exit
+
+from syrabond import mqttsender, common, orm, automation, homekit, behaviors
 
 
 class Facility:
     """
     The main common class. While initialization it creates instances of all the resources and premises, connects DBO.
-    All of resources are stored in dicts.
+    All of resources are being stored in dict.
     """
 
-    def __init__(self, name: str, listen=False):
+    def __init__(self, name: str, listen=False, **kwargs):
         self.premises = {}
         self.resources = {}
         self.virtual_apls = {}
         self.tags = {}
+        self.addons={}
+        self.behaviors = {}
         self.name = name
         uid = str(uuid1())
         self.dbo = orm.DBO('mysql')  # TODO Choose DB interface with config
@@ -31,6 +36,7 @@ class Facility:
         Resource.dbo = self.dbo
         Resource.listener = self.listener
         Resource.sender = self.sender
+        Resource.behaviors = self.behaviors
 
         confs = common.extract_config('confs.json')
         self.equip_conf_file = confs['equipment']
@@ -45,10 +51,25 @@ class Facility:
         self.build_scenarios()
         self.build_premises(config['premises'])
         self.build_bindings(config['bind'])
+
+        if 'addons' in kwargs:
+            if 'homekit' in kwargs['addons']:
+                home_kit = homekit.HomeKit(self)
+                self.addons.update({'homekit': home_kit})
+                home_kit.run()
+
         config.clear()
 
     def __repr__(self):
         return f'Syrabond facility \"{self.name}\" containing {self.resources.__len__()} resources'
+
+    def shutdown(self):
+        if isinstance(self.listener, mqttsender.Mqtt):
+            self.listener.disconnect()
+        self.dbo.connection.close()
+        if 'homekit' in self.addons:
+            self.addons['homekit'].driver.stop()
+            self.addons['homekit'].driver_thread.join()
 
     def build_resources(self):
         resources_loaded = self.dbo.load_resources()  # Loading resources params from DB and creating instances
@@ -58,12 +79,18 @@ class Facility:
             tags = self.dbo.get_tags(res.uid)
             if res.channels:
                 channels = res.channels.split(',')
-            if res.type == 'switch':
-                resource = Switch(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
-            elif res.type == 'sensor':
-                resource = Sensor(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
-            elif res.type == 'thermo':
-                resource = VirtualAppliance(res.uid, res.type, res.group, res.hrn, tags)
+            if res.plugin:
+                if res.plugin == 'noolite' and not sys.platform == 'darwin':
+                    from .noolite import NooliteSwitch
+                    resource = NooliteSwitch(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
+            else:
+                if res.type == 'switch':
+                    resource = Switch(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
+                elif res.type == 'sensor':
+                    resource = Sensor(res.uid, res.type, res.group, res.hrn, tags, res.pir, channels)
+                elif res.type == 'thermo':
+                    resource = VirtualAppliance(res.uid, res.type, res.group, res.hrn, tags)
+
             if resource:
                 self.resources[res.uid] = resource
 
@@ -154,8 +181,6 @@ class Facility:
         if isinstance(self.listener, mqttsender.Dumb):
             return None
         while self.listener.message_buffer.size:
-            print(self.listener.message_buffer.size)
-            print(self.listener.message_buffer)
             payload = self.listener.message_buffer.dequeue()
             type, id, channel = parse_topic(payload[0])
             msg = payload[1]
@@ -167,7 +192,7 @@ class Facility:
             elif type == 'switch':
                 self.resources[id].update_state(msg.upper())
             elif type == 'thermo':
-                self.premises[id].thermostat.update_state(msg)
+                self.resources[id].update_state(msg)
             elif type == 'status':
                 if id in self.resources:
                     self.resources[id].update_status(msg)
@@ -255,9 +280,9 @@ class Resource:
     tags: list of associated tags.
     """
 
-    listener, sender, dbo, basename = None, None, None, 'default'
+    behaviors, listener, sender, dbo, basename = None, None, None, None, 'default'
 
-    def __init__(self, uid, type, group, hrn, tags):
+    def __init__(self, uid, type, group, hrn, tags, *args, **kwargs):
         self.uid = uid
         self.type = type
         self.group = group
@@ -269,6 +294,16 @@ class Resource:
         self.dbo = Resource.dbo
         self.state = None
         self.scens = dict()
+
+        if 'behavior' in kwargs:
+            try:
+                self.behavior = getattr(behaviors, kwargs.get('behavior'))
+                self.behaviors.update({self.behavior: {self, }})
+            except AttributeError:
+                self.behavior = None
+        else:
+            self.behavior = None
+
         self.check_state()
 
     def __repr__(self):
@@ -282,6 +317,8 @@ class Resource:
             self.state = state
             self.dbo.update_state(self.uid, self.state)
             common.log(f'The state of {self} changed to {state}')
+            if self.behavior:
+                self.behavior(self)
 
     def get_state(self):
         return self.dbo.get_state(self.uid)
@@ -378,6 +415,16 @@ class Device(Resource):
 
 
 class Switch(Device):
+
+    def __init__(self, *args):
+        super().__init__(*args)
+
+    # Mapping 'what-to-send': 'what-to-store'
+    command_map = {
+        'off': 'OFF',
+        'on': 'ON'
+    }
+
     """Class to represent switches"""
 
     def update_state(self, state):
@@ -395,9 +442,9 @@ class Switch(Device):
     def toggle(self):
         self.get_state()
         try:
-            if self.state == 'ON':
+            if self.state == Switch.command_map['on']:
                 self.off()
-            elif self.state == 'OFF':
+            elif self.state == Switch.command_map['off']:
                 self.on()
             else:
                 return False
@@ -424,7 +471,7 @@ class Switch(Device):
     def on(self):
         try:
             self.sender.mqttsend(self.topic, 'on', retain=True)
-            self.update_state('ON')
+            self.update_state(Switch.command_map['on'])
             return True
         except Exception as e:
             common.log(f'Error while turning {self.uid} on: {e}')
@@ -433,7 +480,7 @@ class Switch(Device):
     def off(self):
         try:
             self.sender.mqttsend(self.topic, 'off', retain=True)
-            self.update_state('OFF')
+            self.update_state(Switch.command_map['off'])
             return True
         except Exception as e:
             common.log(f'Error while turning {self.uid} off: {e}')

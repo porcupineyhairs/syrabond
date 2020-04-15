@@ -18,7 +18,7 @@ class DBO:
                                         config['user'], config['password'], config['host'], config['database']),
                                         pool_pre_ping=True)
         self.Session = sessionmaker(bind=self.engine)
-        self.engine.connect()
+        self.connection = self.engine.connect()
         self.log = common.log
         Base.metadata.create_all(self.engine)
 
@@ -233,9 +233,11 @@ class Resource(Base):
     hrn = Column(String(40))
     channels = Column(String(20))
     pir = Column(Boolean)
+    plugin = Column(String(20))
     state = relationship("State")
     status = relationship("Status")
     tags = relationship("Tags")
+    behavior = Column(String(40))
 
     def __repr__(self):
         return "<Resource(uid='{}'>".format(self.uid)
