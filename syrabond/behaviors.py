@@ -1,6 +1,32 @@
-from syrabond.facility import Resource
+import threading
+from datetime import datetime, timedelta
 
-# TODO короч у нас есть дикт, там лежат все ресурсы в данном поведении. Вот по ним и работаем
-def ventilation(resource: Resource):
-    if resource.uid == 'switch-1603eb00-v0.1':
-        pass
+
+def invent(resource):
+    t = None
+
+    WORKING_TIME = 10
+    STANDBY_TIME = 20
+
+    if hasattr(resource, 'timer'):
+        print(resource.timer)
+        if resource.timer.get('finish_time') > datetime.now():
+            resource.timer.get('timer_thread', threading.Timer(1, lambda: print(1))).cancel()
+            print('CANCELED!!!')
+
+            return
+
+    if resource.state == 'ON':
+        t = threading.Timer(WORKING_TIME, resource.off)
+        setattr(resource, 'timer', {
+            'finish_time': datetime.now()+timedelta(minutes=WORKING_TIME),
+            'timer_thread': t
+        })
+    if resource.state == 'OFF':
+        t = threading.Timer(STANDBY_TIME, resource.on)
+        setattr(resource, 'timer', {
+            'finish_time': datetime.now()+timedelta(minutes=STANDBY_TIME),
+            'timer_thread': t
+        })
+    if t:
+        t.start()

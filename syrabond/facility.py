@@ -18,7 +18,6 @@ class Facility:
         self.virtual_apls = {}
         self.tags = {}
         self.addons={}
-        self.behaviors = {}
         self.name = name
         uid = str(uuid1())
         self.dbo = orm.DBO('mysql')  # TODO Choose DB interface with config
@@ -36,7 +35,6 @@ class Facility:
         Resource.dbo = self.dbo
         Resource.listener = self.listener
         Resource.sender = self.sender
-        Resource.behaviors = self.behaviors
 
         confs = common.extract_config('confs.json')
         self.equip_conf_file = confs['equipment']
@@ -92,6 +90,9 @@ class Facility:
                     resource = VirtualAppliance(res.uid, res.type, res.group, res.hrn, tags)
 
             if resource:
+                if res.behavior:
+                    resource.behavior = getattr(behaviors, res.behavior, None)
+
                 self.resources[res.uid] = resource
 
     def build_scenarios(self):
@@ -294,16 +295,7 @@ class Resource:
         self.dbo = Resource.dbo
         self.state = None
         self.scens = dict()
-
-        if 'behavior' in kwargs:
-            try:
-                self.behavior = getattr(behaviors, kwargs.get('behavior'))
-                self.behaviors.update({self.behavior: {self, }})
-            except AttributeError:
-                self.behavior = None
-        else:
-            self.behavior = None
-
+        self.behavior = None
         self.check_state()
 
     def __repr__(self):
@@ -317,6 +309,9 @@ class Resource:
             self.state = state
             self.dbo.update_state(self.uid, self.state)
             common.log(f'The state of {self} changed to {state}')
+            for scen in self.scens.values():
+                if scen.check_conditions(self) and scen.active:
+                    scen.workout()
             if self.behavior:
                 self.behavior(self)
 
@@ -415,6 +410,7 @@ class Device(Resource):
 
 
 class Switch(Device):
+    """Class to represent switches"""
 
     def __init__(self, *args):
         super().__init__(*args)
@@ -424,17 +420,6 @@ class Switch(Device):
         'off': 'OFF',
         'on': 'ON'
     }
-
-    """Class to represent switches"""
-
-    def update_state(self, state):
-        if not self.state == state:
-            self.state = state
-            self.dbo.update_state(self.uid, self.state)
-            common.log(f'The state of {self} changed to {state}')
-            for scen in self.scens.values():
-                if scen.check_conditions(self) and scen.active:
-                    scen.workout()
 
     def connect(self):
         self.listener.subscribe(self.topic)
