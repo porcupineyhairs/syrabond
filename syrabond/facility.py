@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 from uuid import uuid1
@@ -91,7 +92,11 @@ class Facility:
 
             if resource:
                 if res.behavior:
-                    resource.behavior = getattr(behaviors, res.behavior, None)
+                    resource.behavior = {
+                        'function': getattr(behaviors, res.behavior[0].function, lambda x: x),
+                        'params': json.loads(res.behavior[0].params)
+                    }
+
 
                 self.resources[res.uid] = resource
 
@@ -281,7 +286,7 @@ class Resource:
     tags: list of associated tags.
     """
 
-    behaviors, listener, sender, dbo, basename = None, None, None, None, 'default'
+    listener, sender, dbo, basename = None, None, None, 'default'
 
     def __init__(self, uid, type, group, hrn, tags, *args, **kwargs):
         self.uid = uid
@@ -313,7 +318,7 @@ class Resource:
                 if scen.check_conditions(self) and scen.active:
                     scen.workout()
             if self.behavior:
-                self.behavior(self)
+                self.behavior['function'](self, self.behavior['params'])
 
     def get_state(self):
         return self.dbo.get_state(self.uid)

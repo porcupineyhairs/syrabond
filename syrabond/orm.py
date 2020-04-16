@@ -1,7 +1,7 @@
 import sqlalchemy as sql
 
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Integer, Column, String, Boolean, ForeignKey, CHAR
+from sqlalchemy import Integer, Column, String, Boolean, ForeignKey, CHAR, Text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import relationship
 
@@ -237,7 +237,7 @@ class Resource(Base):
     state = relationship("State")
     status = relationship("Status")
     tags = relationship("Tags")
-    behavior = Column(String(40))
+    behavior = relationship("Behaviors", lazy="joined")
 
     def __repr__(self):
         return "<Resource(uid='{}'>".format(self.uid)
@@ -347,5 +347,14 @@ class Schedule(Base):
     end = Column(String(9))
     scenario = Column(Integer, ForeignKey('scenarios.id'))
 
+
+class Behaviors(Base):
+    __tablename__ = 'behaviors'
+    id = Column(Integer, primary_key=True)
+    function = Column(String(40))
+    name = Column(String(40))
+    params = Column(Text)
+    resource = Column(String(40), ForeignKey('resources.uid'))
+
     def __repr__(self):
-        return "<Schedule(id='{}')>".format(self.id)
+        return "<Behaviors(id='{}')>".format(self.id)
