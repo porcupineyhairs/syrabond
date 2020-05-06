@@ -94,7 +94,8 @@ class Facility:
                 if res.behavior:
                     resource.behavior = {
                         'function': getattr(behaviors, res.behavior[0].function, lambda x: x),
-                        'params': json.loads(res.behavior[0].params)
+                        'params': json.loads(res.behavior[0].params),
+                        'active': res.behavior[0].active
                     }
 
 
@@ -317,7 +318,7 @@ class Resource:
             for scen in self.scens.values():
                 if scen.check_conditions(self) and scen.active:
                     scen.workout()
-            if self.behavior:
+            if self.behavior and self.behavior['active']:
                 self.behavior['function'](self, self.behavior['params'])
 
     def get_state(self):

@@ -351,10 +351,11 @@ class Schedule(Base):
 class Behaviors(Base):
     __tablename__ = 'behaviors'
     id = Column(Integer, primary_key=True)
+    active = Column(Boolean)
     function = Column(String(40))
     name = Column(String(40))
     params = Column(Text)
     resource = Column(String(40), ForeignKey('resources.uid'))
 
     def __repr__(self):
-        return "<Behaviors(id='{}')>".format(self.id)
+        return "<Behavior(id='{}')>".format(self.id)
