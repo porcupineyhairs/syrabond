@@ -2,11 +2,21 @@ import threading
 from datetime import datetime, timedelta
 
 
-def invent(resource):
+def timed_throwback(resource, params: dict):
+    """
+    :param resource: facility.Resource
+    :param params: dict()
+    {
+    'working_time': int (minutes)
+    'standby_time;: int (minutes)
+    }
+    :return: None
+    """
+
     t = None
 
-    WORKING_TIME = 10
-    STANDBY_TIME = 20
+    WORKING_TIME = params.get('working_time')
+    STANDBY_TIME = params.get('standby_time')
 
     if hasattr(resource, 'timer'):
 
