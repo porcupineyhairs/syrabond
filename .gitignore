@@ -3,3 +3,14 @@
 global.json
 _mac
 codestyles
+inspection
+
+.git/*
+
+migrations
+static
+
+__pycache__
+*.pyc
+
+local.py
