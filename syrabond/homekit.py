@@ -2,9 +2,9 @@ from threading import Thread
 
 from pyhap.accessory import Accessory, Bridge
 from pyhap.accessory_driver import AccessoryDriver
-from pyhap.const import CATEGORY_SWITCH, CATEGORY_SENSOR, CATEGORY_THERMOSTAT
+from pyhap.const import CATEGORY_SWITCH, CATEGORY_SENSOR
 
-from .common import log
+from syrabond2.main_app.common import log
 
 
 class iSensor(Accessory):

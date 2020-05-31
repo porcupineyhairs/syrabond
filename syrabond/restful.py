@@ -1,7 +1,7 @@
 import flask
 import json
 from os import path
-from syrabond import common
+from syrabond2.main_app import common
 from syrabond.api import API
 
 

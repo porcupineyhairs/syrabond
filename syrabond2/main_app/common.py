@@ -20,27 +20,26 @@ def log(line, log_type='info'):
         logging.warning(' {} {}'.format(time_string, line))
 
 
-def extract_config(file_name):
-    # type: (str) -> dict
+def extract_config(file_path: str) -> dict:
+
     """
     Opens file and extracting json to dict.
     :rtype: dict
-    :param file_name: path to config file
+    :param file_path: path to config file
     """
     try:
-        f = open(path.join(confs_dir, file_name), 'r')
-        items = json.loads(f.read())
-        f.close()
+        with open(file_path, 'r') as f:
+            items = json.loads(f.read())
     except Exception as e:
-        log(f'Unable to open config file {file_name}: {e}', 'error')
+        log(f'Unable to open config file {file_path}: {e}', 'error')
         return {}
     return items
 
 
 def rewrite_config(file_name, content):
     try:
-        with open(confs_dir+file_name, 'w') as f:
-             f.write(json.dumps(content, ensure_ascii=False, indent=4, sort_keys=True))
+        with open(dir+file_name, 'w') as f:
+            f.write(json.dumps(content, ensure_ascii=False, indent=4, sort_keys=True))
     except Exception as e:
         print(e)
         return False
@@ -55,11 +54,11 @@ logging_levels = {
     'DEBUG': 10
 }
 
-working_dir = path.split(path.dirname(path.abspath(__file__)))[0]
-chdir(working_dir)
-confs_dir = working_dir
-conf = extract_config('global.json')
-log_file = path.join(working_dir, conf['log_file'])
-confs_dir = path.join(working_dir, conf['confs_dir'])
-logging.basicConfig(filename=log_file, level=logging_levels[conf['log_level']])
-conf.clear()
+
+dir = path.split(path.dirname(path.abspath(__file__)))[0]
+
+config = extract_config(path.join(dir, 'conf.json'))
+log_file = path.join(dir, config.get('logging', {}).get('file'))
+log_level = logging_levels.get(config.get('logging', {}).get('level', 'INFO'))
+if log_file:
+    logging.basicConfig(filename=log_file, level=log_level)

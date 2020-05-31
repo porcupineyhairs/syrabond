@@ -1,5 +1,5 @@
 from syrabond import facility
-from syrabond.common import log
+from syrabond2.main_app.common import log
 
 
 class API:

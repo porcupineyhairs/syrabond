@@ -1,5 +1,5 @@
 import pymysql
-from syrabond import common
+from syrabond2.main_app import common
 from time import sleep
 
 

@@ -1,9 +1,7 @@
 import paho.mqtt.client as mqtt
 import sys
 from time import sleep
-from uuid import uuid1
-from syrabond.common import extract_config
-from syrabond.common import log
+from .common import config, log
 
 
 class Queue:
@@ -47,12 +45,12 @@ class Mqtt:
     Wrapper class for paho.mqtt.client.
     Handles connecting, subscribing, receiving and sending MQTT-messages.
     Holds the messages in own message buffer that used by other classes to get messages.
-    Accepts mqtt.json file in config dir to get config.
+    Accepts conf.json file in config dir to get config.
     """
 
-    def __init__(self, name, config='mqtt.json', clean_session=True):
+    def __init__(self, name, config=config, clean_session=True, handler=None):
         self.connected = False
-        mqtt_config = extract_config(config)
+        mqtt_config = config.get('mqtt')
         self.name = name
         self.clean_session = clean_session
         self.root = mqtt_config['object_name']
@@ -63,6 +61,8 @@ class Mqtt:
         self.client.on_message = self.message_to_buffer
         self.client.on_disconnect = self.on_disconnect
         self.message_buffer = Queue()
+        self.external_handler = handler
+        self.subscriptions = []
 
     def connect(self):
         try:
@@ -98,10 +98,14 @@ class Mqtt:
         """Subscribes to the topic specifies. Logs activity and errors."""
         while not self.connected:
             if not self.connect():
-                sleep(5)
+                sleep(1)
         try:
-            self.client.subscribe(topic)
-            log('Subscribed: '+topic, log_type='debug')
+            if topic not in self.subscriptions:
+                self.client.subscribe(topic)
+                self.subscriptions.append(topic)
+                log('Subscribed: '+topic, log_type='debug')
+            else:
+                log('Already subscribed on '+topic, log_type='debug')
             return True
         except Exception as e:
             log('Could not subscribe', log_type='error')
@@ -110,12 +114,21 @@ class Mqtt:
     def check_for_messages(self):
         self.client.loop()
 
+    def go_for_messages(self):
+        self.client.loop_start()
+
     def wait_for_messages(self):
-        self.client.loop_forever()
+        self.client.loop_forever(retry_first_connection=True)
 
     def message_to_buffer(self, client, userdata, message):
         if message:
             log(f' Got {message.payload.decode()} in {message.topic}', log_type='debug')
+
+            if self.external_handler:
+                payload = parse_topic(message.topic)
+                payload.append(message.payload.decode())
+                self.external_handler.handle(payload)
+
             self.message_buffer.enqueue((message.topic, message.payload.decode()))
 
     def disconnect(self):
@@ -140,6 +153,19 @@ class Dumb:
     def subscribe(self, topic):
         pass
         #print('Dumb would not subscribe')
+
+
+#sender = Mqtt('syrabond_sender_' + str(uuid()), config='conf.json', clean_session=True)
+
+def parse_topic(topic: str):
+    """Split topic by / sign and return tuple of type, id and channel"""
+    _type, _id, channel = None, None, None
+    splited = topic.split('/')
+    _type = topic.split('/')[1]
+    _id = topic.split('/')[2]
+    if len(splited) == 4:
+        channel = topic.split('/')[3]
+    return [_type, _id, channel]
 
 
 if __name__ == "__main__":

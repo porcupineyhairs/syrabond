@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class MainAppConfig(AppConfig):
-    name = 'main_app'
+    name = 'syrabond2.main_app'

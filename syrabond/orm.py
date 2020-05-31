@@ -5,7 +5,7 @@ from sqlalchemy import Integer, Column, String, Boolean, ForeignKey, CHAR, Text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import relationship
 
-from syrabond import common
+from syrabond2.main_app import common
 
 Base = declarative_base()
 
@@ -13,7 +13,7 @@ Base = declarative_base()
 class DBO:
 
     def __init__(self, sql_engine: str):
-        config = common.extract_config(sql_engine+'.json')
+        config = common.extract_config(sql_engine + '.json')
         self.engine = sql.create_engine('mysql+pymysql://{}:{}@{}/{}?charset=utf8'.format(  # TODO Make dependence to sql_engine
                                         config['user'], config['password'], config['host'], config['database']),
                                         pool_pre_ping=True)

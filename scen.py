@@ -5,7 +5,7 @@ import syrabond
 import json
 import sys
 from pathlib import Path
-from syrabond.common import extract_config
+from syrabond2.main_app.common import extract_config
 
 KEYWORDS = {
     'device': 'shift_device',

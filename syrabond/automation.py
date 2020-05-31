@@ -1,6 +1,6 @@
 import time
 import syrabond.facility
-from syrabond.common import log
+from syrabond2.main_app.common import log
 
 #  TODO: 1) For each scenario should be 2 subscenarios: start and finish;les
 

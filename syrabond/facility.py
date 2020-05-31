@@ -1,10 +1,10 @@
 import json
-import os
 import sys
 from uuid import uuid1
 from sys import exit
 
-from syrabond import mqttsender, common, orm, automation, homekit, behaviors
+from syrabond import orm, automation, homekit, behaviors
+from syrabond2.main_app import mqttsender, common
 
 
 class Facility:
@@ -25,12 +25,12 @@ class Facility:
         common.log('Creating Syrabond instance with uuid ' + uid)
         self.welcome_topic = '{}/{}/'.format('common', 'welcome')
         if listen:
-            self.listener = mqttsender.Mqtt('syrabond_listener_' + __name__, config='mqtt.json', clean_session=False)
+            self.listener = mqttsender.Mqtt('syrabond_listener_' + __name__, config='conf.json', clean_session=False)
             self.listener.subscribe('{}/{}/#'.format(self.name, 'status'))  # TODO Dehardcode status topic
             self.listener.subscribe(self.welcome_topic+'#')  # TODO Dehardcode welcome topic
         else:
             self.listener = mqttsender.Dumb()
-        self.sender = mqttsender.Mqtt('syrabond_sender_' + uid, config='mqtt.json', clean_session=True)
+        self.sender = mqttsender.Mqtt('syrabond_sender_' + uid, config='conf.json', clean_session=True)
 
         Resource.basename = name
         Resource.dbo = self.dbo
@@ -523,7 +523,7 @@ class Sensor(Device):
 
 
 def parse_topic(topic: str):
-    """Split topic by / sign and return touple of type, id and channel"""
+    """Split topic by / sign and return tuple of type, id and channel"""
     type = id = channel = None
     splited = topic.split('/')
     if len(splited) == 4:
