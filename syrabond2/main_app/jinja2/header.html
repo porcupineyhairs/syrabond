@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<header class="navbar navbar-light" style="background-color: #e3f2fd;">
+    <a class="navbar-brand" href="#">Syrabond</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link active" href="#">Shortcuts<span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="/premises/">Premises</a>
+            <a class="nav-item nav-link" href="#">Heating</a>
+        </div>
+    </div>
+
+</header>
+{% endblock %}

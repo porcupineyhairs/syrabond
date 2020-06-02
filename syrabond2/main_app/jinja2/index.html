@@ -1,0 +1,12 @@
+{% extends 'header.html' %}
+
+{% block content %}
+    <ul>
+{% for item in object_list %}
+
+    <li><a href="/switch/{{ item.uid }}">{{ item.title }}</a></li>
+
+
+{% endfor %}
+    </ul>
+{% endblock %}

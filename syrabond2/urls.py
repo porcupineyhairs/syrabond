@@ -18,14 +18,15 @@ from django.urls import path, include
 
 from rest_framework import routers
 
-from main_app import views
+from syrabond2.main_app import views
 
 
-router = routers.DefaultRouter()
+router = routers.SimpleRouter()
 
 router.register(r'switches', views.SwitchViewSet)
 
 urlpatterns = [
+    path('', include('main_app.urls')),
     path('api/v03/', include(router.urls)),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))

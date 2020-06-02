@@ -54,6 +54,11 @@ ROOT_URLCONF = 'urls'
 
 TEMPLATES = [
     {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'APP_DIRS': True,
+        'OPTIONS': {'environment': 'j2.environment', }
+    },
+    {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
         'APP_DIRS': True,
@@ -66,6 +71,7 @@ TEMPLATES = [
             ],
         },
     },
+
 ]
 
 REST_FRAMEWORK = {
@@ -130,7 +136,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    'main_app/static/'
+]
 
 
 # APP specific settings

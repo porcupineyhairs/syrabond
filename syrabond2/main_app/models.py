@@ -108,6 +108,7 @@ class Resource(BaseModel, ResourceApp):
 
     title = models.CharField(verbose_name='Название', max_length=100)
     uid = models.CharField(
+        primary_key=True,
         verbose_name='Идентификатор',
         max_length=50,
         blank=False,

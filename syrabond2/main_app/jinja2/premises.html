@@ -1,0 +1,61 @@
+{% extends 'header.html' %}
+
+{% block content %}
+    <div class="accordion" id="accordionExample">
+        {% for item in object_list %}
+        {% if not item.location%}
+            <div class="card" id="card-{{item.pk}}">
+            <div class="card-header" id="head-{{item.pk}}">
+                <h2 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-{{item.pk}}" aria-expanded="true" aria-controls="">
+                        <span>{{ item.title }}</span>
+                    </button>
+                </h2>
+            </div>
+                <div id="collapse-{{item.pk}}" class="collapse" aria-labelledby="head-{{item.pk}}">
+                    <div class="card-body" id="body-{{item.pk}}">
+                    <div class="p-2">
+                        {% for res in item.switch_resources.all() %}
+
+                            <div class="btn {{ 'btn-success' if res.state.current == 'ON' else 'btn-light' }} syra-switch" type="button" id="{{ res.uid }}">
+                                <span>{{ res.title }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="card" id="card-{{item.pk}}">
+                <div class="card-header" id="head-{{item.pk}}">
+                    <h2 class="mb-0">
+                        <div class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-{{item.pk}}" aria-expanded="true" aria-controls="">
+                            <span>{{ item.title }}</span>
+                        </div>
+                    </h2>
+                </div>
+                <div id="collapse-{{item.pk}}" class="collapse" aria-labelledby="head-{{item.pk}}">
+                    <div class="card-body" id="body-{{item.pk}}">
+                        <div class="p-2">
+                        {% for res in item.switch_resources.all() %}
+
+                            <div class="btn {{ 'btn-success' if res.state.current == 'ON' else 'btn-light' }} syra-switch" type="button" id="{{ res.uid }}">
+                                <span>{{ res.title }}</span>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript">
+                $("#body-{{item.location.pk}}").append($("#card-{{ item.pk }}").show());
+            </script>
+        {% endif %}
+
+        {% endfor %}
+    </div>
+
+    <script type="text/javascript">
+        setSwitchEventHandler();
+    </script>
+{% endblock %}

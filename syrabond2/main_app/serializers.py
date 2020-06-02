@@ -4,6 +4,7 @@ from .models import Switch, Sensor
 
 
 class SwitchSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = Switch
-        fields = ['title', 'uid']
+        fields = ['title', 'uid', 'state_']

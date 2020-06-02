@@ -50,6 +50,21 @@ class SwitchApp:
             print(f'Error while turning {self.uid} off: {e}')
             return False
 
+    def toggle(self):
+        try:
+            if self.state.current == Comm.command_map['off']:
+                self.sender.mqttsend(self.topic, 'on', retain=True)
+                self.state.current = Comm.command_map['on']
+                self.state.save()
+            elif self.state.current == Comm.command_map['on']:
+                self.sender.mqttsend(self.topic, 'off', retain=True)
+                self.state.current = Comm.command_map['off']
+                self.state.save()
+            return True
+        except Exception as e:
+            print(f'Error while turning {self.uid} off: {e}')
+            return False
+
 
 class SensorApp:
 
