@@ -207,7 +207,7 @@ class Switch(Resource, SwitchApp):
         verbose_name_plural = 'Выключатели'
 
 
-class Sensor(SensorApp, Resource):
+class Sensor(Resource, SensorApp):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
