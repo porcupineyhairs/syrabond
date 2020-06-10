@@ -98,7 +98,6 @@ class Facility:
                         'active': res.behavior[0].active
                     }
 
-
                 self.resources[res.uid] = resource
 
     def build_scenarios(self):
