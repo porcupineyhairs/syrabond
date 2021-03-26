@@ -1,10 +1,5 @@
-.idea
-*.xml
-global.json
-_mac
-codestyles
-inspection
 
+global.json
 .git/*
 
 migrations
