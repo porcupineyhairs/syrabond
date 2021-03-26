@@ -62,4 +62,4 @@ class SwitchViewSet(viewsets.ModelViewSet):
         serializer.save()
 
 
-facility = Facility()
+#facility = Facility()

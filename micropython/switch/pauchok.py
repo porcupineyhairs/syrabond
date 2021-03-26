@@ -42,7 +42,7 @@ class Mqttsender:
                 self.management_subscribe()
             except Exception as e:
                 print('Connecting error: ', e)
-                sleep(1)
+                sleep(5)
 
     def management_subscribe(self):
         is_error = False
@@ -58,7 +58,9 @@ class Mqttsender:
             return is_error
 
     def send(self, topic, message, retain=True):
+        is_error = False
         print('Sending ' + str(message) + ' in topic ' + str(topic) + '...')
+
         try:
             if not isinstance(topic, bytes):
                 topic = topic.encode()
@@ -66,13 +68,13 @@ class Mqttsender:
                 message = message.encode()
             self.c.publish(topic, message, retain=retain)
             print ('Data sent')
-            is_error = False
+
         except Exception as e:
             print ("Could not send data")
             print (e)
             is_error = True
         finally:
-            return (is_error)
+            return is_error
 
     def subscribe(self, topic, sub_cb):
         is_error = False
@@ -82,13 +84,13 @@ class Mqttsender:
             self.c.set_callback(sub_cb)
             self.c.subscribe(topic)
             print ('Subscribed: '+topic.decode())
-            is_error = False
+
         except Exception as e:
             print("Could not subscribe")
             print(e)
             is_error = True
         finally:
-            return(is_error)
+            return is_error
 
     def manage(self, command):
         print ('Maintenance command received')
@@ -115,13 +117,13 @@ def get_config(filename):
     try:
         with open(filename) as f:
             config = json.loads(f.read())
-            return (config)
+            return config
     except (OSError, ValueError):
         print("Couldn't load config ", filename)
-        print('Starting webrepl and reboot after 2 min.')
+        print('Starting webrepl and reboot after 5 min.')
         import webrepl
         webrepl.start()
-        sleep(120)
+        sleep(300)
         import machine
         machine.reset()
 

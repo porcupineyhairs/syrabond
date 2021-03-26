@@ -5,6 +5,7 @@ from uos import urandom as rnd
 import network
 from time import sleep
 
+
 def get_config():
     try:
      with open("/network.json") as f:
@@ -39,11 +40,7 @@ def get_config():
 
 
 def do_connect(config):
-    if led:
-        led.value(0)
-    t = int.from_bytes(rnd(1), 'little') // 12 + 1
-    print('Waiting ' + str(t) + ' sec.')  # wait randomized time to balance the load
-    sleep(t)
+
     sta_if = network.WLAN(network.STA_IF)
     ap_if = network.WLAN(network.AP_IF)
     ap_if.active(False)
@@ -57,10 +54,10 @@ def do_connect(config):
         while not sta_if.isconnected():
             if t < 60:
                 if led:
-                    led.value(0)
+                    led.value(OFF)
                 sleep(0.5)
                 if led:
-                    led.value(1)
+                    led.value(ON)
                 sleep(0.5)
                 t += 1
                 pass
@@ -88,31 +85,43 @@ def do_connect(config):
                             sleep(1)
                 if conn_flag:
                     if led:
-                        led.value(0)
+                        led.value(OFF)
                     sleep(1)
                     if led:
-                        led.value(1)
+                        led.value(ON)
                 else:
                     if led:
-                        led.value(0)
+                        led.value(OFF)
                     sleep(1.5)
                     if led:
-                        led.value(1)
+                        led.value(ON)
                     sleep(0.5)
     print('Connected:', sta_if.ifconfig())
     ap_if.active(False)
     if led:
-        led.value(1)
+        led.value(ON)
 
+
+t = int.from_bytes(rnd(1), 'little') // 12 + 1
+print('Waiting ' + str(t) + ' sec.')  # wait randomized time to balance the load
+sleep(t)
 
 led = None
 config = get_config()
+
 if 'led' in config:
     led = machine.Pin(int(config['led']), machine.Pin.OUT)
+    level = int(config.get('level', 0))
+    ON = int(level)
+    OFF = abs(ON-1)
+
+    led.value(OFF)
+
 do_connect(config)
 if config['debug']:
     import webrepl
     webrepl.start()
 gc.collect()
+
 if led:
-    led.value(1)
+    led.value(ON)

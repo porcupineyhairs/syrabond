@@ -1,4 +1,8 @@
-
+.idea
+*.xml
+_mac
+codestyles
+inspection
 global.json
 .git/*
 

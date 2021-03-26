@@ -2,7 +2,7 @@
       "mqtt": {
         "server": "192.168.88.12",
         "user": "dev",
-        "pass": "whatever",
+        "pass": "kal1966",
         "object": "sh",
         "channel": "switch",
         "keepalive": "300"
