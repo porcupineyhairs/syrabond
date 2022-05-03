@@ -3,7 +3,7 @@ import json
 from os import path
 from syrabond import common
 from syrabond.api import API
-
+from werkzeug.utils import safe_join
 
 conf = common.extract_config('global.json')
 directory = path.split(path.dirname(path.abspath(__file__)))[0]
@@ -88,10 +88,11 @@ def test(tst):
 
 @app.route('/client/include/<path:params>', methods=['GET'])   # test jsons
 def include(params):
+    f = safe_join(directory,'/clientside/include/',params)
     if params.find('css') > -1:
-        return flask.send_file('{}/clientside/include/{}'.format(directory, params), mimetype='text/css')
+        return flask.send_file(f, mimetype='text/css')
     else:
-        return flask.send_file('{}/clientside/include/{}'.format(directory, params), mimetype='text/html')
+        return flask.send_file(f, mimetype='text/html')
 
 
 @app.route('/client/img/<filename>', methods=['GET'])
